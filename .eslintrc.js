@@ -6,7 +6,8 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard'
+    'standard',
+    'prettier'
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -19,18 +20,18 @@ module.exports = {
     'react'
   ],
   rules: {
-    "react/prop-types": "off"
+    'react/prop-types': 'off'
   },
   settings: {
     react: {
-      version: "detect",
+      version: 'detect',
     }
   },
   overrides: [
     {
       files: [
-        "**/*.test.js",
-        "**/*.test.jsx"
+        '**/*.test.js',
+        '**/*.test.jsx'
       ]
     }
   ]

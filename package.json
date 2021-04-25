@@ -20,6 +20,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "lint": "npx eslint src",
+    "prettier": "npx prettier --write src",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -41,12 +43,14 @@
   },
   "devDependencies": {
     "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-react-hooks": "^4"
+    "eslint-plugin-react-hooks": "^4",
+    "prettier": "2.2.1"
   }
 }
