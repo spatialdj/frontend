@@ -1,7 +1,8 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
+    jest: true,
   },
   extends: [
     'plugin:react/recommended',
@@ -18,5 +19,19 @@ module.exports = {
     'react'
   ],
   rules: {
-  }
+    "react/prop-types": "off"
+  },
+  settings: {
+    react: {
+      version: "detect",
+    }
+  },
+  overrides: [
+    {
+      files: [
+        "**/*.test.js",
+        "**/*.test.jsx"
+      ]
+    }
+  ]
 }
