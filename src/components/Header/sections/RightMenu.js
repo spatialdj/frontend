@@ -25,7 +25,7 @@ function RightMenu(props) {
 const mapStateToProps = state => {
   return {
     username: state.username,
-    avatar: state.profile_pic,
+    avatar: state.profilePicture,
     status: state.status,
     authenticated: state.authenticated,
   };
