@@ -21,7 +21,6 @@ export const userSlice = createSlice({
   initialState: {
     username: '',
     profilePicture: '',
-    userid: '',
     authenticated: false,
     status: 'idle',
   },
@@ -36,7 +35,6 @@ export const userSlice = createSlice({
       state.status = 'success';
       state.username = payload.username;
       state.profilePicture = payload.profilePicture;
-      state.userid = payload.userid;
     },
     [authenticate.pending]: state => {
       state.status = 'loading';
