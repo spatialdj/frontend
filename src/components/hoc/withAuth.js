@@ -14,15 +14,17 @@ export default function (Component, option) {
     }, []);
 
     useEffect(() => {
-      const { authenticated } = user;
-      // Not logged in and tries to go to auth route
-      if (!authenticated && option === LOGGED_IN_ONLY) {
-        window.location.href = '/login';
-        return null;
-      } else if (authenticated && option === PUBLIC_ONLY) {
-        // Logged in but tries to go to public only page like login page
-        window.location.href = '/';
-        return null;
+      const { authenticated, status } = user;
+      if (status !== 'idle' && status !== 'loading') {
+        // Not logged in and tries to go to auth route
+        if (!authenticated && option === LOGGED_IN_ONLY) {
+          window.location.href = '/login';
+          return null;
+        } else if (authenticated && option === PUBLIC_ONLY) {
+          // Logged in but tries to go to public only page like login page
+          window.location.href = '/';
+          return null;
+        }
       }
     }, [user]);
 
