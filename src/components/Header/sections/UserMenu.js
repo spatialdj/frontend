@@ -3,19 +3,17 @@ import { Box, MenuList, MenuItem, MenuDivider } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 function UserMenu(props) {
-  const { isAuth } = props;
+  const { isAuth, username } = props;
 
   if (isAuth) {
     return (
       <Box zIndex="3">
         <MenuList>
-          <MenuItem color="black">My account</MenuItem>
-          <Link to="/orders">
-            <MenuItem color="black">Orders</MenuItem>
-          </Link>
+          <MenuItem>{username}</MenuItem>
+          <MenuItem>My account</MenuItem>
           <MenuDivider />
           <Link to="/login">
-            <MenuItem color="black">Logout</MenuItem>
+            <MenuItem>Logout</MenuItem>
           </Link>
         </MenuList>
       </Box>

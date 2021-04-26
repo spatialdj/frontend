@@ -1,4 +1,5 @@
 import { ColorModeScript } from '@chakra-ui/react';
+import theme from './theme';
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import store from './store';
@@ -9,7 +10,7 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <StrictMode>
-    <ColorModeScript />
+    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     <Provider store={store}>
       <App />
     </Provider>

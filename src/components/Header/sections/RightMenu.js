@@ -1,20 +1,20 @@
 import React from 'react';
 import { Menu, Flex } from '@chakra-ui/react';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import UserIcon from './UserIcon';
 import UserMenu from './UserMenu';
 
-function RightMenu(props) {
-  const { username, avatar, status, authenticated } = props;
+function RightMenu() {
+  const user = useSelector(state => state.user);
+  const { username, status, authenticated, profilePicture } = user;
 
   return (
     <Flex alignItems="center">
       <Menu isLazy>
         <UserIcon
-          isLoaded={status === 'success'}
+          isLoaded={status !== 'loading' && status !== 'idle'}
           isAuth={authenticated}
-          image={avatar}
+          image={profilePicture}
         />
         <UserMenu isAuth={authenticated} username={username} />
       </Menu>
@@ -22,13 +22,4 @@ function RightMenu(props) {
   );
 }
 
-const mapStateToProps = state => {
-  return {
-    username: state.username,
-    avatar: state.profilePicture,
-    status: state.status,
-    authenticated: state.authenticated,
-  };
-};
-
-export default withRouter(connect(mapStateToProps)(RightMenu));
+export default RightMenu;

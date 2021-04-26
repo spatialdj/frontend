@@ -7,7 +7,7 @@ function LeftMenu() {
   return (
     <Flex align="center">
       <Image src={logo} alt="Logo" w="32px" mr={4} />
-      <Heading color="white" as="h1" size="lg">
+      <Heading as="h1" size="lg">
         <Link to="/" data-testid="header-text">
           SPATIAL.DJ
         </Link>
