@@ -3,6 +3,12 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme';
 import Header from 'components/Header';
+import withAuth from 'components/hoc/withAuth';
+import {
+  PUBLIC_PAGE,
+  LOGGED_IN_ONLY,
+  PUBLIC_ONLY,
+} from 'components/hoc/options';
 // Pages
 import Home from 'pages/Home';
 import ErrorNotFound from 'pages/ErrorNotFound';
@@ -23,8 +29,8 @@ function App() {
       <Router>
         <Header>
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route component={ErrorNotFound} />
+            <Route exact path="/" component={withAuth(Home, PUBLIC_PAGE)} />
+            <Route component={withAuth(ErrorNotFound, PUBLIC_PAGE)} />
           </Switch>
         </Header>
       </Router>
