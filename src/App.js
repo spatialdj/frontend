@@ -5,6 +5,7 @@ import { ChakraProvider, theme } from '@chakra-ui/react';
 // Pages
 import Home from 'pages/Home';
 import ErrorNotFound from 'pages/ErrorNotFound';
+import Rooms from 'pages/Rooms';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/rooms" component={Rooms} />
           <Route component={ErrorNotFound} />
         </Switch>
       </Router>
