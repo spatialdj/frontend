@@ -6,9 +6,11 @@ import logo from './logo.png';
 function LeftMenu() {
   return (
     <Flex align="center">
-      <Image src={logo} w="32px" mr={4} />
+      <Image src={logo} alt="Logo" w="32px" mr={4} />
       <Heading color="white" as="h1" size="lg">
-        <Link to="/">SPATIAL.DJ</Link>
+        <Link to="/" data-testid="header-text">
+          SPATIAL.DJ
+        </Link>
       </Heading>
     </Flex>
   );
