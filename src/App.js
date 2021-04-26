@@ -24,6 +24,9 @@ import '@fontsource/poppins/800.css';
 import '@fontsource/poppins/900.css';
 
 function App() {
+  // Force Chakra dark mode
+  localStorage.setItem('chakra-ui-color-mode', 'dark');
+
   return (
     <ChakraProvider theme={theme}>
       <Router>

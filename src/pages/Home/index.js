@@ -40,6 +40,7 @@ function Home() {
           xl: 'container.xl',
         }}
         minH="80%"
+        color="white"
       >
         <Heading as="h1" size="4xl">
           LISTEN TO MUSIC WITH YOUR FRIENDS.

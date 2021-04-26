@@ -16,7 +16,9 @@ function UserMenu(props) {
       <Box zIndex="3">
         <MenuList>
           <MenuGroup title={username}>
-            <MenuItem>My account</MenuItem>
+            <Link to="/account">
+              <MenuItem>My account</MenuItem>
+            </Link>
           </MenuGroup>
           <MenuDivider />
           <Link to="/login">

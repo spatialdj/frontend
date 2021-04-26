@@ -13,6 +13,7 @@ function Header({ children }) {
         wrap="wrap"
         padding="1rem"
         bgColor="rgba(12, 22, 45, 1)"
+        color="white"
       >
         <LeftMenu />
         <RightMenu />
