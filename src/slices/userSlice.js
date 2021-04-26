@@ -1,29 +1,20 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as userAPI from 'services/user';
 
-export const authenticate = createAsyncThunk(
-  'user/auth',
-  async () => {
-    const response = await userAPI.auth();
-    return response.data;
-  }
-);
+export const authenticate = createAsyncThunk('user/auth', async () => {
+  const response = await userAPI.auth();
+  return response.data;
+});
 
-export const login = createAsyncThunk(
-  'user/login',
-  async (request) => {
-    const response = await userAPI.login(request);
-    return response.data;
-  }
-);
+export const login = createAsyncThunk('user/login', async request => {
+  const response = await userAPI.login(request);
+  return response.data;
+});
 
-export const register = createAsyncThunk(
-  'user/register',
-  async (request) => {
-    const response = await userAPI.register(request);
-    return response.data;
-  }
-);
+export const register = createAsyncThunk('user/register', async request => {
+  const response = await userAPI.register(request);
+  return response.data;
+});
 
 export const userSlice = createSlice({
   name: 'user',
@@ -47,13 +38,13 @@ export const userSlice = createSlice({
       state.profile_pic = payload.profile_pic;
       state.userid = payload.userid;
     },
-    [authenticate.pending]: (state) => {
+    [authenticate.pending]: state => {
       state.status = 'loading';
     },
-    [authenticate.rejected]: (state) => {
+    [authenticate.rejected]: state => {
       state.status = 'failed';
-    }
-  }
+    },
+  },
 });
 
 export default userSlice.reducer;
