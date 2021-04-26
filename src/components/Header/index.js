@@ -12,7 +12,7 @@ function Header({ children }) {
         justify="space-between"
         wrap="wrap"
         padding="1rem"
-        bg="blue.800"
+        bgColor="rgba(12, 22, 45, 1)"
       >
         <LeftMenu />
         <RightMenu />

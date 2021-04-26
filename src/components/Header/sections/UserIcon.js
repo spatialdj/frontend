@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Button, MenuButton } from '@chakra-ui/react';
+import { Avatar, MenuButton, HStack, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 const UserIcon = props => {
@@ -16,9 +16,14 @@ const UserIcon = props => {
     );
   } else {
     return (
-      <Link to="/login">
-        <Button colorScheme="blue">Login</Button>
-      </Link>
+      <HStack spacing={8}>
+        <Link to="/login">
+          <Text colorScheme="blue">Login</Text>
+        </Link>
+        <Link to="/login">
+          <Text colorScheme="blue">Register</Text>
+        </Link>
+      </HStack>
     );
   }
 };

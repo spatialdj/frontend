@@ -1,5 +1,11 @@
 import React from 'react';
-import { Box, MenuList, MenuItem, MenuDivider } from '@chakra-ui/react';
+import {
+  Box,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuDivider,
+} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 function UserMenu(props) {
@@ -9,8 +15,9 @@ function UserMenu(props) {
     return (
       <Box zIndex="3">
         <MenuList>
-          <MenuItem>{username}</MenuItem>
-          <MenuItem>My account</MenuItem>
+          <MenuGroup title={username}>
+            <MenuItem>My account</MenuItem>
+          </MenuGroup>
           <MenuDivider />
           <Link to="/login">
             <MenuItem>Logout</MenuItem>

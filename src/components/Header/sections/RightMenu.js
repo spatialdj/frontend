@@ -3,6 +3,7 @@ import { Menu, Flex } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import UserIcon from './UserIcon';
 import UserMenu from './UserMenu';
+import ColorModeSwitcher from 'components/ColorModeSwitcher';
 
 function RightMenu() {
   const user = useSelector(state => state.user);
@@ -10,7 +11,7 @@ function RightMenu() {
 
   return (
     <Flex alignItems="center">
-      <Menu isLazy>
+      <Menu>
         <UserIcon
           isLoaded={status !== 'loading' && status !== 'idle'}
           isAuth={authenticated}
@@ -18,6 +19,7 @@ function RightMenu() {
         />
         <UserMenu isAuth={authenticated} username={username} />
       </Menu>
+      <ColorModeSwitcher />
     </Flex>
   );
 }
