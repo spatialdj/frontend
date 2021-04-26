@@ -31,8 +31,8 @@ function App() {
         <Header>
           <Switch>
             <Route exact path="/" component={withAuth(Home, PUBLIC_PAGE)} />
+            <Route exact path="/rooms" component={withAuth(Rooms, PUBLIC_PAGE)} />
             <Route component={withAuth(ErrorNotFound, PUBLIC_PAGE)} />
-            <Route exact path="/rooms" component={Rooms} />
           </Switch>
         </Header>
       </Router>
