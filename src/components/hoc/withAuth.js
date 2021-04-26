@@ -10,7 +10,10 @@ export default function (Component, option) {
 
     useEffect(() => {
       // To know my current status, send Auth request
-      dispatch(authenticate());
+      const { status } = user;
+      if (status === "idle") {
+        dispatch(authenticate());
+      }
     }, []);
 
     useEffect(() => {
