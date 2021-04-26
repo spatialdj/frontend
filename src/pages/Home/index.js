@@ -5,9 +5,11 @@ import {
   Text,
   ButtonGroup,
   Button,
+  
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import GradientBackground from 'components/GradientBackground';
+import { Link } from 'react-router-dom';
 
 const VerticalHeading = styled.div`
   writing-mode: sideways-lr;
@@ -52,7 +54,9 @@ function Home() {
           <Button size="lg" colorScheme="blue">
             Create Room
           </Button>
-          <Button size="lg">View Rooms</Button>
+          <Button size="lg">
+          <Link to="/rooms">View Rooms</Link>  
+          </Button>
         </ButtonGroup>
       </Container>
       <VerticalHeading>SPATIAL</VerticalHeading>

@@ -12,6 +12,7 @@ import {
 // Pages
 import Home from 'pages/Home';
 import ErrorNotFound from 'pages/ErrorNotFound';
+import Rooms from 'pages/Rooms';
 // Fonts
 import '@fontsource/poppins/100.css';
 import '@fontsource/poppins/200.css';
@@ -33,6 +34,7 @@ function App() {
         <Header>
           <Switch>
             <Route exact path="/" component={withAuth(Home, PUBLIC_PAGE)} />
+            <Route exact path="/rooms" component={withAuth(Rooms, PUBLIC_PAGE)} />
             <Route component={withAuth(ErrorNotFound, PUBLIC_PAGE)} />
           </Switch>
         </Header>
