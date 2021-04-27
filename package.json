@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^10.4.9",
     "@testing-library/user-event": "^12.8.3",
+    "@yaireo/tagify": "^4.1.1",
     "axios": "^0.21.1",
     "framer-motion": "^4.1.9",
     "react": "^17.0.2",
