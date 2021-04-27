@@ -20,7 +20,7 @@ const UserIcon = props => {
         <Link to="/login">
           <Text colorScheme="blue">Login</Text>
         </Link>
-        <Link to="/login">
+        <Link to="/register">
           <Text colorScheme="blue">Register</Text>
         </Link>
       </HStack>

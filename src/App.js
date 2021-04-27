@@ -11,6 +11,7 @@ import {
 } from 'components/hoc/options';
 // Pages
 import Home from 'pages/Home';
+import Login from 'pages/Login';
 import ErrorNotFound from 'pages/ErrorNotFound';
 import Rooms from 'pages/Rooms';
 // Fonts
@@ -34,7 +35,16 @@ function App() {
         <Header>
           <Switch>
             <Route exact path="/" component={withAuth(Home, PUBLIC_PAGE)} />
-            <Route exact path="/rooms" component={withAuth(Rooms, PUBLIC_PAGE)} />
+            <Route
+              exact
+              path="/rooms"
+              component={withAuth(Rooms, PUBLIC_PAGE)}
+            />
+            <Route
+              exact
+              path="/login"
+              component={withAuth(Login, PUBLIC_PAGE)}
+            />
             <Route component={withAuth(ErrorNotFound, PUBLIC_PAGE)} />
           </Switch>
         </Header>
