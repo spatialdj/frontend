@@ -12,6 +12,7 @@ import {
 // Pages
 import Home from 'pages/Home';
 import Login from 'pages/Login';
+import AccountSettings from 'pages/AccountSettings';
 import ErrorNotFound from 'pages/ErrorNotFound';
 import Rooms from 'pages/Rooms';
 // Fonts
@@ -43,7 +44,11 @@ function App() {
             <Route
               exact
               path="/login"
-              component={withAuth(Login, PUBLIC_PAGE)}
+              component={withAuth(Login, PUBLIC_PAGE)} />
+            <Route
+              exact
+              path="/account"
+              component={withAuth(AccountSettings, LOGGED_IN_ONLY)}
             />
             <Route component={withAuth(ErrorNotFound, PUBLIC_PAGE)} />
           </Switch>
