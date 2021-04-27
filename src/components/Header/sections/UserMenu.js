@@ -1,4 +1,6 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { logout } from 'slices/userSlice';
 import {
   Box,
   MenuList,
@@ -10,6 +12,11 @@ import { Link } from 'react-router-dom';
 
 function UserMenu(props) {
   const { isAuth, username } = props;
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  }
 
   if (isAuth) {
     return (
@@ -21,9 +28,7 @@ function UserMenu(props) {
             </Link>
           </MenuGroup>
           <MenuDivider />
-          <Link to="/login">
-            <MenuItem>Logout</MenuItem>
-          </Link>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </MenuList>
       </Box>
     );

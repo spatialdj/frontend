@@ -16,6 +16,11 @@ export const register = createAsyncThunk('user/register', async request => {
   return response.data;
 });
 
+export const logout = createAsyncThunk('user/logout', async () => {
+  const response = await userAPI.logout();
+  return response.data;
+});
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -41,6 +46,13 @@ export const userSlice = createSlice({
     },
     [authenticate.rejected]: state => {
       state.status = 'failed';
+    },
+    [logout.fulfilled]: state => {
+      // Reset state to blank
+      state.authenticated = false;
+      state.status = 'failed';
+      state.username = '';
+      state.profilePicture = '';
     },
   },
 });

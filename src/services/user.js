@@ -11,3 +11,7 @@ export const login = request => {
 export const register = request => {
   return axios.post('/auth/register', request);
 };
+
+export const logout = () => {
+  return axios.post('/auth/logout');
+};
