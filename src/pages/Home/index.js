@@ -5,11 +5,12 @@ import {
   Text,
   ButtonGroup,
   Button,
-  
+  useDisclosure,
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import GradientBackground from 'components/GradientBackground';
-import { Link } from 'react-router-dom';
+import CreateRoomModal from 'components/CreateRoomModal';
+import {Link} from 'react-router-dom';
 
 const VerticalHeading = styled.div`
   writing-mode: sideways-lr;
@@ -28,39 +29,47 @@ const VerticalHeading = styled.div`
 `;
 
 function Home() {
+  // Handles create room modal opening and closing
+  const {isOpen, onOpen, onClose} = useDisclosure();
+
   return (
-    <GradientBackground>
-      <Container
-        d="flex"
-        justifyContent="center"
-        flexDir="column"
-        maxW={{
-          base: 'container.sm',
-          sm: 'container.sm',
-          md: 'container.md',
-          lg: 'container.lg',
-          xl: 'container.xl',
-        }}
-        minH="80%"
-        color="white"
-      >
-        <Heading as="h1" size="4xl">
-          LISTEN TO MUSIC WITH YOUR FRIENDS.
+    <>
+      <GradientBackground>
+        <Container
+          d="flex"
+          justifyContent="center"
+          flexDir="column"
+          maxW={{
+            base: 'container.sm',
+            sm: 'container.sm',
+            md: 'container.md',
+            lg: 'container.lg',
+            xl: 'container.xl',
+          }}
+          minH="80%"
+          color="white"
+        >
+          <Heading as="h1" size="4xl">
+            LISTEN TO MUSIC WITH YOUR FRIENDS.
         </Heading>
-        <Text fontSize="xl" mt="12px">
-          Create a room or join a public room. Make friends through music.
+          <Text fontSize="xl" mt="12px">
+            Create a room or join a public room. Make friends through music.
         </Text>
-        <ButtonGroup variant="outline" spacing="6" mt="48px">
-          <Button size="lg" colorScheme="blue">
-            Create Room
+          <ButtonGroup variant="outline" spacing="6" mt="48px">
+            <Button size="lg" colorScheme="blue" variant="solid" onClick={onOpen}>
+              Create Room
           </Button>
-          <Button size="lg">
-          <Link to="/rooms">View Rooms</Link>  
-          </Button>
-        </ButtonGroup>
-      </Container>
-      <VerticalHeading>SPATIAL</VerticalHeading>
-    </GradientBackground>
+            <Link to="/rooms">
+              <Button size="lg">
+                View Rooms
+            </Button>
+            </Link>
+          </ButtonGroup>
+        </Container>
+        <VerticalHeading>SPATIAL</VerticalHeading>
+      </GradientBackground>
+      <CreateRoomModal isOpen={isOpen} onClose={onClose} />
+    </>
   );
 }
 
