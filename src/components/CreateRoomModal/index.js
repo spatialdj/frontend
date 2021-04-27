@@ -17,6 +17,7 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  Switch,
 } from '@chakra-ui/react';
 import TagsSelector from 'components/TagsSelector';
 
@@ -50,6 +51,7 @@ function CreateRoomModal(props) {
           name: values.roomName,
           description: values.description,
           genres: tagsRef?.current?.map(tag => tag.value) ?? [],
+          private: values.privateRoom,
         };
         console.log(dataToSubmit);
         resolve();
@@ -134,6 +136,11 @@ function CreateRoomModal(props) {
                 </FormLabel>
                 <TagsSelector name="genres" ref={tagsRef} />
                 <FormHelperText>Choose up to three genres.</FormHelperText>
+              </FormControl>
+
+              <FormControl display="flex" alignItems="center">
+                <FormLabel htmlFor="privateRoom">Private room?</FormLabel>
+                <Switch {...register('privateRoom')} name="privateRoom" />
               </FormControl>
             </Stack>
           </ModalBody>
