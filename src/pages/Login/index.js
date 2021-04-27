@@ -1,17 +1,23 @@
 import React from 'react';
+import { HiEye, HiEyeOff } from 'react-icons/hi';
 import {
   Box,
   Button,
-  Center,
   FormControl,
   FormLabel,
+  IconButton,
   Input,
+  InputGroup,
+  InputRightElement,
   Heading,
   Stack,
 } from '@chakra-ui/react';
 import GradientBackground from 'components/GradientBackground';
 
 function Login() {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClick = () => setShowPassword(!showPassword);
+
   return (
     <GradientBackground>
       <Box maxW="md" mx="auto" py="5%">
@@ -27,23 +33,37 @@ function Login() {
         >
           <form>
             <Stack spacing="6">
-              <FormControl id="email" isRequired>
+              <FormControl id="username" isRequired>
                 <FormLabel>Username</FormLabel>
                 <Input
-                  type="email"
                   placeholder="Username"
                   _placeholder={{ color: 'white' }}
                 />
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  _placeholder={{ color: 'white' }}
-                />
+                <InputGroup>
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Password"
+                    _placeholder={{ color: 'white' }}
+                  />
+                  <InputRightElement>
+                    <IconButton
+                      onClick={handleClick}
+                      variant="ghost"
+                      size="sm"
+                      icon={showPassword ? <HiEyeOff /> : <HiEye />}
+                    />
+                  </InputRightElement>
+                </InputGroup>
               </FormControl>
-              <Button colorScheme="purple" size="lg" fontSize="md">
+              <Button
+                type="submit"
+                colorScheme="purple"
+                size="lg"
+                fontSize="md"
+              >
                 Login
               </Button>
             </Stack>
