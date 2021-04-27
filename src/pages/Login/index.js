@@ -11,12 +11,22 @@ import {
   InputRightElement,
   Heading,
   Stack,
+  Text,
 } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
 import GradientBackground from 'components/GradientBackground';
 
 function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClick = () => setShowPassword(!showPassword);
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  // Todo: make the callout to backend api on submit
+  const onSubmit = data => console.log(data);
 
   return (
     <GradientBackground>
@@ -31,19 +41,24 @@ function Login() {
           shadow="base"
           rounded={{ sm: 'lg' }}
         >
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing="6">
-              <FormControl id="username" isRequired>
+              <FormControl id="username">
                 <FormLabel>Username</FormLabel>
                 <Input
+                  {...register('username', { required: true })}
                   placeholder="Username"
                   _placeholder={{ color: 'white' }}
                 />
+                {errors.username && (
+                  <Text color="red.500">Username is required.</Text>
+                )}
               </FormControl>
-              <FormControl id="password" isRequired>
+              <FormControl id="password">
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <Input
+                    {...register('password', { required: true })}
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
                     _placeholder={{ color: 'white' }}
@@ -57,6 +72,9 @@ function Login() {
                     />
                   </InputRightElement>
                 </InputGroup>
+                {errors.password && (
+                  <Text color="red.500">Password is required.</Text>
+                )}
               </FormControl>
               <Button
                 type="submit"
