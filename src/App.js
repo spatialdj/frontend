@@ -44,7 +44,7 @@ function App() {
             <Route
               exact
               path="/login"
-              component={withAuth(Login, PUBLIC_PAGE)} />
+              component={withAuth(Login, PUBLIC_ONLY)} />
             <Route
               exact
               path="/account"
