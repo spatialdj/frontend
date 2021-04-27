@@ -26,6 +26,7 @@
     "start": "react-scripts start",
     "lint": "npx eslint src",
     "prettier": "npx prettier --write src",
+    "prettier-check": "npx prettier --check src",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
