@@ -1,20 +1,31 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { login, authenticate } from 'slices/userSlice';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
 import {
   Box,
   Button,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   IconButton,
   Input,
   InputGroup,
   InputRightElement,
   Heading,
   Stack,
-  Text,
+  useToast,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import GradientBackground from 'components/GradientBackground';
+
+const validateUsername = value => {
+  return value ? true : 'Enter your username';
+};
+
+const validatePassword = value => {
+  return value ? true : 'Enter your password';
+};
 
 function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -22,11 +33,27 @@ function Login() {
 
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm();
+  const dispatch = useDispatch();
+  const toast = useToast();
   // Todo: make the callout to backend api on submit
-  const onSubmit = data => console.log(data);
+  const onSubmit = data => {
+    return dispatch(login(data)).then(res => {
+      if (res.type === 'user/login/rejected') {
+        toast({
+          title: 'Login error',
+          description: res?.error?.message ?? 'Please try again',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
+      } else if (res.type === 'user/login/fulfilled') {
+        dispatch(authenticate());
+      }
+    });
+  };
 
   return (
     <GradientBackground>
@@ -43,22 +70,24 @@ function Login() {
         >
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing="6">
-              <FormControl id="username">
-                <FormLabel>Username</FormLabel>
+              <FormControl isInvalid={errors.username}>
+                <FormLabel htmlFor="username">Username</FormLabel>
                 <Input
-                  {...register('username', { required: true })}
+                  name="username"
+                  {...register('username', { validate: validateUsername })}
                   placeholder="Username"
                   _placeholder={{ color: 'white' }}
                 />
-                {errors.username && (
-                  <Text color="red.500">Username is required.</Text>
-                )}
+                <FormErrorMessage>
+                  {errors.username && errors.username.message}
+                </FormErrorMessage>
               </FormControl>
-              <FormControl id="password">
-                <FormLabel>Password</FormLabel>
+              <FormControl isInvalid={errors.password}>
+                <FormLabel htmlFor="password">Password</FormLabel>
                 <InputGroup>
                   <Input
-                    {...register('password', { required: true })}
+                    name="password"
+                    {...register('password', { validate: validatePassword })}
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
                     _placeholder={{ color: 'white' }}
@@ -72,13 +101,14 @@ function Login() {
                     />
                   </InputRightElement>
                 </InputGroup>
-                {errors.password && (
-                  <Text color="red.500">Password is required.</Text>
-                )}
+                <FormErrorMessage>
+                  {errors.password && errors.password.message}
+                </FormErrorMessage>
               </FormControl>
               <Button
+                isLoading={isSubmitting}
                 type="submit"
-                colorScheme="purple"
+                colorScheme="blue"
                 size="lg"
                 fontSize="md"
               >
