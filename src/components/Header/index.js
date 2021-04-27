@@ -7,6 +7,8 @@ function Header({ children }) {
   return (
     <div>
       <Flex
+        position="sticky"
+        zIndex="1"
         as="nav"
         align="center"
         justify="space-between"
