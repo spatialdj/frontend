@@ -13,9 +13,12 @@ import {
   InputGroup,
   InputRightElement,
   Heading,
+  Link,
   Stack,
+  Text,
   useToast,
 } from '@chakra-ui/react';
+import { Link as ReactLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import GradientBackground from 'components/GradientBackground';
 
@@ -38,7 +41,6 @@ function Login() {
   } = useForm();
   const dispatch = useDispatch();
   const toast = useToast();
-  // Todo: make the callout to backend api on submit
   const onSubmit = data => {
     return dispatch(login(data)).then(res => {
       if (res.type === 'user/login/rejected') {
@@ -73,7 +75,7 @@ function Login() {
               <FormControl isInvalid={errors.username}>
                 <FormLabel htmlFor="username">Username</FormLabel>
                 <Input
-                  name="username"
+                  id="username"
                   {...register('username', { validate: validateUsername })}
                   placeholder="Username"
                   _placeholder={{ color: 'white' }}
@@ -86,7 +88,7 @@ function Login() {
                 <FormLabel htmlFor="password">Password</FormLabel>
                 <InputGroup>
                   <Input
-                    name="password"
+                    id="password"
                     {...register('password', { validate: validatePassword })}
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
@@ -114,6 +116,12 @@ function Login() {
               >
                 Login
               </Button>
+              <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
+                <Text as="span">Don&apos;t have an account yet? </Text>
+                <Link color="blue.200" as={ReactLink} to="/register">
+                  Register here.
+                </Link>
+              </Text>
             </Stack>
           </form>
         </Box>
