@@ -16,7 +16,7 @@ function Bubble(props) {
 
   switch (type) {
     case 'you':
-      tagColor = 'blue';
+      tagColor = 'green';
       break;
     case 'songPicker':
       tagColor = 'red';
@@ -45,7 +45,7 @@ function Bubble(props) {
       <Flex
         onMouseEnter={handleHover}
         onMouseLeave={handleUnHover}
-        width="200px"
+        width="fit-content"
         flexDir="column"
         alignItems="center"
       >
@@ -58,7 +58,13 @@ function Bubble(props) {
         />
 
         <ScaleFade in={showTag} initialScale={0.8}>
-          <Tag mt={2} variant="solid" colorScheme={tagColor}>
+          <Tag
+            mt={2}
+            variant="solid"
+            colorScheme={tagColor}
+            maxW="128px"
+            textAlign="center"
+          >
             {prefix}&nbsp;{username.substr(0, 20)}
           </Tag>
         </ScaleFade>
