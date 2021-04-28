@@ -12,6 +12,7 @@ import {
 // Pages
 import Home from 'pages/Home';
 import Login from 'pages/Login';
+import Register from 'pages/Register';
 import AccountSettings from 'pages/AccountSettings';
 import ErrorNotFound from 'pages/ErrorNotFound';
 import Rooms from 'pages/Rooms';
@@ -44,7 +45,13 @@ function App() {
             <Route
               exact
               path="/login"
-              component={withAuth(Login, PUBLIC_ONLY)} />
+              component={withAuth(Login, PUBLIC_ONLY)}
+            />
+            <Route
+              exact
+              path="/register"
+              component={withAuth(Register, PUBLIC_ONLY)}
+            />
             <Route
               exact
               path="/account"

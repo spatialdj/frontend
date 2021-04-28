@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { login, authenticate } from 'slices/userSlice';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
 import {
   Box,
@@ -8,60 +6,60 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
+  Heading,
   IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Heading,
   Link,
   Stack,
   Text,
-  useToast,
 } from '@chakra-ui/react';
 import { Link as ReactLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import GradientBackground from 'components/GradientBackground';
 
-const validateUsername = value => {
-  return value ? true : 'Enter your username';
-};
-
-const validatePassword = value => {
-  return value ? true : 'Enter your password';
-};
-
-function Login() {
+function Register() {
   const [showPassword, setShowPassword] = useState(false);
-  const handleClick = () => setShowPassword(!showPassword);
+  const handleShowPassword = () => setShowPassword(!showPassword);
+
+  const [showConfirmPW, setShowConfirmPW] = useState(false);
+  const handleShowConfirmPW = () => setShowConfirmPW(!showConfirmPW);
+
+  const [passwordValue, setPasswordValue] = useState('');
+
+  const validateUsername = value => {
+    return value ? true : 'Enter your username';
+  };
+
+  const validatePassword = value => {
+    return value ? true : 'Enter your password';
+  };
+
+  const validateConfirmPW = value => {
+    if (!value) {
+      return 'Confirm your password';
+    } else if (value !== passwordValue) {
+      return 'Passwords do not match';
+    } else {
+      return true;
+    }
+  };
 
   const {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm();
-  const dispatch = useDispatch();
-  const toast = useToast();
   const onSubmit = data => {
-    return dispatch(login(data)).then(res => {
-      if (res.type === 'user/login/rejected') {
-        toast({
-          title: 'Login error',
-          description: res?.error?.message ?? 'Please try again',
-          status: 'error',
-          duration: 9000,
-          isClosable: true,
-        });
-      } else if (res.type === 'user/login/fulfilled') {
-        dispatch(authenticate());
-      }
-    });
+    console.log(data);
   };
 
   return (
     <GradientBackground>
       <Box maxW="md" mx="auto" py="5%">
         <Heading textAlign="center" size="xl" padding="1rem">
-          Login
+          Register
         </Heading>
         <Box
           bg="gray.900"
@@ -90,13 +88,14 @@ function Login() {
                   <Input
                     id="password"
                     {...register('password', { validate: validatePassword })}
+                    onChange={event => setPasswordValue(event.target.value)}
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
                     _placeholder={{ color: 'white' }}
                   />
                   <InputRightElement>
                     <IconButton
-                      onClick={handleClick}
+                      onClick={handleShowPassword}
                       variant="ghost"
                       size="sm"
                       icon={showPassword ? <HiEyeOff /> : <HiEye />}
@@ -107,6 +106,33 @@ function Login() {
                   {errors.password && errors.password.message}
                 </FormErrorMessage>
               </FormControl>
+              <FormControl isInvalid={errors.confirmPassword}>
+                <FormLabel htmlFor="confirmPassword">
+                  Confirm Password
+                </FormLabel>
+                <InputGroup>
+                  <Input
+                    id="confirmPassword"
+                    {...register('confirmPassword', {
+                      validate: validateConfirmPW,
+                    })}
+                    type={showConfirmPW ? 'text' : 'password'}
+                    placeholder="Confirm Password"
+                    _placeholder={{ color: 'white' }}
+                  />
+                  <InputRightElement>
+                    <IconButton
+                      onClick={handleShowConfirmPW}
+                      variant="ghost"
+                      size="sm"
+                      icon={showConfirmPW ? <HiEyeOff /> : <HiEye />}
+                    />
+                  </InputRightElement>
+                </InputGroup>
+                <FormErrorMessage>
+                  {errors.confirmPassword && errors.confirmPassword.message}
+                </FormErrorMessage>
+              </FormControl>
               <Button
                 isLoading={isSubmitting}
                 type="submit"
@@ -114,12 +140,12 @@ function Login() {
                 size="lg"
                 fontSize="md"
               >
-                Login
+                Register
               </Button>
               <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
-                <Text as="span">Don&apos;t have an account yet? </Text>
-                <Link color="blue.200" as={ReactLink} to="/register">
-                  Register here.
+                <Text as="span">Already have an account? </Text>
+                <Link color="blue.200" as={ReactLink} to="/login">
+                  Login here.
                 </Link>
               </Text>
             </Stack>
@@ -130,4 +156,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
