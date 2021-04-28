@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme';
-import Header from 'components/Header';
+import Layout from 'components/Layout';
 import withAuth from 'components/hoc/withAuth';
 import {
   PUBLIC_PAGE,
@@ -38,7 +38,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <SocketContext.Provider value={socket}>
         <Router>
-          <Header>
+          <Layout>
             <Switch>
               <Route exact path="/" component={withAuth(Home, PUBLIC_PAGE)} />
               <Route
@@ -68,7 +68,7 @@ function App() {
               />
               <Route component={withAuth(ErrorNotFound, PUBLIC_PAGE)} />
             </Switch>
-          </Header>
+          </Layout>
         </Router>
       </SocketContext.Provider>
     </ChakraProvider>
