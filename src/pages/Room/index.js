@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
+import { SocketContext } from 'contexts/socket';
 import { Box } from '@chakra-ui/react';
 import Bubble from 'components/Bubble';
 
@@ -38,7 +39,24 @@ const data = [
   },
 ];
 
-function Room() {
+function Room(props) {
+  const socket = useContext(SocketContext);
+  const roomId = props.match.params.id;
+
+  useEffect(() => {
+    socket.emit('join_room', roomId, response => {
+      // TODO: handle join room
+      console.log('join_room', response);
+    });
+
+    return () => {
+      console.log('room unmounted');
+      socket.emit('leave_room', response => {
+        console.log('leave_room', response);
+      });
+      // TODO: disconnect from listeners
+    };
+  }, [socket, roomId]);
 
   return (
     <Box id="canvas" overflow="hidden" h="100vh" w="100%">

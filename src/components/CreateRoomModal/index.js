@@ -1,5 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { SocketContext } from 'contexts/socket';
 import {
   useColorModeValue,
   Stack,
@@ -18,6 +20,7 @@ import {
   ModalCloseButton,
   Button,
   Switch,
+  useToast,
 } from '@chakra-ui/react';
 import TagsSelector from 'components/TagsSelector';
 
@@ -38,6 +41,8 @@ function CreateRoomModal(props) {
   } = useForm();
   const initialFocusRef = useRef(); // For auto focus input on open
   const tagsRef = useRef([]); // To store genre tags
+  const socket = useContext(SocketContext); // socket.io to create room
+  const toast = useToast();
 
   const handleCreateRoom = values => {
     // TODO: create the room
@@ -45,17 +50,31 @@ function CreateRoomModal(props) {
     // Send POST request
     // Open socket.io connection
     // Redirect to room
+    const dataToSubmit = {
+      name: values.roomName,
+      description: values.description,
+      genres: tagsRef?.current?.map(tag => tag.value) ?? [],
+      private: values.privateRoom,
+    };
     return new Promise(resolve => {
-      setTimeout(() => {
-        const dataToSubmit = {
-          name: values.roomName,
-          description: values.description,
-          genres: tagsRef?.current?.map(tag => tag.value) ?? [],
-          private: values.privateRoom,
-        };
-        console.log(dataToSubmit);
-        resolve();
-      }, 1000);
+      socket.emit('create_room', dataToSubmit, response => {
+        const { success, room } = response;
+        if (success && room?.id) {
+          // Redirect to room page
+          resolve();
+          onClose();
+          props.history.push(`/room/${room.id}`);
+        } else {
+          toast({
+            title: 'Error creating room',
+            description: "Couldn't create a room, please try again",
+            status: 'error',
+            duration: 9000,
+            isClosable: true,
+          });
+        }
+        console.log('create_room', response);
+      });
     });
   };
 
@@ -163,4 +182,4 @@ function CreateRoomModal(props) {
   );
 }
 
-export default CreateRoomModal;
+export default withRouter(CreateRoomModal);
