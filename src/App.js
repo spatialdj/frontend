@@ -16,6 +16,7 @@ import Register from 'pages/Register';
 import AccountSettings from 'pages/AccountSettings';
 import ErrorNotFound from 'pages/ErrorNotFound';
 import Rooms from 'pages/Rooms';
+import Room from 'pages/Room';
 // Fonts
 import '@fontsource/poppins/100.css';
 import '@fontsource/poppins/200.css';
@@ -41,6 +42,11 @@ function App() {
               exact
               path="/rooms"
               component={withAuth(Rooms, PUBLIC_PAGE)}
+            />
+            <Route
+              exact
+              path="/room/:id"
+              component={withAuth(Room, LOGGED_IN_ONLY)}
             />
             <Route
               exact
