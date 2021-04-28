@@ -3,7 +3,7 @@ import { Avatar, Tag, Flex, ScaleFade } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
 
 function Bubble(props) {
-  const { image, username, prefix, defaultPos, type, pos } = props;
+  const { image, username, prefix, type, position } = props;
   const [isHover, setIsHover] = useState(false);
   const showTag = !(type === 'other' && !isHover);
 
@@ -15,9 +15,6 @@ function Bubble(props) {
   let tagColor = 'blue';
 
   switch (type) {
-    case 'you':
-      tagColor = 'green';
-      break;
     case 'songPicker':
       tagColor = 'red';
       break;
@@ -26,17 +23,21 @@ function Bubble(props) {
   }
 
   const handleHover = e => {
-    setIsHover(true);
+    if (type === 'other') {
+      setIsHover(true);
+    }
   };
 
   const handleUnHover = e => {
-    setIsHover(false);
+    if (type === 'other') {
+      setIsHover(false);
+    }
   };
 
   return (
     <Draggable
-      disabled={type !== 'you'}
-      defaultPosition={defaultPos}
+      disabled={true}
+      position={position}
       defaultClassName="_draggable"
       defaultClassNameDragging="__dragging"
       defaultClassNameDragged="__dragged"

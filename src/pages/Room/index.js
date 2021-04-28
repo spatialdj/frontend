@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { Box } from '@chakra-ui/react';
 import Bubble from 'components/Bubble';
+import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 
@@ -14,34 +15,33 @@ function getRandomInt(min, max) {
 // Mock data
 const data = [
   {
-    image: 'https://picsum.photos/50',
-    prefix: '👋',
-    username: 'You',
-    type: 'you',
-    defaultPos: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
-  },
-  {
     image: 'https://picsum.photos/51',
     prefix: '🎵',
     username: 'Song Picker',
     type: 'songPicker',
-    defaultPos: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
+    position: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
   },
   {
     image: 'https://picsum.photos/52',
     prefix: '',
     username: 'Test',
     type: 'other',
-    defaultPos: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
+    position: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
   },
   {
     image: 'https://picsum.photos/53',
     prefix: '',
     username: 'LONG ASS NAME BRUH WHY IS THIS NAME SO LONG WTF',
     type: 'other',
-    defaultPos: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
+    position: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
   },
 ];
+
+const clientData = {
+  image: 'https://picsum.photos/51',
+  prefix: '👋',
+  username: 'You',
+};
 
 function Room(props) {
   const socket = useContext(SocketContext);
@@ -72,10 +72,15 @@ function Room(props) {
           image={item.image}
           prefix={item.prefix}
           username={item.username}
-          defaultPos={item.defaultPos}
+          position={item.position}
           type={item.type}
         />
       ))}
+      <ClientBubble
+        image={clientData.image}
+        prefix={clientData.prefix}
+        username={clientData.username}
+      />
     </Box>
   );
 }

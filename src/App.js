@@ -11,6 +11,8 @@ import {
 } from 'components/hoc/options';
 // Socket
 import { SocketContext, socket } from 'contexts/socket';
+// Client position
+import { ClientPositionProvider } from 'contexts/clientposition';
 // Pages
 import Home from 'pages/Home';
 import Login from 'pages/Login';
@@ -37,39 +39,41 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <SocketContext.Provider value={socket}>
-        <Router>
-          <Layout>
-            <Switch>
-              <Route exact path="/" component={withAuth(Home, PUBLIC_PAGE)} />
-              <Route
-                exact
-                path="/rooms"
-                component={withAuth(Rooms, PUBLIC_PAGE)}
-              />
-              <Route
-                exact
-                path="/room/:id"
-                component={withAuth(Room, LOGGED_IN_ONLY)}
-              />
-              <Route
-                exact
-                path="/login"
-                component={withAuth(Login, PUBLIC_ONLY)}
-              />
-              <Route
-                exact
-                path="/register"
-                component={withAuth(Register, PUBLIC_ONLY)}
-              />
-              <Route
-                exact
-                path="/account"
-                component={withAuth(AccountSettings, LOGGED_IN_ONLY)}
-              />
-              <Route component={withAuth(ErrorNotFound, PUBLIC_PAGE)} />
-            </Switch>
-          </Layout>
-        </Router>
+        <ClientPositionProvider>
+          <Router>
+            <Layout>
+              <Switch>
+                <Route exact path="/" component={withAuth(Home, PUBLIC_PAGE)} />
+                <Route
+                  exact
+                  path="/rooms"
+                  component={withAuth(Rooms, PUBLIC_PAGE)}
+                />
+                <Route
+                  exact
+                  path="/room/:id"
+                  component={withAuth(Room, LOGGED_IN_ONLY)}
+                />
+                <Route
+                  exact
+                  path="/login"
+                  component={withAuth(Login, PUBLIC_ONLY)}
+                />
+                <Route
+                  exact
+                  path="/register"
+                  component={withAuth(Register, PUBLIC_ONLY)}
+                />
+                <Route
+                  exact
+                  path="/account"
+                  component={withAuth(AccountSettings, LOGGED_IN_ONLY)}
+                />
+                <Route component={withAuth(ErrorNotFound, PUBLIC_PAGE)} />
+              </Switch>
+            </Layout>
+          </Router>
+        </ClientPositionProvider>
       </SocketContext.Provider>
     </ChakraProvider>
   );
