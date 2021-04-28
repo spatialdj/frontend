@@ -3,9 +3,12 @@ import { SocketContext } from 'contexts/socket';
 import { Box } from '@chakra-ui/react';
 import Bubble from 'components/Bubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
+import YoutubePlayer from 'components/YoutubePlayer';
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Mock data
@@ -15,28 +18,28 @@ const data = [
     prefix: '👋',
     username: 'You',
     type: 'you',
-    defaultPos: { x: getRandomInt(500), y: getRandomInt(500) },
+    defaultPos: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
   },
   {
     image: 'https://picsum.photos/51',
     prefix: '🎵',
     username: 'Song Picker',
     type: 'songPicker',
-    defaultPos: { x: getRandomInt(500), y: getRandomInt(500) },
+    defaultPos: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
   },
   {
     image: 'https://picsum.photos/52',
     prefix: '',
     username: 'Test',
     type: 'other',
-    defaultPos: { x: getRandomInt(500), y: getRandomInt(500) },
+    defaultPos: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
   },
   {
     image: 'https://picsum.photos/53',
     prefix: '',
     username: 'LONG ASS NAME BRUH WHY IS THIS NAME SO LONG WTF',
     type: 'other',
-    defaultPos: { x: getRandomInt(500), y: getRandomInt(500) },
+    defaultPos: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
   },
 ];
 
@@ -62,6 +65,7 @@ function Room(props) {
   return (
     <Box id="canvas" overflow="hidden" h="100vh" w="100%">
       <LeaveRoomButton />
+      <YoutubePlayer id="LITzD9YjuS8" height="390" width="640" />
       {data.map(item => (
         <Bubble
           key={item.username}
