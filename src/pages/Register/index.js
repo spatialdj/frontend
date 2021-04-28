@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { register as apiRegister, authenticate } from 'slices/userSlice';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
 import {
   Box,
@@ -14,6 +16,7 @@ import {
   Link,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { Link as ReactLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -51,8 +54,26 @@ function Register() {
     formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm();
+  const dispatch = useDispatch();
+  const toast = useToast();
   const onSubmit = data => {
-    console.log(data);
+    const body = {
+      username: data.username,
+      password: data.password,
+    };
+    return dispatch(apiRegister(body)).then(res => {
+      if (res.type === 'user/register/rejected') {
+        toast({
+          title: 'Registration error',
+          description: res?.error?.message ?? 'Please try again',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
+      } else if (res.type === 'user/register/fulfilled') {
+        dispatch(authenticate());
+      }
+    });
   };
 
   return (
