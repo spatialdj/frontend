@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { Box } from '@chakra-ui/react';
 import Bubble from 'components/Bubble';
+import LeaveRoomButton from 'components/LeaveRoomButton';
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -60,6 +61,7 @@ function Room(props) {
 
   return (
     <Box id="canvas" overflow="hidden" h="100vh" w="100%">
+      <LeaveRoomButton />
       {data.map(item => (
         <Bubble
           key={item.username}
