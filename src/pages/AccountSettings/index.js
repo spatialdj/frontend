@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   chakra,
   Box,
@@ -22,8 +22,8 @@ import {
 
 function AccountSettings() {
   const user = useSelector(state => state.user);
-  const {profilePicture, username} = user;
-  const {isOpen, onOpen, onClose} = useDisclosure();
+  const { profilePicture, username } = user;
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const avatarUrl = useRef(profilePicture);
   const [avatarUrlState, setAvatarUrlState] = useState(profilePicture);
 
@@ -34,26 +34,26 @@ function AccountSettings() {
   const handleSaveAvatar = () => {
     setAvatarUrlState(avatarUrl.current);
     onClose();
-  }
+  };
 
-  const handleAvatarUrlChange = (e) => {
+  const handleAvatarUrlChange = e => {
     avatarUrl.current = e.target.value;
-  }
+  };
 
   return (
-    <Box bg={useColorModeValue('gray.50', 'inherit')} color='white' p={10}>
+    <Box bg={useColorModeValue('gray.50', 'inherit')} color="white" p={10}>
       <chakra.form
         method="POST"
         shadow="base"
         rounded={[null, 'md']}
-        overflow={{sm: 'hidden'}}
+        overflow={{ sm: 'hidden' }}
       >
         <Stack
           px={4}
           py={5}
           bg={useColorModeValue('white', 'gray.900')}
           spacing={6}
-          p={{sm: 6}}
+          p={{ sm: 6 }}
         >
           <SimpleGrid columns={3} spacing={6}>
             <FormControl as={GridItem} colSpan={[3, 2]}>
@@ -69,7 +69,8 @@ function AccountSettings() {
                 type="tel"
                 placeholder="A cool name"
                 value={username}
-                rounded="md" />
+                rounded="md"
+              />
             </FormControl>
           </SimpleGrid>
 
@@ -87,7 +88,7 @@ function AccountSettings() {
                 mt={1}
                 rows={3}
                 shadow="sm"
-                fontSize={{sm: 'sm'}}
+                fontSize={{ sm: 'sm' }}
               />
               <FormHelperText>
                 Brief description for your profile.
@@ -109,21 +110,22 @@ function AccountSettings() {
                 bg={useColorModeValue('gray.100', 'gray.800')}
                 src={avatarUrlState}
               />
-              {isOpen ?
+              {isOpen ? (
                 <Box ml={5} w="100%">
                   <InputGroup size="md">
-                    <Input defaultValue={avatarUrlState} onChange={handleAvatarUrlChange} />
+                    <Input
+                      defaultValue={avatarUrlState}
+                      onChange={handleAvatarUrlChange}
+                    />
                     <InputRightElement width="4.5rem">
                       <Button h="1.75rem" size="sm" onClick={handleSaveAvatar}>
                         Done
-                    </Button>
+                      </Button>
                     </InputRightElement>
                   </InputGroup>
-                  <FormHelperText>
-                    Enter an image URL
-              </FormHelperText>
+                  <FormHelperText>Enter an image URL</FormHelperText>
                 </Box>
-                :
+              ) : (
                 <Button
                   onClick={onOpen}
                   type="button"
@@ -133,20 +135,17 @@ function AccountSettings() {
                   fontWeight="medium"
                 >
                   Change
-              </Button>}
+                </Button>
+              )}
             </Flex>
           </FormControl>
         </Stack>
         <Box
-          px={{base: 4, sm: 6}}
+          px={{ base: 4, sm: 6 }}
           py={3}
           bg={useColorModeValue('gray.50', 'gray.900')}
         >
-          <Button
-            type="submit"
-            colorScheme="blue"
-            fontWeight="md"
-          >
+          <Button type="submit" colorScheme="blue" fontWeight="md">
             Save
           </Button>
         </Box>

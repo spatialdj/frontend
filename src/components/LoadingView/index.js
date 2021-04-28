@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Spinner} from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 
 function LoadingView() {
   return (
@@ -9,7 +9,8 @@ function LoadingView() {
         speed="0.65s"
         emptyColor="gray.200"
         color="blue.300"
-        size="xl" />
+        size="xl"
+      />
     </Box>
   );
 }

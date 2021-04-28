@@ -16,7 +16,7 @@ function UserMenu(props) {
 
   const handleLogout = () => {
     dispatch(logout());
-  }
+  };
 
   if (isAuth) {
     return (

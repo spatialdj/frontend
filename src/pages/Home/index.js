@@ -10,7 +10,7 @@ import {
 import styled from '@emotion/styled';
 import GradientBackground from 'components/GradientBackground';
 import CreateRoomModal from 'components/CreateRoomModal';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const VerticalHeading = styled.div`
   writing-mode: sideways-lr;
@@ -30,7 +30,7 @@ const VerticalHeading = styled.div`
 
 function Home() {
   // Handles create room modal opening and closing
-  const {isOpen, onOpen, onClose} = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
@@ -51,18 +51,21 @@ function Home() {
         >
           <Heading as="h1" size="4xl">
             LISTEN TO MUSIC WITH YOUR FRIENDS.
-        </Heading>
+          </Heading>
           <Text fontSize="xl" mt="12px">
             Create a room or join a public room. Make friends through music.
-        </Text>
+          </Text>
           <ButtonGroup variant="outline" spacing="6" mt="48px">
-            <Button size="lg" colorScheme="blue" variant="solid" onClick={onOpen}>
+            <Button
+              size="lg"
+              colorScheme="blue"
+              variant="solid"
+              onClick={onOpen}
+            >
               Create Room
-          </Button>
-            <Link to="/rooms">
-              <Button size="lg">
-                View Rooms
             </Button>
+            <Link to="/rooms">
+              <Button size="lg">View Rooms</Button>
             </Link>
           </ButtonGroup>
         </Container>
