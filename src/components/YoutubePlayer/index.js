@@ -64,9 +64,8 @@ const calculateVolume = (boundingBox, position) => {
     0,
     100
   );
+  
   const volume = 100 - rescaledVolume;
-
-  // console.log('volume', volume);
 
   if (volume >= 80) return linearTransform(volume, 0, 80, 0, 100);
 
