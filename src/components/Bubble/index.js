@@ -67,8 +67,7 @@ function Bubble(props) {
         alignItems="center"
       >
         <Avatar
-          outline="4px solid"
-          outlineColor={tagColor}
+          boxShadow={`0 0 0 4px ${tagColor}`}
           bgColor={tagColor}
           cursor={type !== 'you' ? 'pointer' : 'move'}
           size="lg"
