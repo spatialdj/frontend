@@ -30,7 +30,12 @@ const ClientBubble = props => {
       defaultClassNameDragged="__dragged"
       bounds="#canvas"
     >
-      <Flex width="fit-content" flexDir="column" alignItems="center">
+      <Flex
+        position="absolute"
+        width="fit-content"
+        flexDir="column"
+        alignItems="center"
+      >
         <Avatar
           cursor="move"
           size="lg"
@@ -46,7 +51,7 @@ const ClientBubble = props => {
           maxW="128px"
           textAlign="center"
         >
-          {prefix}&nbsp;{username.substr(0, 20)}
+          {`${prefix} ${username.substr(0, 20)} (you)`}
         </Tag>
       </Flex>
     </Draggable>

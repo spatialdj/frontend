@@ -44,6 +44,7 @@ function Bubble(props) {
       bounds="#canvas"
     >
       <Flex
+        position="absolute"
         onMouseEnter={handleHover}
         onMouseLeave={handleUnHover}
         width="fit-content"
