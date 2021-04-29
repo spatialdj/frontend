@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   Flex,
   Text,
@@ -12,6 +12,7 @@ import {
   Image,
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import axios from 'axios';
 
 const Card = styled.div`
   background-color: #0c162d;
@@ -19,7 +20,7 @@ const Card = styled.div`
   border-radius: 0.25rem;
   padding: 16px;
 `;
-
+/*
 const rooms = [
   {
     name: 'EDM Mix',
@@ -99,7 +100,7 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
 ];
-
+*/
 const genres = [
   'EDM',
   'Pop',
@@ -111,6 +112,11 @@ const genres = [
   'Jazz',
 ];
 function index() {
+  const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  useEffect(() => {
+  },[]);
   return (
     <Box bg="black" color="white" padding="8" h="full">
       <Flex direction="row" justify="space-between">
