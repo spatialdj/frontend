@@ -7,6 +7,7 @@ import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 import SongBar from 'components/SongBar';
+import JoinFailedModal from 'components/JoinFailedModal';
 
 // For testing
 function getRandomInt(min, max) {
@@ -18,14 +19,18 @@ function getRandomInt(min, max) {
 function Room(props) {
   const socket = useContext(SocketContext);
   const [bubblesData, setBubblesData] = useState([]);
+  const [showJoinFailed, setShowJoinFailed] = useState(false);
   const user = useSelector(state => state.user);
   const toast = useToast();
   const roomId = props.match.params.id;
 
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
-      // TODO: handle join room
-      console.log('join_room', response);
+      const { success } = response;
+      if (!success && !user?.authenticated) {
+        // TODO: handle join room fail
+        setShowJoinFailed(true);
+      }
     });
 
     // Listen to user joining room
@@ -118,7 +123,12 @@ function Room(props) {
   return (
     <Box id="canvas" overflow="hidden" h="100vh" w="100%">
       <LeaveRoomButton />
-      <YoutubePlayer id="LITzD9YjuS8" height="390" width="640" />
+      <YoutubePlayer
+        isAuth={user?.authenticated}
+        id="LITzD9YjuS8"
+        height="390"
+        width="640"
+      />
       {bubblesData.map(item => (
         <Bubble
           key={item.username}
@@ -135,6 +145,10 @@ function Room(props) {
         username={user?.username}
       />
       <SongBar />
+      <JoinFailedModal
+        isOpen={showJoinFailed}
+        onClose={() => setShowJoinFailed(false)}
+      />
     </Box>
   );
 }
