@@ -6,6 +6,7 @@ import Bubble from 'components/Bubble';
 import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
+import SongBar from 'components/SongBar';
 
 // For testing
 function getRandomInt(min, max) {
@@ -133,6 +134,7 @@ function Room(props) {
         prefix="👋"
         username={user?.username}
       />
+      <SongBar />
     </Box>
   );
 }
