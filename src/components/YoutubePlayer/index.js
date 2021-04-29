@@ -14,10 +14,10 @@ import {
 
 let player = null;
 
-// Adjusts for circle size, which is 64x64
-const X_OFFSET = 32;
-// For some reason, top of the page y = -330?
-const Y_OFFSET = 336 + X_OFFSET;
+// Adjusts for circle size, which is 64x64 + 4px of border
+const X_OFFSET = 32 + 4;
+// When in doubt, add 330 to this number?
+const Y_OFFSET = X_OFFSET;
 
 /**
  * Maps `val`, which is between `a` and `b` to a number between `c` and `d`
@@ -32,40 +32,53 @@ const linearTransform = (val, a, b, c, d) => {
   return Math.min(((val - a) / (b - a)) * (d - c) + c, 100);
 };
 
-const maxUnscaledDistance = Math.sqrt(100 * 100 + 100 * 100)
+const maxUnscaledDistance = Math.sqrt(100 * 100 + 100 * 100);
 
 /**
- * Calculates volume given player corner position and client position
- * @param {{x: number, y: number}[]} corners
+ * Calculates volume given player bounding box and client position
+ * @param {object} boundingBox
  * @param {{x: number, y: number}} position
  * @returns {number} volume, from 0 to 100 inclusive
  */
 const calculateVolume = (boundingBox, position) => {
-  const {left, bottom, right} = boundingBox;
+  const { left, bottom, right } = boundingBox;
   const { x, y } = position;
 
+  // Distance from left/right/bottom edge
   let dx = Math.max(left - x, 0, x - right);
   let dy = Math.max(y - bottom, 0);
+  // console.log({dx, dy});
   dx = linearTransform(dx, 0, left, 0, 100);
   dy = linearTransform(dy, 0, bottom, 0, 100);
 
   const distance = Math.sqrt(dx * dx + dy * dy);
-  
+
   if (distance < 0) {
-    return 100
+    return 100;
   }
 
-  const rescaledDistance = linearTransform(distance, 0, maxUnscaledDistance, 0, 100)
+  const rescaledVolume = linearTransform(
+    distance,
+    0,
+    maxUnscaledDistance,
+    0,
+    100
+  );
+  const volume = 100 - rescaledVolume;
 
-  return 100 - rescaledDistance
+  // console.log('volume', volume);
+
+  if (volume >= 80) return linearTransform(volume, 0, 80, 0, 100);
+
+  return volume;
 };
 
 const baseBoundingBox = {
   left: 0,
   right: 0,
   top: 0,
-  bottom: 0
-}
+  bottom: 0,
+};
 
 function YoutubePlayer(props) {
   const { id, height, width } = props;
@@ -137,6 +150,7 @@ function YoutubePlayer(props) {
     // Open modal to allow autoplay videos
     onOpen();
     boundingBox.current = event.target.getIframe().getBoundingClientRect();
+    console.log('boundingBox', boundingBox.current);
   };
 
   const onPlayerStateChange = event => {
