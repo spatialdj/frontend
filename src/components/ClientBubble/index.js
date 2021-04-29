@@ -37,6 +37,9 @@ const ClientBubble = props => {
         alignItems="center"
       >
         <Avatar
+          outline="4px solid"
+          outlineColor={`${tagColor}.500`}
+          bgColor={`${tagColor}.500`}
           cursor="move"
           size="lg"
           src={image}
@@ -45,7 +48,7 @@ const ClientBubble = props => {
         />
 
         <Tag
-          mt={2}
+          mt={4}
           variant="solid"
           colorScheme={tagColor}
           maxW="128px"

@@ -2,6 +2,21 @@ import React, { useState } from 'react';
 import { Avatar, Tag, Flex, ScaleFade } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
 
+const colors = ['orange', 'yellow', 'teal', 'blue', 'cyan', 'purple', 'pink'];
+const weights = ['50', '100', '300', '400', '500', '600', '700', '800', '900'];
+
+/**
+ * Generates random Chakra-UI colors
+ * @param {string[]} colors array of color strings
+ * @param {string[]} weights array of color weights
+ * @returns {string} a color in `color`.`weight` form
+ */
+const generateRandomColor = (colors, weights) => {
+  const randomColor = colors[Math.floor(Math.random() * colors.length)];
+  const randomWeight = weights[Math.floor(Math.random() * weights.length)];
+  return `${randomColor}.${randomWeight}`;
+};
+
 function Bubble(props) {
   const { image, username, prefix, type, position } = props;
   const [isHover, setIsHover] = useState(false);
@@ -12,7 +27,7 @@ function Bubble(props) {
     e.preventDefault();
   };
 
-  let tagColor = 'blue';
+  let tagColor = generateRandomColor(colors, weights);
 
   switch (type) {
     case 'songPicker':
@@ -52,6 +67,9 @@ function Bubble(props) {
         alignItems="center"
       >
         <Avatar
+          outline="4px solid"
+          outlineColor={tagColor}
+          bgColor={tagColor}
           cursor={type !== 'you' ? 'pointer' : 'move'}
           size="lg"
           src={image}
@@ -61,7 +79,7 @@ function Bubble(props) {
 
         <ScaleFade in={showTag} initialScale={0.8}>
           <Tag
-            mt={2}
+            mt={4}
             variant="solid"
             colorScheme={tagColor}
             maxW="128px"
