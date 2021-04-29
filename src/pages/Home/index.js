@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   Button,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import GradientBackground from 'components/GradientBackground';
@@ -28,9 +29,26 @@ const VerticalHeading = styled.div`
   pointer-events: none;
 `;
 
-function Home() {
+function Home(props) {
+  const { user } = props;
   // Handles create room modal opening and closing
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
+  const handleOpenCreateRoom = () => {
+    if (user?.authenticated) {
+      onOpen();
+    } else {
+      toast({
+        title: 'Please login first',
+        status: 'info',
+        duration: 5000,
+        position: 'top',
+        isClosable: true,
+      });
+      props.history.push('/login');
+    }
+  };
 
   return (
     <>
@@ -56,17 +74,14 @@ function Home() {
             Create a room or join a public room. Make friends through music.
           </Text>
           <ButtonGroup variant="outline" spacing="6" mt="48px">
-            <Button
-              size="lg"
-              colorScheme="blue"
-              variant="solid"
-              onClick={onOpen}
-            >
+            <Link to="/rooms">
+              <Button colorScheme="blue" variant="solid" size="lg">
+                View Rooms
+              </Button>
+            </Link>
+            <Button size="lg" onClick={handleOpenCreateRoom}>
               Create Room
             </Button>
-            <Link to="/rooms">
-              <Button size="lg">View Rooms</Button>
-            </Link>
           </ButtonGroup>
         </Container>
         <VerticalHeading>SPATIAL</VerticalHeading>
