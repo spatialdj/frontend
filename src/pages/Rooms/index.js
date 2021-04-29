@@ -12,13 +12,15 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import RoomCard from 'components/RoomCard';
+import RoomsFilter from 'components/RoomsFilter';
 import { FaSearch } from 'react-icons/fa';
 
 const rooms = [
   {
+    id: 'asdasd123',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['EDM', 'Rock', 'Jazz'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -27,10 +29,11 @@ const rooms = [
     currentSong: { name: 'Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaartist - Song Name' },
   },
   {
+    id: '2345sdgsdfg',
     name: 'Long very big room name lol bruh very big room name lol bruh ',
     description:
       'Super long description of lots of words and words and long description of lots of words and words and long description of lots of words and words and long description of lots of words and words and long description of lots of words and words and',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['EDM'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -39,9 +42,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: 'vbndrgdgf',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['Pop'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -50,9 +54,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: '4sdfdsv345',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['Hip hop'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -61,9 +66,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: 'sdasd3453456',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['Country'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -72,9 +78,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: 'dfbfd456',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['R&B'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -83,9 +90,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: 'ghjghj567567sdf',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['Indie', 'Jazz', 'Pop'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -93,17 +101,6 @@ const rooms = [
     },
     currentSong: { name: 'Artist - Song Name' },
   },
-];
-
-const genres = [
-  'EDM',
-  'Pop',
-  'Hip hop',
-  'R&B',
-  'Rock',
-  'Country',
-  'Indie',
-  'Jazz',
 ];
 
 function Room() {
@@ -141,21 +138,10 @@ function Room() {
         />
         <Input placeholder="Search for rooms..." size="md" />
       </InputGroup>
-      <HStack my={4} spacing={4}>
-        <Text>Filter</Text>
-        <HStack wrap="wrap">
-          {genres.map(genre => {
-            return (
-              <Button key={genre} variant="solid" size="sm">
-                {genre}
-              </Button>
-            );
-          })}
-        </HStack>
-      </HStack>
+      <RoomsFilter />
       <SimpleGrid minChildWidth="364px" spacing={10}>
         {rooms.map(room => (
-          <RoomCard key={room.name} room={room} />
+          <RoomCard key={room.id} room={room} />
         ))}
       </SimpleGrid>
     </Container>
