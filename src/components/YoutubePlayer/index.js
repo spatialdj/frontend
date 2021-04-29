@@ -17,23 +17,7 @@ let player = null;
 // Adjusts for circle size, which is 64x64
 const X_OFFSET = 32;
 // For some reason, top of the page y = -330?
-const Y_OFFSET = -330 + X_OFFSET;
-
-/**
- * Calculates distance from point to an edge defined by 2 points
- * @param {{x: number, y: number}[]} edge
- * @param {{x: number, y: number}} point
- * @returns {number} distance
- */
-const calculateDistanceToEdge = (edge, point) => {
-  const p1 = edge[0];
-  const p2 = edge[1];
-  return (
-    Math.abs(
-      (p2.x - p1.x) * (p1.y - point.y) - (p1.x - point.x) * (p2.y - p1.y)
-    ) / Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2))
-  );
-};
+const Y_OFFSET = 336 + X_OFFSET;
 
 /**
  * Maps `val`, which is between `a` and `b` to a number between `c` and `d`
@@ -48,48 +32,46 @@ const linearTransform = (val, a, b, c, d) => {
   return Math.min(((val - a) / (b - a)) * (d - c) + c, 100);
 };
 
+const maxUnscaledDistance = Math.sqrt(100 * 100 + 100 * 100)
+
 /**
  * Calculates volume given player corner position and client position
  * @param {{x: number, y: number}[]} corners
  * @param {{x: number, y: number}} position
  * @returns {number} volume, from 0 to 100 inclusive
  */
-const calculateVolume = (corners, position) => {
-  const distanceToEdges = [
-    calculateDistanceToEdge([corners[0], corners[1]], position), // left
-    calculateDistanceToEdge([corners[1], corners[3]], position), // bottom
-    calculateDistanceToEdge([corners[2], corners[3]], position), // right
-  ];
-  // Sort ascending
-  distanceToEdges.sort((a, b) => a - b);
-  // Inverse square law modelling
-  const squareRootDist = Math.floor(Math.sqrt(distanceToEdges[0]));
-  // Apply linear transform to map to a value from 0 to 100
-  const transformedDist = 100 - linearTransform(squareRootDist, 0, 28, 0, 100);
-  // Constraints
-  if (transformedDist >= 80) {
-    // Set max volume if we're close
-    return 100;
-  } else if (transformedDist <= 20) {
-    // Mute if we're far
-    return 0;
-  } else {
-    return transformedDist;
+const calculateVolume = (boundingBox, position) => {
+  const {left, bottom, right} = boundingBox;
+  const { x, y } = position;
+
+  let dx = Math.max(left - x, 0, x - right);
+  let dy = Math.max(y - bottom, 0);
+  dx = linearTransform(dx, 0, left, 0, 100);
+  dy = linearTransform(dy, 0, bottom, 0, 100);
+
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  
+  if (distance < 0) {
+    return 100
   }
+
+  const rescaledDistance = linearTransform(distance, 0, maxUnscaledDistance, 0, 100)
+
+  return 100 - rescaledDistance
 };
 
-const baseCorners = [
-  { x: 0, y: 0 }, // top left
-  { x: 0, y: 390 }, // bottom left
-  { x: 0 + 640, y: 0 }, // top right
-  { x: 0 + 640, y: 390 }, // bottom right
-];
+const baseBoundingBox = {
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0
+}
 
 function YoutubePlayer(props) {
   const { id, height, width } = props;
   const { clientPosition } = useContext(ClientPositionContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // Autoplay modal
-  const corners = useRef(baseCorners);
+  const boundingBox = useRef(baseBoundingBox);
 
   useEffect(() => {
     // Code adapted from Bill Feng:
@@ -122,7 +104,7 @@ function YoutubePlayer(props) {
     // The closer clientPosition is to youtube embed
     // the louder the volume gets.
     if (player?.setVolume) {
-      const volume = calculateVolume(corners.current, {
+      const volume = calculateVolume(boundingBox.current, {
         x: clientPosition.x + X_OFFSET,
         y: clientPosition.y + Y_OFFSET,
       });
@@ -154,18 +136,7 @@ function YoutubePlayer(props) {
   const onPlayerReady = event => {
     // Open modal to allow autoplay videos
     onOpen();
-    // Calculate corners
-    const offsetLeft = parseInt(event.target.getIframe().offsetLeft);
-    const h = parseInt(height);
-    const w = parseInt(width);
-    const computedCorners = [
-      { x: offsetLeft, y: 0 }, // top left
-      { x: offsetLeft, y: h }, // bottom left
-      { x: offsetLeft + w, y: 0 }, // top right
-      { x: offsetLeft + w, y: h }, // bottom right
-    ];
-    corners.current = computedCorners;
-    console.log('iframe corners', corners.current);
+    boundingBox.current = event.target.getIframe().getBoundingClientRect();
   };
 
   const onPlayerStateChange = event => {
