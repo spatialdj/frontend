@@ -2,29 +2,38 @@ import React from 'react';
 import {
   Flex,
   Text,
+  Icon,
+  InputGroup,
+  InputLeftElement,
   Input,
   Button,
-  Grid,
-  GridItem,
-  Box,
   Container,
-  Stack,
-  Image,
+  SimpleGrid,
+  HStack,
 } from '@chakra-ui/react';
-import styled from '@emotion/styled';
-
-const Card = styled.div`
-  background-color: #0c162d;
-  opacity: 1;
-  border-radius: 0.25rem;
-  padding: 16px;
-`;
+import RoomCard from 'components/RoomCard';
+import RoomsFilter from 'components/RoomsFilter';
+import { FaSearch } from 'react-icons/fa';
 
 const rooms = [
   {
+    id: 'asdasd123',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['EDM', 'Rock', 'Jazz'],
+    host: {
+      username: 'attybach',
+      profilePicture:
+        'https://i.pinimg.com/originals/47/6f/fc/476ffc83637891f004e1ba6e1ca63e6c.jpg',
+    },
+    currentSong: { name: 'Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaartist - Song Name' },
+  },
+  {
+    id: '2345sdgsdfg',
+    name: 'Long very big room name lol bruh very big room name lol bruh ',
+    description:
+      'Super long description of lots of words and words and long description of lots of words and words and long description of lots of words and words and long description of lots of words and words and long description of lots of words and words and',
+    genres: ['EDM'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -33,9 +42,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: 'vbndrgdgf',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['Pop'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -44,9 +54,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: '4sdfdsv345',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['Hip hop'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -55,9 +66,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: 'sdasd3453456',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['Country'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -66,9 +78,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: 'dfbfd456',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['R&B'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -77,20 +90,10 @@ const rooms = [
     currentSong: { name: 'Artist - Song Name' },
   },
   {
+    id: 'ghjghj567567sdf',
     name: 'EDM Mix',
     description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
-    host: {
-      username: 'attybach',
-      profilePicture:
-        'https://i.pinimg.com/originals/47/6f/fc/476ffc83637891f004e1ba6e1ca63e6c.jpg',
-    },
-    currentSong: { name: 'Artist - Song Name' },
-  },
-  {
-    name: 'EDM Mix',
-    description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Pop', 'EDM', 'Pop'],
+    genres: ['Indie', 'Jazz', 'Pop'],
     host: {
       username: 'attybach',
       profilePicture:
@@ -100,113 +103,49 @@ const rooms = [
   },
 ];
 
-const genres = [
-  'EDM',
-  'Pop',
-  'Hip hop',
-  'R&B',
-  'Rock',
-  'Country',
-  'Indie',
-  'Jazz',
-];
-function index() {
+function Room() {
   return (
-    <Box bg="black" color="white" padding="8" h="full">
-      <Flex direction="row" justify="space-between">
-        <Text fontSize="2xl" mr="4">
-          All Rooms
+    <Container maxW="container.xl" p={8} overflow="auto">
+      <HStack spacing={8} display={['none', null, 'flex']}>
+        <Text fontSize="3xl" fontWeight="semibold" whiteSpace="nowrap">
+          Rooms
         </Text>
-
-        <Button
-          bg="purple.800"
-          _hover={{
-            background: 'purple.900',
-            color: 'white',
-          }}
-        >
+        <InputGroup>
+          <InputLeftElement
+            pointerEvents="none"
+            children={<Icon as={FaSearch} color="gray.600" />}
+          />
+          <Input placeholder="Search for rooms..." size="md" />
+        </InputGroup>
+        <Button px={8} colorScheme="blue">
           Create Room
         </Button>
-      </Flex>
-      <Input placeholder="Search for rooms..." size="md" my="8" />
-      <Flex>
-        <Text my="4" mr="4">
-          Filter
-        </Text>
-        {genres.map(genre => {
-          return (
-            <Button
-              key={genre}
-              margin="2"
-              ml="0"
-              bg="purple.800"
-              _hover={{
-                background: 'purple.900',
-                color: 'white',
-              }}
-            >
-              {genre}
-            </Button>
-          );
-        })}
-      </Flex>
-      <Grid
-        templateColumns="repeat(3, 1fr)"
-        templateRows="repeat(2, 1fr)"
-        gap={4}
-        mt={6}
+      </HStack>
+      <Flex
+        spacing={8}
+        justifyContent="space-between"
+        display={['flex', null, 'none']}
       >
-        {rooms.map(room => {
-          return (
-            <GridItem key={room.name}>
-              <Stack spacing="0">
-                <Card>
-                  <Container opacity="1" color="white" z-index="1">
-                    <Text color="white" opacity="1" fontSize="2xl">
-                      {room.name}
-                    </Text>
-                    <Text color="white" fontSize="xl">
-                      {room.currentSong.name}
-                    </Text>
-                    <Text color="white" fontSize="md">
-                      {room.description}
-                    </Text>
-                    <Flex>
-                      <Image
-                        w="12"
-                        h="12"
-                        borderRadius="full"
-                        src={room.host.profilePicture}
-                        alt="pfp"
-                        my="4"
-                      />
-                      <Text color="white" mx="2" my="6">
-                        {room.host.username}
-                      </Text>
-                      {room.genres.map(genre => {
-                        return (
-                          <Button
-                            mx="2"
-                            my="4"
-                            color="white"
-                            key={genre}
-                            fontSize="md"
-                          >
-                            {genre}
-                          </Button>
-                        );
-                      })}
-                    </Flex>
-                  </Container>
-                </Card>
-              </Stack>
-            </GridItem>
-          );
-        })}
-      </Grid>
-    </Box>
+        <Text fontSize="3xl" fontWeight="semibold" whiteSpace="nowrap">
+          Rooms
+        </Text>
+        <Button colorScheme="blue">Create Room</Button>
+      </Flex>
+      <InputGroup my={4} display={['flex', null, 'none']}>
+        <InputLeftElement
+          pointerEvents="none"
+          children={<Icon as={FaSearch} color="gray.600" />}
+        />
+        <Input placeholder="Search for rooms..." size="md" />
+      </InputGroup>
+      <RoomsFilter />
+      <SimpleGrid minChildWidth="364px" spacing={10}>
+        {rooms.map(room => (
+          <RoomCard key={room.id} room={room} />
+        ))}
+      </SimpleGrid>
+    </Container>
   );
 }
 
-export default index;
-//
+export default Room;
