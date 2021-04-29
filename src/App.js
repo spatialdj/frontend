@@ -52,7 +52,7 @@ function App() {
                 <Route
                   exact
                   path="/room/:id"
-                  component={withAuth(Room, LOGGED_IN_ONLY)}
+                  component={withAuth(Room, PUBLIC_PAGE)}
                 />
                 <Route
                   exact

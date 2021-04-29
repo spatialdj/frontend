@@ -30,8 +30,16 @@ const ClientBubble = props => {
       defaultClassNameDragged="__dragged"
       bounds="#canvas"
     >
-      <Flex width="fit-content" flexDir="column" alignItems="center">
+      <Flex
+        position="absolute"
+        width="fit-content"
+        flexDir="column"
+        alignItems="center"
+      >
         <Avatar
+          outline="4px solid"
+          outlineColor={`${tagColor}.500`}
+          bgColor={`${tagColor}.500`}
           cursor="move"
           size="lg"
           src={image}
@@ -40,13 +48,13 @@ const ClientBubble = props => {
         />
 
         <Tag
-          mt={2}
+          mt={4}
           variant="solid"
           colorScheme={tagColor}
           maxW="128px"
           textAlign="center"
         >
-          {prefix}&nbsp;{username.substr(0, 20)}
+          {`${prefix} ${username.substr(0, 20)} (you)`}
         </Tag>
       </Flex>
     </Draggable>
