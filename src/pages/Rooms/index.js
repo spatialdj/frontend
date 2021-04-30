@@ -1,150 +1,56 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   Flex,
   Text,
-  Icon,
-  InputGroup,
-  InputLeftElement,
-  Input,
   Button,
   Container,
-  SimpleGrid,
-  HStack,
+  useToast,
+  useDisclosure,
 } from '@chakra-ui/react';
-import RoomCard from 'components/RoomCard';
+import RoomList from 'components/RoomList';
 import RoomsFilter from 'components/RoomsFilter';
-import { FaSearch } from 'react-icons/fa';
+import RoomsSearch from 'components/RoomsSearch';
+import CreateRoomModal from 'components/CreateRoomModal';
 
-const rooms = [
-  {
-    id: 'asdasd123',
-    name: 'EDM Mix',
-    description: 'Come join and listen to some EDM Favorites!',
-    genres: ['EDM', 'Rock', 'Jazz'],
-    host: {
-      username: 'attybach',
-      profilePicture:
-        'https://i.pinimg.com/originals/47/6f/fc/476ffc83637891f004e1ba6e1ca63e6c.jpg',
-    },
-    currentSong: { name: 'Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaartist - Song Name' },
-  },
-  {
-    id: '2345sdgsdfg',
-    name: 'Long very big room name lol bruh very big room name lol bruh ',
-    description:
-      'Super long description of lots of words and words and long description of lots of words and words and long description of lots of words and words and long description of lots of words and words and long description of lots of words and words and',
-    genres: ['EDM'],
-    host: {
-      username: 'attybach',
-      profilePicture:
-        'https://i.pinimg.com/originals/47/6f/fc/476ffc83637891f004e1ba6e1ca63e6c.jpg',
-    },
-    currentSong: { name: 'Artist - Song Name' },
-  },
-  {
-    id: 'vbndrgdgf',
-    name: 'EDM Mix',
-    description: 'Come join and listen to some EDM Favorites!',
-    genres: ['Pop'],
-    host: {
-      username: 'attybach',
-      profilePicture:
-        'https://i.pinimg.com/originals/47/6f/fc/476ffc83637891f004e1ba6e1ca63e6c.jpg',
-    },
-    currentSong: { name: 'Artist - Song Name' },
-  },
-  {
-    id: '4sdfdsv345',
-    name: 'EDM Mix',
-    description: 'Come join and listen to some EDM Favorites!',
-    genres: ['Hip hop'],
-    host: {
-      username: 'attybach',
-      profilePicture:
-        'https://i.pinimg.com/originals/47/6f/fc/476ffc83637891f004e1ba6e1ca63e6c.jpg',
-    },
-    currentSong: { name: 'Artist - Song Name' },
-  },
-  {
-    id: 'sdasd3453456',
-    name: 'EDM Mix',
-    description: 'Come join and listen to some EDM Favorites!',
-    genres: ['Country'],
-    host: {
-      username: 'attybach',
-      profilePicture:
-        'https://i.pinimg.com/originals/47/6f/fc/476ffc83637891f004e1ba6e1ca63e6c.jpg',
-    },
-    currentSong: { name: 'Artist - Song Name' },
-  },
-  {
-    id: 'dfbfd456',
-    name: 'EDM Mix',
-    description: 'Come join and listen to some EDM Favorites!',
-    genres: ['R&B'],
-    host: {
-      username: 'attybach',
-      profilePicture:
-        'https://i.pinimg.com/originals/47/6f/fc/476ffc83637891f004e1ba6e1ca63e6c.jpg',
-    },
-    currentSong: { name: 'Artist - Song Name' },
-  },
-  {
-    id: 'ghjghj567567sdf',
-    name: 'EDM Mix',
-    description: 'Come join and listen to some EDM Favorites!',
-    genres: ['Indie', 'Jazz', 'Pop'],
-    host: {
-      username: 'attybach',
-      profilePicture:
-        'https://i.pinimg.com/originals/47/6f/fc/476ffc83637891f004e1ba6e1ca63e6c.jpg',
-    },
-    currentSong: { name: 'Artist - Song Name' },
-  },
-];
+function Room(props) {
+  // Handles create room modal opening and closing
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+  const user = useSelector(state => state.user);
 
-function Room() {
+  const handleOpenCreateRoom = () => {
+    if (user?.authenticated) {
+      onOpen();
+    } else {
+      toast({
+        title: 'Please login first',
+        status: 'info',
+        duration: 5000,
+        position: 'top',
+        isClosable: true,
+      });
+      props.history.push('/login');
+    }
+  };
+
   return (
-    <Container maxW="container.xl" p={8} overflow="auto">
-      <HStack spacing={8} display={['none', null, 'flex']}>
-        <Text fontSize="3xl" fontWeight="semibold" whiteSpace="nowrap">
-          Rooms
-        </Text>
-        <InputGroup>
-          <InputLeftElement
-            pointerEvents="none"
-            children={<Icon as={FaSearch} color="gray.600" />}
-          />
-          <Input placeholder="Search for rooms..." size="md" />
-        </InputGroup>
-        <Button px={8} colorScheme="blue">
-          Create Room
-        </Button>
-      </HStack>
-      <Flex
-        spacing={8}
-        justifyContent="space-between"
-        display={['flex', null, 'none']}
-      >
-        <Text fontSize="3xl" fontWeight="semibold" whiteSpace="nowrap">
-          Rooms
-        </Text>
-        <Button colorScheme="blue">Create Room</Button>
-      </Flex>
-      <InputGroup my={4} display={['flex', null, 'none']}>
-        <InputLeftElement
-          pointerEvents="none"
-          children={<Icon as={FaSearch} color="gray.600" />}
-        />
-        <Input placeholder="Search for rooms..." size="md" />
-      </InputGroup>
-      <RoomsFilter />
-      <SimpleGrid minChildWidth="364px" spacing={10}>
-        {rooms.map(room => (
-          <RoomCard key={room.id} room={room} />
-        ))}
-      </SimpleGrid>
-    </Container>
+    <>
+      <Container maxW="container.xl" p={8} overflow="auto">
+        <Flex spacing={8} justifyContent="space-between">
+          <Text fontSize="3xl" fontWeight="semibold" whiteSpace="nowrap">
+            Rooms
+          </Text>
+          <Button onClick={handleOpenCreateRoom} colorScheme="blue">
+            Create Room
+          </Button>
+        </Flex>
+        <RoomsSearch />
+        <RoomsFilter />
+        <RoomList />
+      </Container>
+      <CreateRoomModal isOpen={isOpen} onClose={onClose} />
+    </>
   );
 }
 

@@ -35,7 +35,9 @@ function Room(props) {
 
     // Listen to user joining room
     socket.on('user_join', response => {
-      const { username, profilePicture } = response;
+      const { user, position } = response;
+      const { username, profilePicture } = user;
+
       handleJoin(username, profilePicture);
       console.log('user_join', response);
     });
