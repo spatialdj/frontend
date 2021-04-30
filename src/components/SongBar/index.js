@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Flex,
+  Box,
   Drawer,
   DrawerOverlay,
   DrawerHeader,
@@ -13,6 +14,9 @@ import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import styled from '@emotion/styled';
 import LeftSide from './sections/LeftSide';
 import RightSide from './sections/RightSide';
+import SongSearch from "../SongSearch";
+import SongList from "../SongList";
+import { search } from "../../services/song.js";
 
 const Bar = styled(Flex)`
   position: absolute;
@@ -26,14 +30,21 @@ export default function SongBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // TODO: connect volume to youtube player? how?
   const [volume, setVolume] = useState(50);
-
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
   // TODO: get song values
   const currentSong = 'Glace - "Ocean"';
   const nextSong = 'Darude - "Sandstorm"';
   const playlistName = 'Epic Bangers';
 
   // TODO: figure out how drawer thing works
-
+  const handleChange = (e) => {
+    console.log(e)
+    if(e.key === 'Enter') {
+      setResults(search(query).data.videos);
+    }
+    setQuery(e.target.value);
+  }
   return (
     <Bar
       position="absolute"
@@ -58,14 +69,22 @@ export default function SongBar() {
               Playlist Manager
             </DrawerHeader>
             <DrawerBody>
-              <p>uhhhh work in progress dont click this ...</p>
-              <p>uhhhh work in progress dont click this ...</p>
-              <p>uhhhh work in progress dont click this ...</p>
-              <p>uhhhh work in progress dont click this ...</p>
-              <p>uhhhh work in progress dont click this ...</p>
-              <p>uhhhh work in progress dont click this ...</p>
-              <p>uhhhh work in progress dont click this ...</p>
-              <p>uhhhh work in progress dont click this ...</p>
+              <Flex>
+                <Box my="4">
+                  <p>uhhhh work in progress dont click this ...</p>
+                  <p>uhhhh work in progress dont click this ...</p>
+                  <p>uhhhh work in progress dont click this ...</p>
+                  <p>uhhhh work in progress dont click this ...</p>
+                  <p>uhhhh work in progress dont click this ...</p>
+                  <p>uhhhh work in progress dont click this ...</p>
+                  <p>uhhhh work in progress dont click this ...</p>
+                  <p>uhhhh work in progress dont click this ...</p>
+                </Box>
+                <Box mx="8" my="4">
+                  <SongSearch query={query} setQuery={handleChange}/>
+                  <SongList list={results}/>
+                </Box>
+              </Flex>
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>
