@@ -6,7 +6,7 @@ import React, { createContext, useState } from 'react';
 export const ClientPositionContext = createContext();
 
 export const ClientPositionProvider = props => {
-  const [clientPosition, setClientPosition] = useState({ x: 0, y: 0 });
+  const [clientPosition, setClientPosition] = useState({ x: -1, y: -1 });
 
   return (
     <ClientPositionContext.Provider

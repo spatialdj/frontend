@@ -8,6 +8,7 @@ import {
   useToast,
   useDisclosure,
 } from '@chakra-ui/react';
+import { Helmet } from 'react-helmet';
 import RoomList from 'components/RoomList';
 import RoomFilter from 'components/RoomFilter';
 import RoomSearch from 'components/RoomSearch';
@@ -36,6 +37,9 @@ function Room(props) {
 
   return (
     <>
+      <Helmet>
+        <title>Public Rooms - Spatial.dj</title>
+      </Helmet>
       <Container maxW="container.xl" p={8} overflow="auto">
         <Flex spacing={8} justifyContent="space-between">
           <Text fontSize="3xl" fontWeight="semibold" whiteSpace="nowrap">

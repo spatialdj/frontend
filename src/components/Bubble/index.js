@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Avatar, Tag, Flex, ScaleFade } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
 
@@ -20,14 +20,15 @@ const generateRandomColor = (colors, weights) => {
 function Bubble(props) {
   const { image, username, prefix, type, position } = props;
   const [isHover, setIsHover] = useState(false);
-  const showTag = !(type === 'other' && !isHover);
+  const avatarColor = useRef(generateRandomColor(colors, weights));
+  const showTag = isHover;
 
   // Prevents dragging text and images
   const preventDragHandler = e => {
     e.preventDefault();
   };
 
-  let tagColor = generateRandomColor(colors, weights);
+  let tagColor = 'blue';
 
   switch (type) {
     case 'songPicker':
@@ -38,15 +39,11 @@ function Bubble(props) {
   }
 
   const handleHover = e => {
-    if (type === 'other') {
-      setIsHover(true);
-    }
+    setIsHover(true);
   };
 
   const handleUnHover = e => {
-    if (type === 'other') {
-      setIsHover(false);
-    }
+    setIsHover(false);
   };
 
   return (
@@ -67,8 +64,8 @@ function Bubble(props) {
         alignItems="center"
       >
         <Avatar
-          boxShadow={`0 0 0 4px ${tagColor}`}
-          bgColor={tagColor}
+          boxShadow={`0 0 0 4px ${avatarColor.current}`}
+          bgColor={avatarColor.current}
           cursor={type !== 'you' ? 'pointer' : 'move'}
           size="lg"
           src={image}

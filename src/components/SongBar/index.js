@@ -14,9 +14,9 @@ import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import styled from '@emotion/styled';
 import LeftSide from './sections/LeftSide';
 import RightSide from './sections/RightSide';
-import SongSearch from "../SongSearch";
-import SongList from "../SongList";
-import { search } from "../../services/song.js";
+import SongSearch from '../SongSearch';
+import SongList from '../SongList';
+import { search } from '../../services/song.js';
 
 const Bar = styled(Flex)`
   position: absolute;
@@ -38,13 +38,13 @@ export default function SongBar() {
   const playlistName = 'Epic Bangers';
 
   // TODO: figure out how drawer thing works
-  const handleChange = (e) => {
-    console.log(e)
-    if(e.key === 'Enter') {
+  const handleChange = e => {
+    console.log(e);
+    if (e.key === 'Enter') {
       setResults(search(query).data.videos);
     }
     setQuery(e.target.value);
-  }
+  };
   return (
     <Bar
       position="absolute"
@@ -81,8 +81,8 @@ export default function SongBar() {
                   <p>uhhhh work in progress dont click this ...</p>
                 </Box>
                 <Box mx="8" my="4">
-                  <SongSearch query={query} setQuery={handleChange}/>
-                  <SongList list={results}/>
+                  <SongSearch query={query} setQuery={handleChange} />
+                  <SongList list={results} />
                 </Box>
               </Flex>
             </DrawerBody>

@@ -1,7 +1,9 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { SocketContext } from 'contexts/socket';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { leaveRoom } from 'slices/currentRoomSlice';
 import { Box, useToast } from '@chakra-ui/react';
+import { Helmet } from 'react-helmet';
 import Bubble from 'components/Bubble';
 import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
@@ -9,36 +11,50 @@ import YoutubePlayer from 'components/YoutubePlayer';
 import SongBar from 'components/SongBar';
 import JoinFailedModal from 'components/JoinFailedModal';
 
-// For testing
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 function Room(props) {
   const socket = useContext(SocketContext);
   const [bubblesData, setBubblesData] = useState([]);
   const [showJoinFailed, setShowJoinFailed] = useState(false);
-  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const currentUser = useSelector(state => state.user);
+  const currentRoom = useSelector(state => state.currentRoom);
   const toast = useToast();
   const roomId = props.match.params.id;
 
   useEffect(() => {
-    socket.emit('join_room', roomId, response => {
-      const { success } = response;
-      if (!success && !user?.authenticated) {
-        // TODO: handle join room fail
+    const { username } = currentUser;
+    console.log('[currentRoom.data, currentUser]');
+    if (currentRoom.status === 'failed') {
+      const { authenticated } = currentUser;
+      if (!authenticated) {
         setShowJoinFailed(true);
+      } else {
+        toast({
+          title: 'Error joining room',
+          status: 'error',
+          isClosable: true,
+          duration: 9000,
+        });
+        props.history.push('/rooms');
       }
-    });
+    } else if (
+      currentRoom.status === 'success' &&
+      currentRoom.data &&
+      username
+    ) {
+      // Populate bubbles data, but ignore if member.username is
+      // same as client's username
+      setBubblesData(
+        currentRoom.data.members.filter(member => member.username !== username)
+      );
+    }
+  }, [currentRoom, currentUser]);
 
+  useEffect(() => {
     // Listen to user joining room
     socket.on('user_join', response => {
       const { user, position } = response;
-      const { username, profilePicture } = user;
-
-      handleJoin(username, profilePicture);
+      handleJoin(user, position);
       console.log('user_join', response);
     });
 
@@ -66,7 +82,7 @@ function Room(props) {
       socket.emit('leave_room', response => {
         console.log('leave_room', response);
       });
-      // TODO: disconnect from listeners
+      dispatch(leaveRoom());
       socket.removeAllListeners([
         'user_join',
         'user_leave',
@@ -76,7 +92,8 @@ function Room(props) {
     };
   }, [socket, roomId]);
 
-  const handleJoin = (username, image) => {
+  const handleJoin = (user, position) => {
+    const { username, profilePicture } = user;
     toast({
       title: `${username} joined`,
       status: 'info',
@@ -87,11 +104,11 @@ function Room(props) {
     setBubblesData(data => [
       ...data,
       {
-        image: image,
+        image: profilePicture,
         prefix: '',
         username: username,
         type: 'other',
-        position: { x: getRandomInt(0, 600), y: getRandomInt(390, 600) },
+        position: position,
       },
     ]);
   };
@@ -124,9 +141,12 @@ function Room(props) {
 
   return (
     <Box id="canvas" overflow="hidden" h="100vh" w="100%">
+      <Helmet>
+        <title>{`${currentRoom?.data?.name} - Spatial.dj`}</title>
+      </Helmet>
       <LeaveRoomButton />
       <YoutubePlayer
-        isAuth={user?.authenticated}
+        isAuth={currentUser?.authenticated}
         id="LITzD9YjuS8"
         height="390"
         width="640"
@@ -142,9 +162,10 @@ function Room(props) {
         />
       ))}
       <ClientBubble
-        image={user?.profilePicture}
+        roomId={roomId}
+        image={currentUser?.profilePicture}
         prefix="👋"
-        username={user?.username}
+        username={currentUser?.username}
       />
       <SongBar />
       <JoinFailedModal

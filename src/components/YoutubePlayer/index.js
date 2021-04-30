@@ -106,7 +106,7 @@ function YoutubePlayer(props) {
     return () => {
       console.log('YoutubePlayer unmounted');
       // Destroy player object
-      player.destroy();
+      player?.destroy();
       player = null;
     };
   }, []);

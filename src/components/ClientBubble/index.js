@@ -1,13 +1,47 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { SocketContext } from 'contexts/socket';
 import { ClientPositionContext } from 'contexts/clientposition';
+import { useSelector, useDispatch } from 'react-redux';
+import { joinRoom } from 'slices/currentRoomSlice';
+import { populate } from 'slices/queueSlice';
 import { Avatar, Tag, Flex } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
 
 const ClientBubble = props => {
+  const socket = useContext(SocketContext);
   const { clientPosition, setClientPosition } = useContext(
     ClientPositionContext
   );
-  const { image, username, prefix } = props;
+  const dispatch = useDispatch();
+  const currentUser = useSelector(state => state.user);
+  const { roomId, image, username, prefix } = props;
+
+  useEffect(() => {
+    socket.emit('join_room', roomId, response => {
+      const { success, room } = response;
+      const { username } = currentUser;
+
+      // Temporary for now... Franco will fix response.room later
+      if (typeof room !== 'string') {
+        dispatch(joinRoom(response));
+        dispatch(
+          populate({
+            success,
+            queue: room.queue,
+            currentSong: room.currentSong,
+          })
+        );
+      }
+
+      console.log('join_room', response);
+
+      if (success) {
+        if (room?.members) {
+          setClientPosition(room.members[username].position);
+        }
+      }
+    });
+  }, [socket, roomId]);
 
   // Prevents dragging text and images
   const preventDragHandler = e => {
@@ -20,6 +54,11 @@ const ClientBubble = props => {
     const { x, y } = data;
     setClientPosition({ x, y });
   };
+
+  // Don't show client bubble if position is not loaded
+  if (clientPosition.x === -1 && clientPosition.y === -1) {
+    return null;
+  }
 
   return (
     <Draggable

@@ -9,6 +9,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import { Helmet } from 'react-helmet';
 import GradientBackground from 'components/GradientBackground';
 import CreateRoomModal from 'components/CreateRoomModal';
 import { Link } from 'react-router-dom';
@@ -52,6 +53,9 @@ function Home(props) {
 
   return (
     <>
+      <Helmet>
+        <title>Spatial.dj</title>
+      </Helmet>
       <GradientBackground>
         <Container
           d="flex"

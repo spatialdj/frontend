@@ -18,6 +18,7 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
+import { Helmet } from 'react-helmet';
 import { Link as ReactLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import GradientBackground from 'components/GradientBackground';
@@ -78,6 +79,9 @@ function Register() {
 
   return (
     <GradientBackground>
+      <Helmet>
+        <title>Register - Spatial.dj</title>
+      </Helmet>
       <Box maxW="md" mx="auto" py="5%">
         <Heading textAlign="center" size="xl" padding="1rem">
           Register

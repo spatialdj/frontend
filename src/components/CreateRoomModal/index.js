@@ -1,7 +1,9 @@
 import React, { useRef, useContext } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { SocketContext } from 'contexts/socket';
+import { useDispatch } from 'react-redux';
+import { createRoom } from 'slices/currentRoomSlice';
 import {
   useColorModeValue,
   Stack,
@@ -42,6 +44,8 @@ function CreateRoomModal(props) {
   const initialFocusRef = useRef(); // For auto focus input on open
   const tagsRef = useRef([]); // To store genre tags
   const socket = useContext(SocketContext); // socket.io to create room
+  const history = useHistory();
+  const dispatch = useDispatch();
   const toast = useToast();
 
   const handleCreateRoom = values => {
@@ -61,9 +65,10 @@ function CreateRoomModal(props) {
         const { success, room } = response;
         if (success && room?.id) {
           // Redirect to room page
+          dispatch(createRoom(response));
           resolve();
           onClose();
-          props.history.push(`/room/${room.id}`);
+          history.push(`/room/${room.id}`);
         } else {
           toast({
             title: 'Error creating room',
@@ -182,4 +187,4 @@ function CreateRoomModal(props) {
   );
 }
 
-export default withRouter(CreateRoomModal);
+export default CreateRoomModal;

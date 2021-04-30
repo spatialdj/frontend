@@ -19,6 +19,7 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
+import { Helmet } from 'react-helmet';
 
 function AccountSettings() {
   const user = useSelector(state => state.user);
@@ -42,6 +43,9 @@ function AccountSettings() {
 
   return (
     <Box bg={useColorModeValue('gray.50', 'inherit')} color="white" p={10}>
+      <Helmet>
+        <title>My Account - Spatial.dj</title>
+      </Helmet>
       <chakra.form
         method="POST"
         shadow="base"
