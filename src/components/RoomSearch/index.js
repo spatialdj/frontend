@@ -5,7 +5,7 @@ import { Icon, InputGroup, InputLeftElement, Input } from '@chakra-ui/react';
 import { FaSearch } from 'react-icons/fa';
 import debounce from 'utils/debounce';
 
-function RoomsSearch() {
+function RoomSearch() {
   const dispatch = useDispatch();
   // const rooms = useSelector(state => state.rooms);
   // const {data, searchQuery, limit, skip, filters, status} = rooms;
@@ -41,4 +41,4 @@ function RoomsSearch() {
   );
 }
 
-export default RoomsSearch;
+export default RoomSearch;

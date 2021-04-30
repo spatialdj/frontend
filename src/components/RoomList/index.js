@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { get } from 'slices/roomsSlice';
-import { SimpleGrid } from '@chakra-ui/react';
+import { SimpleGrid, Text } from '@chakra-ui/react';
+import LoadingView from 'components/LoadingView';
 import RoomCard from 'components/RoomCard';
 
 function RoomList() {
@@ -21,19 +22,19 @@ function RoomList() {
     );
   }, [dispatch]);
 
-  return (
-    <>
-      {data?.length === 0 ? (
-        <>No rooms found</>
-      ) : (
-        <SimpleGrid minChildWidth="364px" spacing={10}>
-          {data?.map(room => (
-            <RoomCard key={room.id} room={room} />
-          ))}
-        </SimpleGrid>
-      )}
-    </>
-  );
+  if (rooms?.status === 'idle' || rooms?.status === 'loading') {
+    return <LoadingView />;
+  } else if (data?.length === 0) {
+    return <Text fontSize="xl">No rooms found</Text>;
+  } else {
+    return (
+      <SimpleGrid minChildWidth="364px" spacing={10}>
+        {data?.map(room => (
+          <RoomCard key={room.id} room={room} />
+        ))}
+      </SimpleGrid>
+    );
+  }
 }
 
 export default RoomList;
