@@ -34,7 +34,7 @@ function RoomCard(props) {
           textOverflow="ellipsis"
           overflow="hidden"
         >
-          {room.currentSong.name}
+          {room.currentSong?.name ?? 'Unknown song'}
         </Text>
       </HStack>
       <Text
