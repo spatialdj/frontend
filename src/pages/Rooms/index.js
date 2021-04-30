@@ -9,8 +9,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import RoomList from 'components/RoomList';
-import RoomsFilter from 'components/RoomsFilter';
-import RoomsSearch from 'components/RoomsSearch';
+import RoomFilter from 'components/RoomFilter';
+import RoomSearch from 'components/RoomSearch';
 import CreateRoomModal from 'components/CreateRoomModal';
 
 function Room(props) {
@@ -45,8 +45,8 @@ function Room(props) {
             Create Room
           </Button>
         </Flex>
-        <RoomsSearch />
-        <RoomsFilter />
+        <RoomSearch />
+        <RoomFilter />
         <RoomList />
       </Container>
       <CreateRoomModal isOpen={isOpen} onClose={onClose} />

@@ -14,7 +14,7 @@ const genres = [
   'Jazz',
 ];
 
-function RoomsFilter() {
+function RoomFilter() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const dispatch = useDispatch();
   const firstLoad = useRef(true);
@@ -68,4 +68,4 @@ function RoomsFilter() {
   );
 }
 
-export default RoomsFilter;
+export default RoomFilter;
