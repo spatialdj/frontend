@@ -18,7 +18,7 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Link as ReactLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import GradientBackground from 'components/GradientBackground';

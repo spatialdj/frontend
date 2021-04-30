@@ -19,7 +19,7 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 function AccountSettings() {
   const user = useSelector(state => state.user);

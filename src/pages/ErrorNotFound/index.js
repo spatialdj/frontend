@@ -1,14 +1,16 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Heading, Text, Flex } from '@chakra-ui/react';
 
 function index() {
   return (
-    <div>
-      <Flex alignItems="center" flexDirection="column" m="10%">
-        <Heading>404</Heading>
-        <Text>Page not found.</Text>
-      </Flex>
-    </div>
+    <Flex alignItems="center" flexDirection="column" m="10%">
+      <Helmet>
+        <title>404 - Spatial.dj</title>
+      </Helmet>
+      <Heading>404</Heading>
+      <Text>Page not found.</Text>
+    </Flex>
   );
 }
 

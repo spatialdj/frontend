@@ -9,7 +9,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import GradientBackground from 'components/GradientBackground';
 import CreateRoomModal from 'components/CreateRoomModal';
 import { Link } from 'react-router-dom';

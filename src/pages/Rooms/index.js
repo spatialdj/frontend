@@ -8,7 +8,7 @@ import {
   useToast,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import RoomList from 'components/RoomList';
 import RoomFilter from 'components/RoomFilter';
 import RoomSearch from 'components/RoomSearch';

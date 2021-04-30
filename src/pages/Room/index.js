@@ -3,7 +3,7 @@ import { SocketContext } from 'contexts/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { leaveRoom } from 'slices/currentRoomSlice';
 import { Box, useToast } from '@chakra-ui/react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import Bubble from 'components/Bubble';
 import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
