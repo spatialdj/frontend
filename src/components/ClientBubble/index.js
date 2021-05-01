@@ -42,6 +42,10 @@ const ClientBubble = props => {
     });
   }, [socket, roomId]);
 
+  useEffect(() => {
+    socket.emit('pos_change', clientPosition);
+  }, [socket, clientPosition]);
+
   // Prevents dragging text and images
   const preventDragHandler = e => {
     e.preventDefault();
