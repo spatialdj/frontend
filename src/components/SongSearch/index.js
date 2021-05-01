@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon, InputGroup, InputLeftElement, Input } from '@chakra-ui/react';
 import { FaSearch } from 'react-icons/fa';
 
-function SongSearch({ query, setQuery }) {
+function SongSearch({ query, setQuery, onKeyDown }) {
   return (
     <InputGroup>
       <InputLeftElement
@@ -12,6 +12,7 @@ function SongSearch({ query, setQuery }) {
       <Input
         value={query}
         onChange={setQuery}
+        onKeyDown={onKeyDown}
         placeholder="Search for rooms..."
         size="md"
       />

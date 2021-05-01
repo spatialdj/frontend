@@ -1,14 +1,16 @@
 import React from 'react';
-import Song from '../SongCard/Song';
-import { Grid } from '@chakra-ui/react';
+import Song from '../SongCard';
+import { List, ListItem } from '@chakra-ui/react';
 
 function SongList({ list }) {
   return (
-    <Grid>
+    <List overflowY="scroll" maxH="700px">
       {list?.map(song => (
-        <Song key={song.id} data={song} />
+        <ListItem key={song.id}>
+          <Song key={song.id} data={song} />
+        </ListItem>
       ))}
-    </Grid>
+    </List>
   );
 }
 
