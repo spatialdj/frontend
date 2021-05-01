@@ -77,6 +77,7 @@ function CreateRoomModal(props) {
             duration: 9000,
             isClosable: true,
           });
+          resolve();
         }
         console.log('create_room', response);
       });
