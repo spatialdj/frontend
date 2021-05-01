@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { leaveRoom } from 'slices/currentRoomSlice';
@@ -10,11 +10,14 @@ import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 import SongBar from 'components/SongBar';
 import JoinFailedModal from 'components/JoinFailedModal';
-import { auth } from 'services/user';
 
 function Room(props) {
   const socket = useContext(SocketContext);
   const [bubblesData, setBubblesData] = useState([]);
+  // TODO: instead of storing pos in bubblesData,
+  // maybe have a separate state for positions?
+  const bubblesRef = useRef([]);
+  bubblesRef.current = bubblesData;
   const [showJoinFailed, setShowJoinFailed] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user);
@@ -46,30 +49,36 @@ function Room(props) {
   }, [currentRoom, currentUser]);
 
   useEffect(() => {
+    // Listen to user moving
+    socket.on('pos_change', (username, position) => {
+      handlePosChange(username, position);
+      // console.log(`pos_change ${username}`, position);
+    });
+
     // Listen to user joining room
     socket.on('user_join', response => {
+      console.log('user_join', response);
       const { user, position } = response;
       handleJoin(user, position);
-      console.log('user_join', response);
     });
 
     // Listen to user leaving room
     socket.on('user_leave', username => {
-      handleLeave(username);
       console.log('user_leave', username);
+      handleLeave(username);
     });
 
     // Listen to new host transfewr
     socket.on('new_host', response => {
+      console.log('new_host', response);
       const { username } = response;
       handleTransferHost(username);
-      console.log('new_host', response);
     });
 
     // Listen to room closed
     socket.on('room_closed', () => {
-      handleRoomClosed();
       console.log('room_closed');
+      handleRoomClosed();
     });
 
     return () => {
@@ -86,6 +95,29 @@ function Room(props) {
       ]);
     };
   }, [socket, roomId]);
+
+  const handlePosChange = (username, position) => {
+    if (currentUser?.username === username) return;
+
+    const index = bubblesRef.current.findIndex(
+      user => user.username === username
+    );
+    
+    // TODO: find a better way to update this
+    if (index !== -1) {
+      setBubblesData([
+        ...bubblesRef.current.slice(0, index),
+        {
+          image: bubblesRef.current[index].image,
+          prefix: bubblesRef.current[index].prefix,
+          username: bubblesRef.current[index].username,
+          type: bubblesRef.current[index].type,
+          position: position,
+        },
+        ...bubblesRef.current.slice(index + 1),
+      ]);
+    }
+  };
 
   const handleJoin = (user, position) => {
     const { username, profilePicture } = user;
