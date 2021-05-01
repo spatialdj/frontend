@@ -101,6 +101,12 @@ function ChatBox() {
     });
   };
 
+  const handleKeyDown = event => {
+    if (event.key === 'Enter') {
+      onSubmit();
+    }
+  };
+
   return (
     <ChatContainer
       position="absolute"
@@ -125,6 +131,7 @@ function ChatBox() {
         <InputGroup>
           <Input
             onChange={event => setMessage(event.target.value)}
+            onKeyDown={handleKeyDown}
             variant="filled"
             placeholder="Message room"
             _placeholder={{ color: 'white' }}
