@@ -19,20 +19,23 @@ const ClientBubble = props => {
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
       console.log('join_room', response);
-      const { success, room } = response;
+      const { success, guest, room } = response;
       const { username } = currentUser;
 
       dispatch(joinRoom(response));
-      dispatch(
-        populate({
-          success,
-          queue: room.queue,
-          currentSong: room.currentSong,
-        })
-      );
 
-      if (success) {
-        if (room?.members) {
+      if (success && room) {
+        dispatch(
+          populate({
+            success,
+            queue: room.queue,
+            currentSong: room.currentSong,
+          })
+        );
+      }
+
+      if (success && guest === false) {
+        if (room?.members?.[username]) {
           setClientPosition(room.members[username].position);
         }
       }

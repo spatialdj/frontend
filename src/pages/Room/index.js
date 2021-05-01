@@ -10,6 +10,7 @@ import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 import SongBar from 'components/SongBar';
 import JoinFailedModal from 'components/JoinFailedModal';
+import { auth } from 'services/user';
 
 function Room(props) {
   const socket = useContext(SocketContext);
@@ -22,30 +23,24 @@ function Room(props) {
   const roomId = props.match.params.id;
 
   useEffect(() => {
-    const { username } = currentUser;
+    const { username, authenticated } = currentUser;
+    const { status, data } = currentRoom;
     console.log('[currentRoom.data, currentUser]');
-    if (currentRoom.status === 'failed') {
-      const { authenticated } = currentUser;
-      if (!authenticated) {
-        setShowJoinFailed(true);
-      } else {
-        toast({
-          title: 'Error joining room',
-          status: 'error',
-          isClosable: true,
-          duration: 9000,
-        });
-        props.history.push('/rooms');
-      }
-    } else if (
-      currentRoom.status === 'success' &&
-      currentRoom.data &&
-      username
-    ) {
+    if (status === 'failed') {
+      toast({
+        title: 'Error joining room',
+        status: 'error',
+        isClosable: true,
+        duration: 9000,
+      });
+      props.history.push('/rooms');
+    } else if (status === 'success' && !authenticated) {
+      setShowJoinFailed(true);
+    } else if (status === 'success' && data && username) {
       // Populate bubbles data, but ignore if member.username is
       // same as client's username
       setBubblesData(
-        currentRoom.data.members.filter(member => member.username !== username)
+        data.members.filter(member => member.username !== username)
       );
     }
   }, [currentRoom, currentUser]);

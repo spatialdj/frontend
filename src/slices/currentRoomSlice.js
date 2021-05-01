@@ -15,6 +15,7 @@ const initialState = {
     members: [],
   },
   status: 'idle',
+  isGuest: null,
 };
 
 // There is no async here, the socket.io stuff is handled
@@ -48,6 +49,7 @@ export const currentRoomSlice = createSlice({
       // Convert members from object to array
       state.data.members = Object.keys(members).map(key => members[key]);
       state.status = 'success';
+      state.isGuest = false;
     },
     joinRoom: (state, { payload }) => {
       if (payload.success) {
@@ -73,6 +75,7 @@ export const currentRoomSlice = createSlice({
         // Convert members from object to array
         state.data.members = Object.keys(members).map(key => members[key]);
         state.status = 'success';
+        state.isGuest = payload.guest;
       } else {
         state.status = 'failed';
       }
