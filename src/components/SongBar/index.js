@@ -84,7 +84,7 @@ export default function SongBar() {
                   <p>uhhhh work in progress dont click this ...</p>
                   <p>uhhhh work in progress dont click this ...</p>
                 </Box>
-                <Box mx="8" my="4">
+                <Box mx="8" my="4" w="full">
                   <SongSearch query={query} setQuery={handleChange} onKeyDown={searchSongs}/>
                   <SongList list={results} />
                 </Box>

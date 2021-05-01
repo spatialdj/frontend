@@ -13,8 +13,7 @@ function SongSearch({ query, setQuery, onKeyDown }) {
         value={query}
         onChange={setQuery}
         onKeyDown={onKeyDown}
-        placeholder="Search for rooms..."
-        size="md"
+        placeholder="Search for songs on Youtube..."
       />
     </InputGroup>
   );

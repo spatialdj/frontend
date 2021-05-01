@@ -1,9 +1,9 @@
 import React from 'react';
-import { Flex, Text, Image, Button, Icon } from '@chakra-ui/react';
+import { Flex, Text, Image, Button, Icon, Box } from '@chakra-ui/react';
 import { FaPlus } from 'react-icons/fa';
 
 function Song({ data }) {
-  const { title, thumbnails } = data;
+  const { title, thumbnails, channelTitle } = data;
   return (
     <Flex
       bg="black"
@@ -15,7 +15,10 @@ function Song({ data }) {
     >
       <Flex>
         <Image src={thumbnails.default.url} alt="thumbnail" />
-        <Text m="4">{title}</Text>
+        <Box>
+          <Text m="4">{title}</Text>
+          <Text m="4">{channelTitle}</Text>
+        </Box>
       </Flex>
       <Button
         style={{ 'margin-top': 'auto', 'margin-bottom': 'auto' }}
