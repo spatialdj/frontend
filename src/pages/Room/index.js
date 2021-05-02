@@ -10,6 +10,7 @@ import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 import SongBar from 'components/SongBar';
 import JoinFailedModal from 'components/JoinFailedModal';
+import ChatBox from 'components/ChatBox';
 
 function Room(props) {
   const socket = useContext(SocketContext);
@@ -130,7 +131,7 @@ function Room(props) {
     const index = bubblesRef.current.findIndex(
       user => user.username === username
     );
-    
+
     // TODO: find a better way to update this
     if (index !== -1) {
       setBubblesData([
@@ -223,6 +224,7 @@ function Room(props) {
         prefix="👋"
         username={currentUser?.username}
       />
+      <ChatBox />
       <SongBar />
       <JoinFailedModal
         isOpen={showJoinFailed}

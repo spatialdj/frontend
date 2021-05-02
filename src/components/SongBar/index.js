@@ -38,11 +38,15 @@ export default function SongBar() {
   const playlistName = 'Epic Bangers';
 
   // TODO: figure out how drawer thing works
-  const handleChange = e => {
-    console.log(e);
+  const searchSongs = async(e) => {
     if (e.key === 'Enter') {
-      setResults(search(query).data.videos);
+      const res = await search(query);
+      setResults(res.data.data.videos);
     }
+  }
+  const handleChange = e => {
+    // 
+    
     setQuery(e.target.value);
   };
   return (
@@ -80,8 +84,8 @@ export default function SongBar() {
                   <p>uhhhh work in progress dont click this ...</p>
                   <p>uhhhh work in progress dont click this ...</p>
                 </Box>
-                <Box mx="8" my="4">
-                  <SongSearch query={query} setQuery={handleChange} />
+                <Box mx="8" my="4" w="full">
+                  <SongSearch query={query} setQuery={handleChange} onKeyDown={searchSongs}/>
                   <SongList list={results} />
                 </Box>
               </Flex>
