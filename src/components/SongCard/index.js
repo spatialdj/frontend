@@ -1,6 +1,7 @@
 import React from 'react';
 import { Flex, Text, Image, Button, Icon, Box } from '@chakra-ui/react';
 import { FaPlus } from 'react-icons/fa';
+import he from 'he';
 
 function Song({ data }) {
   const { title, thumbnails, channelTitle } = data;
@@ -16,8 +17,8 @@ function Song({ data }) {
       <Flex>
         <Image src={thumbnails.default.url} alt="thumbnail" />
         <Box>
-          <Text m="4">{title}</Text>
-          <Text m="4">{channelTitle}</Text>
+          <Text m="4">{he.decode(title)}</Text>
+          <Text m="4">{he.decode(channelTitle)}</Text>
         </Box>
       </Flex>
       <Button
