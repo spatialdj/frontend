@@ -13,7 +13,11 @@ import JoinFailedModal from 'components/JoinFailedModal';
 
 function Room(props) {
   const socket = useContext(SocketContext);
+
+  const [song, setSong] = useState();
   const [bubblesData, setBubblesData] = useState([]);
+  const [currentSongNumber, setCurrentSongNumber] = useState(0);
+
   // TODO: instead of storing pos in bubblesData,
   // maybe have a separate state for positions?
   const bubblesRef = useRef([]);
@@ -45,8 +49,20 @@ function Room(props) {
       setBubblesData(
         data.members.filter(member => member.username !== username)
       );
+
+      setSong(data.currentSong);
+      // todo: set video position to current time - data.songStartTime
     }
   }, [currentRoom, currentUser]);
+
+  useEffect(() => {
+    if (currentRoom == null) {
+      return;
+    }
+
+    socket.emit('join_queue');
+    // todo: remove socket from dependencies after implementing join queue button
+  }, [currentRoom, socket])
 
   useEffect(() => {
     // Listen to user moving
@@ -81,6 +97,17 @@ function Room(props) {
       handleRoomClosed();
     });
 
+    socket.on('play_song', (username, videoId, startTime) => {
+      console.log('play_song')
+      setSong({ 
+        username,
+        id: videoId
+      });
+
+      setCurrentSongNumber(currentSongNumber => currentSongNumber + 1)
+      // todo: clamp and move video with startTime
+    })
+
     return () => {
       console.log('room unmounted');
       socket.emit('leave_room', response => {
@@ -92,6 +119,7 @@ function Room(props) {
         'user_leave',
         'new_host',
         'room_closed',
+        'play_song'
       ]);
     };
   }, [socket, roomId]);
@@ -174,9 +202,10 @@ function Room(props) {
       <LeaveRoomButton />
       <YoutubePlayer
         isAuth={currentUser?.authenticated}
-        id="LITzD9YjuS8"
+        id={song?.id}
         height="390"
         width="640"
+        currentSongNumber={currentSongNumber}
       />
       {bubblesData.map(item => (
         <Bubble

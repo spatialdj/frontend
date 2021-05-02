@@ -80,7 +80,7 @@ const baseBoundingBox = {
 };
 
 function YoutubePlayer(props) {
-  const { id, height, width } = props;
+  const { id, height, width, currentSongNumber } = props;
   const { clientPosition } = useContext(ClientPositionContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // Autoplay modal
   const boundingBox = useRef(baseBoundingBox);
@@ -109,7 +109,7 @@ function YoutubePlayer(props) {
       player?.destroy();
       player = null;
     };
-  }, []);
+  }, [id, currentSongNumber]);
 
   // Handle proximity audio
   useEffect(() => {
