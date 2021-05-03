@@ -10,9 +10,9 @@ function LeftSide(props) {
         onClick={props.openDrawer}
         icon={props.isDrawerOpen ? <FaChevronDown /> : <FaChevronUp />}
       />
-      <VStack align="left">
+      <VStack align="left" spacing={0}>
         <Text fontWeight="bold">Now Playing: {props.currentSong}</Text>
-        <Text>Next Song: {props.nextSong}</Text>
+        <Text>Next Up: {props.nextSong}</Text>
       </VStack>
     </HStack>
   );

@@ -16,7 +16,8 @@ import MessagesList from './components/MessagesList';
 
 const ChatContainer = styled(SimpleGrid)`
   bottom: 0;
-  right: 1rem;
+  right: 0;
+  background-color: rgba(12, 22, 45, 0.5);
 `;
 
 function ChatBox() {
@@ -110,9 +111,8 @@ function ChatBox() {
   return (
     <ChatContainer
       position="absolute"
-      bg="gray.900"
       py="auto"
-      mb="7rem"
+      mb="80px"
       width="20%"
       height="40%"
       minH="460px"

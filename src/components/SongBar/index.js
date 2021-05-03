@@ -19,7 +19,8 @@ import SongList from '../SongList';
 import { search } from '../../services/song.js';
 
 const Bar = styled(Flex)`
-  position: absolute;
+  z-index: 1;
+  height: 80px;
   width: 100%;
   bottom: 0;
   border-top-left-radius: 100;
@@ -29,7 +30,6 @@ const Bar = styled(Flex)`
 export default function SongBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // TODO: connect volume to youtube player? how?
-  const [volume, setVolume] = useState(50);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   // TODO: get song values
@@ -51,12 +51,10 @@ export default function SongBar() {
   };
   return (
     <Bar
-      position="absolute"
-      zIndex="1"
       align="center"
       justify="space-between"
       wrap="wrap"
-      padding="1.5rem"
+      padding={4}
       bgColor="rgba(12, 22, 45, 1)"
       color="white"
     >
