@@ -14,8 +14,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-let player = null;
-
 // Adjusts for circle size, which is 64x64 + 4px of border
 const X_OFFSET = 32 + 4;
 // When in doubt, add 330 to this number?
@@ -87,6 +85,7 @@ function YoutubePlayer(props) {
   const { isOpen, onOpen, onClose } = useDisclosure(); // Autoplay modal
   const dispatch = useDispatch();
   const volume = useSelector(state => state.youtube.volume);
+  const player = useRef(null);
   const boundingBox = useRef(baseBoundingBox);
 
   useEffect(() => {
@@ -110,8 +109,7 @@ function YoutubePlayer(props) {
     return () => {
       console.log('YoutubePlayer unmounted');
       // Destroy player object
-      player?.destroy();
-      player = null;
+      player.current?.destroy();
     };
   }, [id, currentSongNumber]);
 
@@ -119,25 +117,25 @@ function YoutubePlayer(props) {
   useEffect(() => {
     // The closer clientPosition is to youtube embed
     // the louder the volume gets.
-    if (player?.setVolume) {
+    if (player.current?.setVolume) {
       const volume = calculateVolume(boundingBox.current, {
         x: clientPosition.x + X_OFFSET,
         y: clientPosition.y + Y_OFFSET,
       });
       // console.log(volume);
-      player.setVolume(volume);
+      player.current.setVolume(volume);
       dispatch(changeVolume(volume));
     }
   }, [clientPosition, player]);
 
   useEffect(() => {
-    if (player?.setVolume) {
-      player.setVolume(volume);
+    if (player.current?.setVolume) {
+      player.current.setVolume(volume);
     }
   }, [volume]);
 
   const loadVideo = () => {
-    player = new window.YT.Player('youtube-player', {
+    player.current = new window.YT.Player('youtube-player', {
       height: height,
       width: width,
       videoId: id,
@@ -159,6 +157,7 @@ function YoutubePlayer(props) {
 
   const onPlayerReady = event => {
     // Open modal to allow autoplay videos
+    event.target.playVideo();
     onOpen();
     boundingBox.current = event.target.getIframe().getBoundingClientRect();
     console.log('boundingBox', boundingBox.current);
@@ -175,6 +174,7 @@ function YoutubePlayer(props) {
         break;
       case 1:
         console.log('YT playing 1');
+        if (isOpen) onClose();
         break;
       case 2:
         console.log('YT paused 2');
@@ -195,8 +195,8 @@ function YoutubePlayer(props) {
   };
 
   const onGrantAutoplay = () => {
-    if (player) {
-      player.playVideo();
+    if (player.current) {
+      player.current.playVideo();
       onClose();
     }
   };
