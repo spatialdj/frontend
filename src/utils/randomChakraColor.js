@@ -26,7 +26,7 @@ const weights = [
  * Generates random Chakra-UI colors
  * @returns {string} a color in `color`.`weight` form
  */
-export default generateRandomColor = () => {
+export default () => {
   const randomColor = colors[Math.floor(Math.random() * colors.length)];
   const randomWeight = weights[Math.floor(Math.random() * weights.length)];
   return `${randomColor}.${randomWeight}`;
