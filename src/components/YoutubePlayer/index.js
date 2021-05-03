@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeVolume, muteVideo } from 'slices/youtubeSlice';
+import { changeVolume } from 'slices/youtubeSlice';
 import { ClientPositionContext } from 'contexts/clientposition';
 import {
   Box,
@@ -67,7 +67,7 @@ const calculateVolume = (boundingBox, position) => {
 
   const volume = 100 - rescaledVolume;
 
-  if (volume >= 80) return linearTransform(volume, 0, 80, 0, 100);
+  if (volume >= 90) return linearTransform(volume, 0, 90, 0, 100);
 
   return volume;
 };
@@ -117,15 +117,12 @@ function YoutubePlayer(props) {
   useEffect(() => {
     // The closer clientPosition is to youtube embed
     // the louder the volume gets.
-    if (player.current?.setVolume) {
-      const volume = calculateVolume(boundingBox.current, {
-        x: clientPosition.x + X_OFFSET,
-        y: clientPosition.y + Y_OFFSET,
-      });
-      // console.log(volume);
-      player.current.setVolume(volume);
-      dispatch(changeVolume(volume));
-    }
+    const volume = calculateVolume(boundingBox.current, {
+      x: clientPosition.x + X_OFFSET,
+      y: clientPosition.y + Y_OFFSET,
+    });
+    // console.log(volume);
+    dispatch(changeVolume(volume));
   }, [clientPosition, player]);
 
   useEffect(() => {
@@ -163,6 +160,10 @@ function YoutubePlayer(props) {
       // Only open if authed, because the view only modal
       // will show for non authed users
       onOpen();
+    } else {
+      // Set player volume for non authed users,
+      // because they can't control volume by moving bubble
+      dispatch(changeVolume(100));
     }
     boundingBox.current = event.target.getIframe().getBoundingClientRect();
     console.log('boundingBox', boundingBox.current);
