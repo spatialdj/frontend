@@ -121,6 +121,7 @@ function RoomBox(props) {
       });
       dispatch(leaveRoom());
       socket.removeAllListeners([
+        'pos_change',
         'user_join',
         'user_leave',
         'new_host',
