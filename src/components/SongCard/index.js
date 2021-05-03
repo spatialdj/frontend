@@ -1,13 +1,23 @@
 import React from 'react';
-import { Flex, Text, Image, Button, Icon, Box } from '@chakra-ui/react';
-import { FaPlus } from 'react-icons/fa';
+import { Center, Flex, Text, Image, Button, Icon, Box } from '@chakra-ui/react';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { FaPlus, FaTrashAlt } from 'react-icons/fa';
 import he from 'he';
 
-function Song({ data }) {
+function Song({ data, isInSearch }) {
   const { title, thumbnails, channelTitle } = data;
+
+  const handleOnClick = () => {
+    if (isInSearch) {
+      // TODO: add song to user playlist
+    } else {
+      // TODO: delete song from user playlist
+    }
+  };
+
   return (
     <Flex
-      bg="black"
+      bg="#211E1E"
       my="2"
       px="8"
       py="4"
@@ -15,6 +25,11 @@ function Song({ data }) {
       borderRadius="8px"
     >
       <Flex>
+        {!isInSearch && (
+          <Center>
+            <Icon as={GiHamburgerMenu} pr="1rem" boxSize={8} />
+          </Center>
+        )}
         <Image src={thumbnails.default.url} alt="thumbnail" />
         <Box>
           <Text m="4">{he.decode(title)}</Text>
@@ -22,11 +37,17 @@ function Song({ data }) {
         </Box>
       </Flex>
       <Button
-        style={{ 'margin-top': 'auto', 'margin-bottom': 'auto' }}
+        style={{ marginTop: 'auto', marginBottom: 'auto' }}
         bg="none"
         _hover={{ opacity: 0.5 }}
       >
-        {<Icon as={FaPlus} color="gray.300" />}
+        {
+          <Icon
+            onClick={handleOnClick}
+            as={isInSearch ? FaPlus : FaTrashAlt}
+            color={isInSearch ? 'gray.300' : 'red.300'}
+          />
+        }
       </Button>
     </Flex>
   );

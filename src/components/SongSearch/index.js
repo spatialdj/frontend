@@ -7,13 +7,14 @@ function SongSearch({ query, setQuery, onKeyDown }) {
     <InputGroup>
       <InputLeftElement
         pointerEvents="none"
-        children={<Icon as={FaSearch} color="gray.600" />}
+        children={<Icon as={FaSearch} color="#8F8F8F" />}
       />
       <Input
         value={query}
         onChange={setQuery}
         onKeyDown={onKeyDown}
         placeholder="Search for songs on Youtube..."
+        _placeholder={{ color: 'white' }}
       />
     </InputGroup>
   );

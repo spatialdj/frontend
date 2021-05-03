@@ -1,6 +1,6 @@
 import React from 'react';
 import { HStack, IconButton, Text, VStack } from '@chakra-ui/react';
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
+import { FaChevronUp } from 'react-icons/fa';
 
 function LeftSide(props) {
   return (
@@ -8,7 +8,7 @@ function LeftSide(props) {
       <IconButton
         variant="outline"
         onClick={props.openDrawer}
-        icon={props.isDrawerOpen ? <FaChevronDown /> : <FaChevronUp />}
+        icon={<FaChevronUp />}
       />
       <VStack align="left" spacing={0}>
         <Text fontWeight="bold">Now Playing: {props.currentSong}</Text>
