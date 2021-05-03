@@ -9,7 +9,7 @@ import Bubble from 'components/Bubble';
 import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
-import JoinFailedModal from 'components/JoinFailedModal';
+import ViewOnlyModal from 'components/ViewOnlyModal';
 
 function RoomBox(props) {
   const socket = useContext(SocketContext);
@@ -22,7 +22,7 @@ function RoomBox(props) {
   // maybe have a separate state for positions?
   const bubblesRef = useRef([]);
   bubblesRef.current = bubblesData;
-  const [showJoinFailed, setShowJoinFailed] = useState(false);
+  const [showViewOnly, setShowViewOnly] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user);
   const currentRoom = useSelector(state => state.currentRoom);
@@ -43,7 +43,7 @@ function RoomBox(props) {
       });
       history.push('/rooms');
     } else if (status === 'success' && !authenticated) {
-      setShowJoinFailed(true);
+      setShowViewOnly(true);
     } else if (status === 'success' && data && username) {
       // Populate bubbles data, but ignore if member.username is
       // same as client's username
@@ -231,9 +231,9 @@ function RoomBox(props) {
         prefix="👋"
         username={currentUser?.username}
       />
-      <JoinFailedModal
-        isOpen={showJoinFailed}
-        onClose={() => setShowJoinFailed(false)}
+      <ViewOnlyModal
+        isOpen={showViewOnly}
+        onClose={() => setShowViewOnly(false)}
       />
     </Box>
   );

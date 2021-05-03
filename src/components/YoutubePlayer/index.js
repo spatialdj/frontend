@@ -80,7 +80,7 @@ const baseBoundingBox = {
 };
 
 function YoutubePlayer(props) {
-  const { id, height, width, currentSongNumber } = props;
+  const { isAuth, id, height, width, currentSongNumber } = props;
   const { clientPosition } = useContext(ClientPositionContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // Autoplay modal
   const dispatch = useDispatch();
@@ -156,9 +156,14 @@ function YoutubePlayer(props) {
   };
 
   const onPlayerReady = event => {
-    // Open modal to allow autoplay videos
     event.target.playVideo();
-    onOpen();
+    console.log('isAuth', isAuth);
+    if (isAuth) {
+      // Open modal to allow autoplay videos
+      // Only open if authed, because the view only modal
+      // will show for non authed users
+      onOpen();
+    }
     boundingBox.current = event.target.getIframe().getBoundingClientRect();
     console.log('boundingBox', boundingBox.current);
   };

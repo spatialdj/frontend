@@ -10,7 +10,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-function JoinFailedModal(props) {
+function ViewOnlyModal(props) {
   const { isOpen, onClose, isAuth } = props;
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -33,4 +33,4 @@ function JoinFailedModal(props) {
   );
 }
 
-export default JoinFailedModal;
+export default ViewOnlyModal;
