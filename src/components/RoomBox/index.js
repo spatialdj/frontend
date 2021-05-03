@@ -143,7 +143,7 @@ function RoomBox(props) {
       setBubblesData([
         ...bubblesRef.current.slice(0, index),
         {
-          image: bubblesRef.current[index].image,
+          profilePicture: bubblesRef.current[index].profilePicture,
           prefix: bubblesRef.current[index].prefix,
           username: bubblesRef.current[index].username,
           type: bubblesRef.current[index].type,
@@ -166,7 +166,7 @@ function RoomBox(props) {
     setBubblesData(data => [
       ...data,
       {
-        image: profilePicture,
+        profilePicture: profilePicture,
         prefix: '',
         username: username,
         type: 'other',
@@ -224,7 +224,7 @@ function RoomBox(props) {
       {bubblesData.map(item => (
         <Bubble
           key={item.username}
-          image={item.image}
+          profilePicture={item.profilePicture}
           prefix={item.prefix}
           username={item.username}
           position={item.position}
@@ -233,7 +233,7 @@ function RoomBox(props) {
       ))}
       <ClientBubble
         roomId={roomId}
-        image={currentUser?.profilePicture}
+        profilePicture={currentUser?.profilePicture}
         prefix="👋"
         username={currentUser?.username}
       />

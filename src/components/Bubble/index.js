@@ -3,7 +3,7 @@ import { Avatar, Tag, Flex, ScaleFade } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
 
 function Bubble(props) {
-  const { image, username, prefix, type, position } = props;
+  const { profilePicture, username, prefix, type, position } = props;
   const [isHover, setIsHover] = useState(false);
   const showTag = isHover;
 
@@ -50,7 +50,7 @@ function Bubble(props) {
         <Avatar
           cursor={type !== 'you' ? 'pointer' : 'move'}
           size="lg"
-          src={image}
+          src={profilePicture}
           name={username}
           onDragStart={preventDragHandler}
         />

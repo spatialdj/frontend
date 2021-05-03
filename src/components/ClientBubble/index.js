@@ -14,7 +14,7 @@ const ClientBubble = props => {
   );
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user);
-  const { roomId, image, username, prefix } = props;
+  const { roomId, profilePicture, username, prefix } = props;
 
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
@@ -83,7 +83,7 @@ const ClientBubble = props => {
           bgColor={`${tagColor}.500`}
           cursor="move"
           size="lg"
-          src={image}
+          src={profilePicture}
           name={username}
           onDragStart={preventDragHandler}
         />
