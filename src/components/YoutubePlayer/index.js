@@ -1,4 +1,6 @@
 import React, { useEffect, useContext, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeVolume, muteVideo } from 'slices/youtubeSlice';
 import { ClientPositionContext } from 'contexts/clientposition';
 import {
   Box,
@@ -83,6 +85,8 @@ function YoutubePlayer(props) {
   const { id, height, width, currentSongNumber } = props;
   const { clientPosition } = useContext(ClientPositionContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // Autoplay modal
+  const dispatch = useDispatch();
+  const volume = useSelector(state => state.youtube.volume);
   const boundingBox = useRef(baseBoundingBox);
 
   useEffect(() => {
@@ -122,8 +126,15 @@ function YoutubePlayer(props) {
       });
       // console.log(volume);
       player.setVolume(volume);
+      dispatch(changeVolume(volume));
     }
   }, [clientPosition, player]);
+
+  useEffect(() => {
+    if (player?.setVolume) {
+      player.setVolume(volume);
+    }
+  }, [volume]);
 
   const loadVideo = () => {
     player = new window.YT.Player('youtube-player', {
@@ -133,7 +144,7 @@ function YoutubePlayer(props) {
       playerVars: {
         rel: 0,
         playsinline: 1,
-        // controls: 0,
+        controls: 0,
         disablekb: 1,
         enablejsapi: 1,
         autoplay: 1,
@@ -141,6 +152,7 @@ function YoutubePlayer(props) {
       events: {
         onReady: onPlayerReady,
         onStateChange: onPlayerStateChange,
+        onError: onError,
       },
     });
   };
@@ -176,6 +188,10 @@ function YoutubePlayer(props) {
       default:
         break;
     }
+  };
+
+  const onError = event => {
+    console.log('onError', event);
   };
 
   const onGrantAutoplay = () => {

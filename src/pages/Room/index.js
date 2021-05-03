@@ -63,7 +63,7 @@ function Room(props) {
 
     socket.emit('join_queue');
     // todo: remove socket from dependencies after implementing join queue button
-  }, [currentRoom, socket])
+  }, [currentRoom, socket]);
 
   useEffect(() => {
     // Listen to user moving
@@ -99,15 +99,15 @@ function Room(props) {
     });
 
     socket.on('play_song', (username, videoId, startTime) => {
-      console.log('play_song')
-      setSong({ 
+      console.log('play_song');
+      setSong({
         username,
-        id: videoId
+        id: videoId,
       });
 
-      setCurrentSongNumber(currentSongNumber => currentSongNumber + 1)
+      setCurrentSongNumber(currentSongNumber => currentSongNumber + 1);
       // todo: clamp and move video with startTime
-    })
+    });
 
     return () => {
       console.log('room unmounted');
@@ -120,7 +120,7 @@ function Room(props) {
         'user_leave',
         'new_host',
         'room_closed',
-        'play_song'
+        'play_song',
       ]);
     };
   }, [socket, roomId]);
