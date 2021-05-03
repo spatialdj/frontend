@@ -34,17 +34,10 @@ function RoomBox(props) {
     const { username, authenticated } = currentUser;
     const { status, data } = currentRoom;
     console.log('[currentRoom.data, currentUser]');
-    if (status === 'failed') {
-      toast({
-        title: 'Error joining room',
-        status: 'error',
-        isClosable: true,
-        duration: 9000,
-      });
-      history.push('/rooms');
-    } else if (status === 'success' && !authenticated) {
-      setShowViewOnly(true);
-    } else if (status === 'success' && data && username) {
+    if (status === 'success' && data) {
+      if (!authenticated) {
+        setShowViewOnly(true);
+      }
       // Populate bubbles data, but ignore if member.username is
       // same as client's username
       setBubblesData(
@@ -53,6 +46,14 @@ function RoomBox(props) {
 
       setSong(data.currentSong);
       // todo: set video position to current time - data.songStartTime
+    } else if (status === 'failed') {
+      toast({
+        title: 'Error joining room',
+        status: 'error',
+        isClosable: true,
+        duration: 9000,
+      });
+      history.push('/rooms');
     }
   }, [currentRoom, currentUser]);
 
@@ -76,7 +77,11 @@ function RoomBox(props) {
     socket.on('user_join', response => {
       console.log('user_join', response);
       const { user, position } = response;
-      handleJoin(user, position);
+      const { username } = currentUser;
+      // Don't show own join toast to user
+      if (user?.username !== username) {
+        handleJoin(user, position);
+      }
     });
 
     // Listen to user leaving room
