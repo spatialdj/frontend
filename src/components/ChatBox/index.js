@@ -11,11 +11,13 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 import { IoMdSend } from 'react-icons/io';
+import { VscChromeMinimize } from 'react-icons/vsc';
+import { FiMaximize2 } from 'react-icons/fi';
 import styled from '@emotion/styled';
 import MessagesList from './components/MessagesList';
 
 const ChatContainer = styled(SimpleGrid)`
-  bottom: 0;
+  bottom: 80px;
   right: 0;
   background-color: rgba(12, 22, 45, 0.5);
 `;
@@ -23,6 +25,7 @@ const ChatContainer = styled(SimpleGrid)`
 function ChatBox() {
   const currentUser = useSelector(state => state.user);
   const [message, setMessage] = useState('');
+  const [isOpen, setIsOpen] = useState(true);
 
   // TEST MESSAGES
   const messages = [
@@ -108,45 +111,63 @@ function ChatBox() {
     }
   };
 
+  const onMinimizeChat = () => {
+    setIsOpen(val => !val);
+  };
+
   return (
     <ChatContainer
       position="absolute"
       py="auto"
-      mb="80px"
       width="20%"
-      height="40%"
-      minH="460px"
+      height={isOpen ? '460px' : '48px'}
+      maxH="460px"
       minW="345px"
       shadow="base"
       rounded={{ sm: 'lg' }}
     >
-      <Heading p="1rem" fontSize="2xl">
-        Chat
-      </Heading>
-
-      <MessagesList messages={messages} />
-
-      <HStack p="1rem">
-        <Avatar size="xs" src={currentUser.profilePicture} alt="pfp" />
-        <InputGroup>
-          <Input
-            onChange={event => setMessage(event.target.value)}
-            onKeyDown={handleKeyDown}
-            variant="filled"
-            placeholder="Message room"
-            _placeholder={{ color: 'white' }}
-          />
-          <InputRightElement>
-            <IconButton
-              onClick={onSubmit}
-              variant="ghost"
-              colorScheme="blue"
-              size="md"
-              icon={<IoMdSend size="28px" />}
-            />
-          </InputRightElement>
-        </InputGroup>
+      <HStack justifyContent="space-between" px={4} py={2}>
+        <Heading fontSize="2xl">Chat</Heading>
+        <IconButton
+          onClick={onMinimizeChat}
+          variant="ghost"
+          size="sm"
+          icon={
+            isOpen ? (
+              <VscChromeMinimize size="24px" />
+            ) : (
+              <FiMaximize2 size="24px" />
+            )
+          }
+        />
       </HStack>
+
+      {isOpen ? (
+        <>
+          <MessagesList messages={messages} />
+          <HStack p="1rem">
+            <Avatar size="xs" src={currentUser.profilePicture} alt="pfp" />
+            <InputGroup>
+              <Input
+                onChange={event => setMessage(event.target.value)}
+                onKeyDown={handleKeyDown}
+                variant="filled"
+                placeholder="Message room"
+                _placeholder={{ color: 'white' }}
+              />
+              <InputRightElement>
+                <IconButton
+                  onClick={onSubmit}
+                  variant="ghost"
+                  colorScheme="blue"
+                  size="md"
+                  icon={<IoMdSend size="28px" />}
+                />
+              </InputRightElement>
+            </InputGroup>
+          </HStack>
+        </>
+      ) : null}
     </ChatContainer>
   );
 }
