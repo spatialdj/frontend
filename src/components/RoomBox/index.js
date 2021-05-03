@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { leaveRoom } from 'slices/currentRoomSlice';
 import { Box, useToast } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
@@ -26,6 +27,7 @@ function RoomBox(props) {
   const currentUser = useSelector(state => state.user);
   const currentRoom = useSelector(state => state.currentRoom);
   const toast = useToast();
+  const history = useHistory();
   const roomId = props.roomId;
 
   useEffect(() => {
@@ -39,7 +41,7 @@ function RoomBox(props) {
         isClosable: true,
         duration: 9000,
       });
-      props.history.push('/rooms');
+      history.push('/rooms');
     } else if (status === 'success' && !authenticated) {
       setShowJoinFailed(true);
     } else if (status === 'success' && data && username) {
