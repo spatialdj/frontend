@@ -3,23 +3,29 @@ import { Box } from '@chakra-ui/react';
 import Message from './Message';
 
 export default function MessagesList(props) {
+  const { messages } = props;
   const messagesEnd = useRef({});
+
   const scrollToBottom = () => {
     messagesEnd.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
   useEffect(() => {
     scrollToBottom();
-  }, []);
+  }, [messages]);
 
   return (
     <Box
+      h="340px"
+      w="100%"
       style={{
         scrollbarColor: '#2D3748 #171923',
       }}
-      pl="1rem"
+      px="1rem"
+      pt="1rem"
       overflowY="scroll"
     >
-      {props.messages.map(message => (
+      {messages.map(message => (
         <Message key={message.id} data={message} />
       ))}
       <div style={{ float: 'left', clear: 'both' }} ref={messagesEnd}></div>
