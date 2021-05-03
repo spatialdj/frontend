@@ -192,7 +192,14 @@ function RoomBox(props) {
   };
 
   const handleRoomClosed = () => {
-    // TODO: implement room closed
+    toast({
+      title: 'Room closed',
+      description: 'The room you were in is now closed',
+      status: 'error',
+      isClosable: true,
+      duration: 20000,
+    });
+    history.push('/rooms');
   };
 
   return (
