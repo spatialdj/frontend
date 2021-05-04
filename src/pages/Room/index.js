@@ -1,17 +1,20 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import RoomBox from 'components/RoomBox';
 import SongBar from 'components/SongBar';
 import ChatBox from 'components/ChatBox';
 import Vote from 'components/Vote';
 
 function Room(props) {
+  const authenticated = useSelector(state => state.user.authenticated);
   const roomId = props.match.params.id;
+
   return (
     <>
       <RoomBox roomId={roomId} />
       <ChatBox />
       <SongBar />
-      <Vote />
+      {authenticated ? <Vote /> : null}
     </>
   );
 }

@@ -92,34 +92,36 @@ function ChatBox() {
       {isOpen ? (
         <>
           <MessagesList messages={messages} />
-          <HStack p="1rem">
-            <Avatar size="xs" src={currentUser.profilePicture} alt="pfp" />
-            <form
-              style={{ width: '100%' }}
-              onSubmit={mySubmit}
-              autoComplete="off"
-            >
-              <InputGroup>
-                <Input
-                  id="message"
-                  type="text"
-                  {...register('message')}
-                  variant="filled"
-                  placeholder="Message room"
-                />
-                <InputRightElement>
-                  <IconButton
-                    isLoading={isSubmitting}
-                    type="submit"
-                    variant="ghost"
-                    colorScheme="blue"
-                    size="md"
-                    icon={<IoMdSend size="28px" />}
+          {currentUser.authenticated ? (
+            <HStack p="1rem">
+              <Avatar size="xs" src={currentUser.profilePicture} alt="pfp" />
+              <form
+                style={{ width: '100%' }}
+                onSubmit={mySubmit}
+                autoComplete="off"
+              >
+                <InputGroup>
+                  <Input
+                    id="message"
+                    type="text"
+                    {...register('message')}
+                    variant="filled"
+                    placeholder="Message room"
                   />
-                </InputRightElement>
-              </InputGroup>
-            </form>
-          </HStack>
+                  <InputRightElement>
+                    <IconButton
+                      isLoading={isSubmitting}
+                      type="submit"
+                      variant="ghost"
+                      colorScheme="blue"
+                      size="md"
+                      icon={<IoMdSend size="28px" />}
+                    />
+                  </InputRightElement>
+                </InputGroup>
+              </form>
+            </HStack>
+          ) : null}
         </>
       ) : null}
     </ChatContainer>
