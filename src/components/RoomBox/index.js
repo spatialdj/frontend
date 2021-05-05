@@ -58,15 +58,6 @@ function RoomBox(props) {
   }, [currentRoom, currentUser]);
 
   useEffect(() => {
-    if (currentRoom == null) {
-      return;
-    }
-
-    socket.emit('join_queue');
-    // todo: remove socket from dependencies after implementing join queue button
-  }, [currentRoom, socket]);
-
-  useEffect(() => {
     // Listen to user moving
     socket.on('pos_change', (username, position) => {
       handlePosChange(username, position);

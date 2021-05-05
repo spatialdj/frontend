@@ -17,9 +17,10 @@ export const queueSlice = createSlice({
     // standard reducer logic, with auto-generated action types per reducer
     populate: (state, { payload }) => {
       if (payload.success) {
-        const { queue, currentSong } = payload;
+        const { queue, currentSong, inQueue } = payload;
         state.queue = queue;
         state.currentSong = currentSong;
+        state.inQueue = inQueue;
         state.status = 'success';
       } else {
         state.status = 'failed';
