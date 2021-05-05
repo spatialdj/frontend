@@ -1,17 +1,42 @@
 import React from 'react';
-import { Center, Flex, Text, Image, Button, Icon, Box } from '@chakra-ui/react';
+import { Center, Flex, Text, Image, Button, Icon, IconButton, Box, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { FaPlus, FaTrashAlt } from 'react-icons/fa';
 import he from 'he';
+import { useDispatch, useSelector } from 'react-redux';
+import * as playlistAPI from '../../services/playlist.js'
+import { addSong, removeSong } from '../../slices/playlistsSlice'
 
-function Song({ data, isInSearch }) {
+function Song({ selectedPlaylist, data, isInSearch }) {
   const { title, thumbnails, channelTitle } = data;
+  const playlists = useSelector(state => {
+    return Object.entries(state.playlists.playlists).map(([_id, playlist]) => playlist);
+  });
+  const dispatch = useDispatch();
 
-  const handleOnClick = () => {
-    if (isInSearch) {
-      // TODO: add song to user playlist
+  const handleOnClickDelete = async () => {
+    if (!selectedPlaylist) {
+      return
+    }
+
+    // remove from redux state first for better ux
+    dispatch(removeSong({ songId: data.id, playlistId: selectedPlaylist }))
+
+    const res = await playlistAPI.removeSong(selectedPlaylist, { id: data.id })
+    console.log(data.id)
+
+    if (res.status !== 200) {
+      // todo: unable to remove song from playlist
+    }
+  };
+
+  const handleOnClickAdd = async (playlist) => {
+    const res = await playlistAPI.addSong(playlist.id, { song: data });
+
+    if (res.status === 200) {
+      dispatch(addSong({song: data, playlistId: playlist.id }));
     } else {
-      // TODO: delete song from user playlist
+      // todo: unable to add song
     }
   };
 
@@ -36,19 +61,34 @@ function Song({ data, isInSearch }) {
           <Text m="4">{he.decode(channelTitle)}</Text>
         </Box>
       </Flex>
-      <Button
-        style={{ marginTop: 'auto', marginBottom: 'auto' }}
-        bg="none"
-        _hover={{ opacity: 0.5 }}
-      >
-        {
-          <Icon
-            onClick={handleOnClick}
-            as={isInSearch ? FaPlus : FaTrashAlt}
-            color={isInSearch ? 'gray.300' : 'red.300'}
+
+      { isInSearch ?
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Options"
+            icon={<FaPlus />}
+            variant="outline"
+            color="gray.300"
           />
-        }
-      </Button>
+          <MenuList>
+            {playlists.length > 0 ?
+              playlists.map((playlist, index) => <MenuItem key={index} onClick={async () => await handleOnClickAdd(playlist)}>{playlist.name}</MenuItem>)
+              :
+              <MenuItem isDisabled>No playlists...</MenuItem>
+            }
+          </MenuList>
+        </Menu>
+        :
+        <Button
+          style={{ marginTop: 'auto', marginBottom: 'auto' }}
+          bg="none"
+          _hover={{ opacity: 0.5 }}
+          onClick={async () => await handleOnClickDelete()}
+        >
+          <Icon as={FaTrashAlt} color={'red.300'} />
+        </Button>
+      }
     </Flex>
   );
 }

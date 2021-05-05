@@ -33,7 +33,7 @@ function RoomBox(props) {
   useEffect(() => {
     const { username, authenticated } = currentUser;
     const { status, data } = currentRoom;
-    console.log('[currentRoom.data, currentUser]');
+
     if (status === 'success' && data) {
       if (!authenticated) {
         setShowViewOnly(true);

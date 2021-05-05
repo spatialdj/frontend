@@ -8,8 +8,7 @@ const DraggableListItem = styled(ListItem)`
   top: auto !important;
 `;
 
-function SongList({ list, isInSearch, handleOnDragEnd }) {
-  console.log(list);
+function SongList({ selectedPlaylist, list, isInSearch, handleOnDragEnd }) {
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <Droppable droppableId="songList">
@@ -36,7 +35,7 @@ function SongList({ list, isInSearch, handleOnDragEnd }) {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   >
-                    <Song key={song.id} data={song} isInSearch={isInSearch} />
+                    <Song selectedPlaylist={selectedPlaylist} key={song.id} data={song} isInSearch={isInSearch} />
                   </DraggableListItem>
                 )}
               </Draggable>

@@ -4,6 +4,7 @@ import roomsReducer from 'slices/roomsSlice';
 import currentRoomReducer from 'slices/currentRoomSlice';
 import queueReducer from 'slices/queueSlice';
 import youtubeReducer from 'slices/youtubeSlice';
+import playlistReducer from 'slices/playlistsSlice'
 
 export default configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
     currentRoom: currentRoomReducer,
     queue: queueReducer,
     youtube: youtubeReducer,
+    playlists: playlistReducer,
   },
 });

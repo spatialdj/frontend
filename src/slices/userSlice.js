@@ -28,6 +28,8 @@ export const userSlice = createSlice({
     profilePicture: '',
     authenticated: false,
     status: 'idle',
+    selectedPlaylist: null,
+    playlist: {}
   },
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
@@ -40,6 +42,8 @@ export const userSlice = createSlice({
       state.status = 'success';
       state.username = payload.username;
       state.profilePicture = payload.profilePicture;
+      state.selectedPlaylist = payload.selectedPlaylist;
+      state.playlist = payload.playlist;
     },
     [authenticate.pending]: state => {
       state.status = 'loading';
@@ -53,6 +57,8 @@ export const userSlice = createSlice({
       state.status = 'failed';
       state.username = '';
       state.profilePicture = '';
+      state.selectedPlaylist = null;
+      state.playlist = {};
     },
   },
 });
