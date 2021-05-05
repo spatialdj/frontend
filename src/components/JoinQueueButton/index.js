@@ -1,0 +1,59 @@
+import React, { useContext, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { joinQueue, leaveQueue } from 'slices/queueSlice';
+import { SocketContext } from 'contexts/socket';
+import { Button } from '@chakra-ui/react';
+
+function JoinQueueButton() {
+  const socket = useContext(SocketContext);
+  const dispatch = useDispatch();
+  const inQueue = useSelector(state => state.queue.inQueue);
+  const currentUser = useSelector(state => state.user);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    socket.on('user_join_queue', (position, userFragment) => {
+      if (userFragment.username === currentUser.username) {
+        setIsLoading(false);
+      }
+      console.log('user_join_queue', {position, userFragment});
+    });
+
+    socket.on('user_leave_queue', username => {
+      if (username === currentUser.username) {
+        setIsLoading(false);
+      }
+      console.log('user_leave_queue', username);
+    });
+
+    return () => {
+      socket.removeAllListeners([
+        'user_join_queue',
+        'user_leave_queue',
+      ]);
+    }
+  }, [socket]);
+
+  const handleQueue = () => {
+    // Artificial timeout
+    setIsLoading(true);
+    setTimeout(() => {
+      if (inQueue) {
+        socket.emit('leave_queue');
+        dispatch(leaveQueue());
+      } else {
+        socket.emit('join_queue');
+        dispatch(joinQueue());
+      }
+    }, 100);
+  };
+
+  return (
+    <Button onClick={handleQueue} isLoading={isLoading} size="lg" colorScheme="blue" position="absolute" bottom="80px" left="0"
+    right="0" m="auto">
+      {inQueue ? "Leave Queue" : "Join Queue"}
+    </Button>
+  )
+}
+
+export default JoinQueueButton;

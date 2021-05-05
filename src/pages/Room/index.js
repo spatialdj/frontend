@@ -4,6 +4,7 @@ import RoomBox from 'components/RoomBox';
 import SongBar from 'components/SongBar';
 import ChatBox from 'components/ChatBox';
 import Vote from 'components/Vote';
+import JoinQueueButton from 'components/JoinQueueButton';
 
 function Room(props) {
   const authenticated = useSelector(state => state.user.authenticated);
@@ -15,6 +16,7 @@ function Room(props) {
       <ChatBox />
       <SongBar />
       {authenticated ? <Vote /> : null}
+      {authenticated ? <JoinQueueButton /> : null}
     </>
   );
 }

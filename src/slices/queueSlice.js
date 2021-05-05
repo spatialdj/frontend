@@ -10,6 +10,7 @@ export const queueSlice = createSlice({
   initialState: {
     queue: [],
     currentSong: 'null',
+    inQueue: false,
     status: 'idle',
   },
   reducers: {
@@ -30,9 +31,15 @@ export const queueSlice = createSlice({
     dequeue: (state, { payload }) => {
       state.queue = payload;
     },
+    joinQueue: state => {
+      state.inQueue = true;
+    },
+    leaveQueue: state => {
+      state.inQueue = false;
+    },
   },
 });
 
-export const { populate, enqueue, dequeue } = queueSlice.actions;
+export const { populate, enqueue, dequeue, joinQueue, leaveQueue } = queueSlice.actions;
 
 export default queueSlice.reducer;
