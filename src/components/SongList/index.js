@@ -1,6 +1,6 @@
 import React from 'react';
 import Song from '../SongCard';
-import { List, ListItem, Portal } from '@chakra-ui/react';
+import { List, ListItem } from '@chakra-ui/react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
 

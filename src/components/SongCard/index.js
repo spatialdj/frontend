@@ -34,7 +34,7 @@ function Song({ selectedPlaylist, data, isInSearch }) {
     const res = await playlistAPI.addSong(playlist.id, { song: data });
 
     if (res.status === 200) {
-      dispatch(addSong({song: data, playlistId: playlist.id }));
+      dispatch(addSong({song: res.data.song, playlistId: playlist.id }));
     } else {
       // todo: unable to add song
     }
@@ -43,11 +43,11 @@ function Song({ selectedPlaylist, data, isInSearch }) {
   return (
     <Flex
       bg="#211E1E"
-      my="2"
       px="8"
       py="4"
       justify="space-between"
       borderRadius="8px"
+      marginBottom="2"
     >
       <Flex>
         {!isInSearch && (
