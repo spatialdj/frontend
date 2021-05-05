@@ -88,15 +88,6 @@ export default function SongDrawer(props) {
     setQueryInProgress(false);
   };
 
-  useEffect(() => {
-    if (user?.authenticated) {
-      dispatch(populate({
-        playlists: user.playlist,
-        selectedPlaylist: user.selectedPlaylist
-      }));
-    }
-  }, [user]);
-
   const handleOnDragEnd = async result => {
     if (!result.destination || !selectedPlaylist) {
       return;

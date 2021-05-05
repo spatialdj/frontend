@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { PUBLIC_PAGE, LOGGED_IN_ONLY, PUBLIC_ONLY } from './options';
 import { Fade } from '@chakra-ui/react';
 import LoadingView from 'components/LoadingView';
+import { populate } from '../../slices/playlistsSlice';
 
 export default function (Component, option) {
   function AuthenticationCheck(props) {
@@ -18,6 +19,15 @@ export default function (Component, option) {
         dispatch(authenticate());
       }
     }, []);
+
+    useEffect(() => {
+      if (user?.authenticated) {
+        dispatch(populate({
+          playlists: user.playlist,
+          selectedPlaylist: user.selectedPlaylist
+        }));
+      }
+    }, [user]);
 
     // console.log('authenticated', authenticated);
 
