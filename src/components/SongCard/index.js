@@ -47,7 +47,6 @@ function Song({ selectedPlaylist, data, isInSearch }) {
       py="4"
       justify="space-between"
       borderRadius="8px"
-      marginBottom="2"
     >
       <Flex>
         {!isInSearch && (
@@ -65,10 +64,10 @@ function Song({ selectedPlaylist, data, isInSearch }) {
       { isInSearch ?
         <Menu>
           <MenuButton
+            style={{ marginTop: 'auto', marginBottom: 'auto' }}
             as={IconButton}
             aria-label="Options"
             icon={<FaPlus />}
-            variant="outline"
             color="gray.300"
           />
           <MenuList>
