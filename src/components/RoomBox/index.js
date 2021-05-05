@@ -111,14 +111,12 @@ function RoomBox(props) {
         console.log('leave_room', response);
       });
       dispatch(leaveRoom());
-      socket.removeAllListeners([
-        'pos_change',
-        'user_join',
-        'user_leave',
-        'new_host',
-        'room_closed',
-        'play_song',
-      ]);
+      socket.removeAllListeners('pos_change');
+      socket.removeAllListeners('user_join');
+      socket.removeAllListeners('user_leave');
+      socket.removeAllListeners('new_host');
+      socket.removeAllListeners('room_closed');
+      socket.removeAllListeners('play_song');
     };
   }, [socket, roomId]);
 
