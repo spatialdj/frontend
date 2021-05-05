@@ -16,7 +16,7 @@ export default function MessagesList(props) {
 
   return (
     <Box
-      h="340px"
+      h="100%"
       w="100%"
       style={{
         scrollbarColor: '#2D3748 #171923',
