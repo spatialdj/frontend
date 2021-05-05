@@ -143,6 +143,7 @@ function YoutubePlayer(props) {
         disablekb: 1,
         enablejsapi: 1,
         autoplay: 1,
+        iv_load_policy: 3
       },
       events: {
         onReady: onPlayerReady,
