@@ -41,6 +41,12 @@ export const queueSlice = createSlice({
   },
 });
 
-export const { populate, enqueue, dequeue, joinQueue, leaveQueue } = queueSlice.actions;
+export const {
+  populate,
+  enqueue,
+  dequeue,
+  joinQueue,
+  leaveQueue,
+} = queueSlice.actions;
 
 export default queueSlice.reducer;

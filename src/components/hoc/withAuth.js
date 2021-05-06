@@ -22,10 +22,12 @@ export default function (Component, option) {
 
     useEffect(() => {
       if (user?.authenticated) {
-        dispatch(populate({
-          playlists: user.playlist,
-          selectedPlaylist: user.selectedPlaylist
-        }));
+        dispatch(
+          populate({
+            playlists: user.playlist,
+            selectedPlaylist: user.selectedPlaylist,
+          })
+        );
       }
     }, [user]);
 

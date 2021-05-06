@@ -29,7 +29,7 @@ export const userSlice = createSlice({
     authenticated: false,
     status: 'idle',
     selectedPlaylist: null,
-    playlist: {}
+    playlist: {},
   },
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer

@@ -41,13 +41,14 @@ function RightSide() {
 
   return (
     <HStack>
-      {currentSong != null ? 
-      <>
-      <Icon as={BiBarChart} />
-      <Text fontWeight="bold" mr="2rem">
-        {currentSong?.title}
-      </Text>
-      </> : null}
+      {currentSong != null ? (
+        <>
+          <Icon as={BiBarChart} />
+          <Text fontWeight="bold" mr="2rem">
+            {currentSong?.title}
+          </Text>
+        </>
+      ) : null}
       <IconButton
         onClick={handleMute}
         variant="ghost"

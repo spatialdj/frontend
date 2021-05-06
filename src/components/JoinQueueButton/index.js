@@ -19,7 +19,7 @@ function JoinQueueButton() {
       } else {
         // TODO: handle join queue for other users
       }
-      console.log('user_join_queue', {position, userFragment});
+      console.log('user_join_queue', { position, userFragment });
     });
 
     socket.on('user_leave_queue', username => {
@@ -35,7 +35,7 @@ function JoinQueueButton() {
     return () => {
       socket.removeAllListeners('user_join_queue');
       socket.removeAllListeners('user_leave_queue');
-    }
+    };
   }, [socket, dispatch, currentUser]);
 
   const handleQueue = () => {
@@ -51,11 +51,20 @@ function JoinQueueButton() {
   };
 
   return (
-    <Button onClick={handleQueue} isLoading={isLoading} size="lg" colorScheme="blue" position="absolute" bottom="80px" left="0"
-    right="0" m="auto">
-      {inQueue ? "Leave Queue" : "Join Queue"}
+    <Button
+      onClick={handleQueue}
+      isLoading={isLoading}
+      size="lg"
+      colorScheme="blue"
+      position="absolute"
+      bottom="80px"
+      left="0"
+      right="0"
+      m="auto"
+    >
+      {inQueue ? 'Leave Queue' : 'Join Queue'}
     </Button>
-  )
+  );
 }
 
 export default JoinQueueButton;

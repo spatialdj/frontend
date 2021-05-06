@@ -34,7 +34,7 @@ export const playlistSlice = createSlice({
 
       state.selectedPlaylist = playlistId;
     },
-    cycleSelectedPlaylist: (state) => {
+    cycleSelectedPlaylist: state => {
       const playlist = state.playlists[state.selectedPlaylist].queue;
 
       playlist.push(playlist.shift());
@@ -45,16 +45,25 @@ export const playlistSlice = createSlice({
       state.playlists[playlistId].queue.push(song);
     },
     removeSong: (state, { payload }) => {
-      const { songId, playlistId } = payload
-      const playlist = state.playlists[playlistId]
-      const index = playlist.queue.findIndex(song => song.id === songId)
+      const { songId, playlistId } = payload;
+      const playlist = state.playlists[playlistId];
+      const index = playlist.queue.findIndex(song => song.id === songId);
 
       playlist.queue.splice(index, 1);
-    }
+    },
   },
-  extraReducers: {}
+  extraReducers: {},
 });
 
-export const { populate, updatePlaylist, createPlaylist, deletePlaylist, selectPlaylist, addSong, removeSong, cycleSelectedPlaylist } = playlistSlice.actions;
+export const {
+  populate,
+  updatePlaylist,
+  createPlaylist,
+  deletePlaylist,
+  selectPlaylist,
+  addSong,
+  removeSong,
+  cycleSelectedPlaylist,
+} = playlistSlice.actions;
 
 export default playlistSlice.reducer;

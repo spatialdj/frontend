@@ -29,9 +29,7 @@ export default function SongBar() {
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
         <SongDrawer handleOnClose={onClose} />
       </Drawer>
-      <LeftSide
-        openDrawer={onOpen}
-      />
+      <LeftSide openDrawer={onOpen} />
       <RightSide />
     </Bar>
   );

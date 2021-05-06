@@ -17,8 +17,13 @@ import SongList from '../../SongList';
 import { search } from '../../../services/song.js';
 import { FaChevronDown } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import * as playlistAPI from '../../../services/playlist.js'
-import { updatePlaylist, createPlaylist, selectPlaylist, populate } from '../../../slices/playlistsSlice'
+import * as playlistAPI from '../../../services/playlist.js';
+import {
+  updatePlaylist,
+  createPlaylist,
+  selectPlaylist,
+  populate,
+} from '../../../slices/playlistsSlice';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -45,10 +50,16 @@ export default function SongDrawer(props) {
   };
 
   const playlists = useSelector(state => {
-    return Object.entries(state.playlists.playlists).map(([_id, playlist]) => playlist);
+    return Object.entries(state.playlists.playlists).map(
+      ([_id, playlist]) => playlist
+    );
   });
-  const selectedPlaylistId = useSelector(state => state.playlists.selectedPlaylist);
-  const selectedPlaylist = useSelector(state => state.playlists.playlists[state.playlists.selectedPlaylist])
+  const selectedPlaylistId = useSelector(
+    state => state.playlists.selectedPlaylist
+  );
+  const selectedPlaylist = useSelector(
+    state => state.playlists.playlists[state.playlists.selectedPlaylist]
+  );
   const selectedPlaylistData = selectedPlaylist?.queue ?? [];
 
   const handlePlaylistChange = async playlistId => {
@@ -92,18 +103,22 @@ export default function SongDrawer(props) {
     if (!result.destination || !selectedPlaylist) {
       return;
     }
-    
-    const reorderedSongs = reorder(selectedPlaylistData, result.source.index, result.destination.index);
+
+    const reorderedSongs = reorder(
+      selectedPlaylistData,
+      result.source.index,
+      result.destination.index
+    );
     const newPlaylist = {
       id: selectedPlaylist.id,
       name: selectedPlaylist.name,
       user: selectedPlaylist.user,
-      queue: reorderedSongs
-    }
+      queue: reorderedSongs,
+    };
 
     dispatch(updatePlaylist({ playlist: newPlaylist }));
-    
-    const res = await playlistAPI.update(newPlaylist.id, newPlaylist)
+
+    const res = await playlistAPI.update(newPlaylist.id, newPlaylist);
 
     if (res !== 200) {
       // todo: failed to rearrange playlist
@@ -111,21 +126,21 @@ export default function SongDrawer(props) {
   };
 
   const onClickNewButton = async () => {
-    setPendingNew(true)
+    setPendingNew(true);
 
     const res = await playlistAPI.create({
-      name: "New playlist"
-    })
+      name: 'New playlist',
+    });
 
     if (res.status === 200 && res.data?.success) {
-      const newPlaylist = res.data.playlist
+      const newPlaylist = res.data.playlist;
 
-      dispatch(createPlaylist({ playlist: newPlaylist }))
+      dispatch(createPlaylist({ playlist: newPlaylist }));
     } else {
       // todo: error occurred unable to create playlist
     }
 
-    setPendingNew(false)
+    setPendingNew(false);
   };
 
   return (
@@ -150,7 +165,13 @@ export default function SongDrawer(props) {
                 justifyContent="space-between"
               >
                 <Heading fontSize="lg">Your Playlists 🔥</Heading>
-                <Button isLoading={pendingNew} loadingText="" colorScheme="blue" size="sm" onClick={onClickNewButton}>
+                <Button
+                  isLoading={pendingNew}
+                  loadingText=""
+                  colorScheme="blue"
+                  size="sm"
+                  onClick={onClickNewButton}
+                >
                   New
                 </Button>
               </HStack>
@@ -167,12 +188,16 @@ export default function SongDrawer(props) {
                     style={{
                       cursor: 'pointer',
                     }}
-                    bgColor={playlist.id === selectedPlaylistId ? '#404040' : 'black'}
+                    bgColor={
+                      playlist.id === selectedPlaylistId ? '#404040' : 'black'
+                    }
                     key={playlist.id}
                     w="100%"
                     py="0.75rem"
                     pl="1rem"
-                    onClick={async () => await handlePlaylistChange(playlist.id)}
+                    onClick={async () =>
+                      await handlePlaylistChange(playlist.id)
+                    }
                   >
                     {playlist.name}
                   </Box>

@@ -10,7 +10,7 @@ import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 import ViewOnlyModal from 'components/ViewOnlyModal';
-import { cycleSelectedPlaylist } from '../../slices/playlistsSlice'
+import { cycleSelectedPlaylist } from '../../slices/playlistsSlice';
 
 function RoomBox(props) {
   const socket = useContext(SocketContext);
@@ -96,19 +96,19 @@ function RoomBox(props) {
     });
 
     socket.on('play_song', (username, videoId, startTime) => {
-      console.log('play_song', {username, videoId, startTime});
+      console.log('play_song', { username, videoId, startTime });
       setSong({
         username,
         id: videoId,
       });
 
       console.log(username);
-      console.log(currentUser?.username)
+      console.log(currentUser?.username);
 
       if (username === currentUser?.username) {
-        console.log("dispatch");
+        console.log('dispatch');
         // update redux cycle playlist
-        dispatch(cycleSelectedPlaylist())
+        dispatch(cycleSelectedPlaylist());
       }
 
       setCurrentSongNumber(currentSongNumber => currentSongNumber + 1);

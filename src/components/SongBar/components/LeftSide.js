@@ -17,11 +17,18 @@ function LeftSide(props) {
           icon={<FaChevronUp />}
         />
       ) : null}
-      {selectedPlaylist == null ? <Text>No playlist selected</Text> : 
-      <VStack align="left" spacing={0}>
-        <Text fontWeight="bold">Selected playlist: {playlists?.[selectedPlaylist]?.name}</Text>
-        <Text>Your next song: {playlists?.[selectedPlaylist]?.queue?.[0]?.title}</Text>
-      </VStack>}
+      {selectedPlaylist == null ? (
+        <Text>No playlist selected</Text>
+      ) : (
+        <VStack align="left" spacing={0}>
+          <Text fontWeight="bold">
+            Selected playlist: {playlists?.[selectedPlaylist]?.name}
+          </Text>
+          <Text>
+            Your next song: {playlists?.[selectedPlaylist]?.queue?.[0]?.title}
+          </Text>
+        </VStack>
+      )}
     </HStack>
   );
 }
