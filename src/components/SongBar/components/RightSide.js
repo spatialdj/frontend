@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import he from 'he';
 import { changeVolume, muteVideo } from 'slices/youtubeSlice';
 import {
   HStack,
@@ -10,6 +11,7 @@ import {
   SliderFilledTrack,
   Text,
   Icon,
+  Flex,
 } from '@chakra-ui/react';
 import {
   ImVolumeHigh,
@@ -18,6 +20,7 @@ import {
   ImVolumeMute2,
 } from 'react-icons/im';
 import { BiBarChart } from 'react-icons/bi';
+import './marquee.css';
 
 function RightSide() {
   const lastVolumeRef = useRef(50);
@@ -44,9 +47,16 @@ function RightSide() {
       {currentSong != null ? (
         <>
           <Icon as={BiBarChart} />
-          <Text fontWeight="bold" mr="2rem">
-            {currentSong?.title}
-          </Text>
+          <Flex w="300px" overflow="hidden">
+            <Text
+              fontWeight="bold"
+              mr={2}
+              className="marquee"
+              whiteSpace="nowrap"
+            >
+              {he.decode(currentSong?.title ?? '')}
+            </Text>
+          </Flex>
         </>
       ) : null}
       <IconButton

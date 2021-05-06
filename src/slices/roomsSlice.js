@@ -1,7 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as roomsAPI from 'services/rooms';
 
-export const get = createAsyncThunk('rooms/get', async params => {
+export const get = createAsyncThunk('rooms/get', async (params, thunkAPI) => {
+  // If params didn't include a searchQuery, add current searchQuery to it
+  if (params.searchQuery === undefined) {
+    const searchQuery = thunkAPI.getState().rooms.searchQuery;
+    params.searchQuery = searchQuery;
+  }
   const response = await roomsAPI.get(params);
   return response.data;
 });

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { joinQueue, leaveQueue } from 'slices/queueSlice';
+import { joinQueue, leaveQueue, enqueue, dequeue } from 'slices/queueSlice';
 import { SocketContext } from 'contexts/socket';
 import { Button } from '@chakra-ui/react';
 
@@ -14,27 +14,34 @@ function JoinQueueButton() {
   useEffect(() => {
     socket.on('user_join_queue', (position, userFragment) => {
       if (userFragment.username === currentUser.username) {
-        dispatch(joinQueue());
+        dispatch(joinQueue(currentUser.username));
         setIsLoading(false);
       } else {
-        // TODO: handle join queue for other users
+        dispatch(enqueue(userFragment.username));
       }
       console.log('user_join_queue', { position, userFragment });
     });
 
     socket.on('user_leave_queue', username => {
       if (username === currentUser.username) {
-        dispatch(leaveQueue());
+        dispatch(leaveQueue(currentUser.username));
         setIsLoading(false);
       } else {
-        // TODO: handle leave queue for other users
+        dispatch(dequeue(username));
       }
       console.log('user_leave_queue', username);
+    });
+
+    socket.on('dequeued', username => {
+      // Sent when user is kicked from the queue
+      console.log('dequeued', username);
+      dispatch(dequeue(username));
     });
 
     return () => {
       socket.removeAllListeners('user_join_queue');
       socket.removeAllListeners('user_leave_queue');
+      socket.removeAllListeners('dequeued');
     };
   }, [socket, dispatch, currentUser]);
 

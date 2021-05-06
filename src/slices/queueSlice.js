@@ -10,7 +10,7 @@ export const queueSlice = createSlice({
   initialState: {
     queue: [],
     currentSong: 'null',
-    inQueue: false,
+    inQueue: false, // Client in queue
     status: 'idle',
   },
   reducers: {
@@ -26,27 +26,35 @@ export const queueSlice = createSlice({
         state.status = 'failed';
       }
     },
+    // Handles client join/leave queue
+    joinQueue: (state, { payload }) => {
+      state.inQueue = true;
+      state.queue.push(payload);
+    },
+    leaveQueue: (state, { payload }) => {
+      state.inQueue = false;
+      state.queue = state.queue.filter(username => username !== payload);
+    },
+    // Handles other users join/leave queue
     enqueue: (state, { payload }) => {
-      state.queue = payload;
+      state.queue.push(payload);
     },
     dequeue: (state, { payload }) => {
-      state.queue = payload;
+      state.queue = state.queue.filter(username => username !== payload);
     },
-    joinQueue: state => {
-      state.inQueue = true;
-    },
-    leaveQueue: state => {
-      state.inQueue = false;
+    changeCurrentSong: (state, { payload }) => {
+      state.currentSong = payload;
     },
   },
 });
 
 export const {
   populate,
-  enqueue,
-  dequeue,
   joinQueue,
   leaveQueue,
+  enqueue,
+  dequeue,
+  changeCurrentSong,
 } = queueSlice.actions;
 
 export default queueSlice.reducer;

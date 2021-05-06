@@ -16,11 +16,11 @@ function ViewOnlyModal(props) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>⚠ View-Only Mode</ModalHeader>
+        <ModalHeader>👀 Spectator Mode</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           Because you&apos;re not logged in, your user Bubble won&apos;t appear
-          on the screen. Still feel free to listen in!
+          on the screen. Feel free to listen in!
         </ModalBody>
 
         <ModalFooter>
