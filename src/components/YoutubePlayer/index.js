@@ -2,9 +2,10 @@ import React, { useEffect, useContext, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   changeVolume,
-  reportStatus,
   reportError,
   clearError,
+  playSong,
+  stopSong,
 } from 'slices/youtubeSlice';
 import { ClientPositionContext } from 'contexts/clientposition';
 import { Box } from '@chakra-ui/react';
@@ -163,29 +164,25 @@ function YoutubePlayer(props) {
 
   const onPlayerStateChange = event => {
     const { data } = event;
+    console.log('onPlayerStateChange', data);
     switch (data) {
       case -1:
-        dispatch(reportStatus('unstarted'));
         dispatch(clearError());
         break;
       case 0:
-        dispatch(reportStatus('ended'));
+        dispatch(stopSong());
         dispatch(clearError());
         break;
       case 1:
-        dispatch(reportStatus('playing'));
-        dispatch(clearError());
+        dispatch(playSong());
         break;
       case 2:
-        dispatch(reportStatus('paused'));
         dispatch(clearError());
         break;
       case 3:
-        dispatch(reportStatus('buffering'));
         dispatch(clearError());
         break;
       case 5:
-        dispatch(reportStatus('cued'));
         dispatch(clearError());
         break;
       default:

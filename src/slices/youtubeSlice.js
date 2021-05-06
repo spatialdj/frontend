@@ -20,8 +20,12 @@ export const youtubeSlice = createSlice({
     changeVideoId: (state, { payload }) => {
       state.videoId = payload;
     },
-    reportStatus: (state, { payload }) => {
-      state.status = payload;
+    playSong: state => {
+      state.status = 'playing';
+      state.errorCode = null;
+    },
+    stopSong: state => {
+      state.status = 'ended';
     },
     reportError: (state, { payload }) => {
       state.errorCode = payload;
@@ -36,7 +40,8 @@ export const {
   changeVolume,
   changeVideoId,
   muteVideo,
-  reportStatus,
+  playSong,
+  stopSong,
   reportError,
   clearError,
 } = youtubeSlice.actions;

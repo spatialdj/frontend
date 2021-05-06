@@ -3,6 +3,9 @@ import { SocketContext } from 'contexts/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { leaveRoom } from 'slices/currentRoomSlice';
+import { cycleSelectedPlaylist } from 'slices/playlistsSlice';
+import { changeCurrentSong } from 'slices/queueSlice';
+import { playSong, stopSong } from 'slices/youtubeSlice';
 import { Box, useToast } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
 import Bubble from 'components/Bubble';
@@ -10,8 +13,6 @@ import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 import ViewOnlyModal from 'components/ViewOnlyModal';
-import { cycleSelectedPlaylist } from 'slices/playlistsSlice';
-import { changeCurrentSong } from 'slices/queueSlice';
 
 function RoomBox(props) {
   const socket = useContext(SocketContext);
@@ -192,8 +193,16 @@ function RoomBox(props) {
         dispatch(cycleSelectedPlaylist());
       }
 
+      dispatch(playSong());
+
       setCurrentSongNumber(currentSongNumber => currentSongNumber + 1);
       // todo: clamp and move video with startTime
+    });
+
+    socket.on('stop_song', () => {
+      // Sent when current song ends AND there are no more users in queue
+      console.log('stop_song');
+      dispatch(stopSong());
     });
 
     return () => {
@@ -208,6 +217,7 @@ function RoomBox(props) {
       socket.removeAllListeners('new_host');
       socket.removeAllListeners('room_closed');
       socket.removeAllListeners('play_song');
+      socket.removeAllListeners('stop_song');
     };
   }, [dispatch, socket, history, toast, roomId, clientUsername]);
 
