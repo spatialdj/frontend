@@ -1,0 +1,14 @@
+@keyframes scroll {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(-50%, 0);
+  }
+}
+
+.marquee:hover {
+  animation: scroll 7s linear 0s infinite;
+  animation-direction: alternate;
+}
