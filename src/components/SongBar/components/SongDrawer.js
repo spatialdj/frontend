@@ -178,7 +178,7 @@ export default function SongDrawer(props) {
               <VStack
                 maxH="475px"
                 spacing="0"
-                overflowY="scroll"
+                overflowY="auto"
                 style={{
                   scrollbarColor: '#404040 #000000',
                 }}
