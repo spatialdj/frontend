@@ -96,7 +96,7 @@ function RoomBox(props) {
     });
 
     socket.on('play_song', (username, videoId, startTime) => {
-      console.log('play_song');
+      console.log('play_song', {username, videoId, startTime});
       setSong({
         username,
         id: videoId,

@@ -12,7 +12,7 @@ export const playlistSlice = createSlice({
       const { playlists, selectedPlaylist } = payload;
 
       state.playlists = playlists;
-      state.selectedPlaylist = selectedPlaylist;
+      state.selectedPlaylist = selectedPlaylist ?? null;
     },
     updatePlaylist: (state, { payload }) => {
       const { playlist } = payload;
