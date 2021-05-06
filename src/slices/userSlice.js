@@ -8,7 +8,7 @@ export const authenticate = createAsyncThunk(
     const response = await userAPI.auth();
     thunkAPI.dispatch(
       populate({
-        playlist: response.data.playlist,
+        playlists: response.data.playlist,
         selectedPlaylist: response.data.selectedPlaylist,
       })
     );
