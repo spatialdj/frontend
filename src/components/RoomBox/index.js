@@ -95,15 +95,14 @@ function RoomBox(props) {
       handleRoomClosed();
     });
 
-    socket.on('play_song', (username, videoId, startTime) => {
+    socket.on('play_song', (song, startTime) => {
+      const { username, videoId } = song
+      
       console.log('play_song');
       setSong({
         username,
         id: videoId,
       });
-
-      console.log(username);
-      console.log(currentUser?.username)
 
       if (username === currentUser?.username) {
         console.log("dispatch");
