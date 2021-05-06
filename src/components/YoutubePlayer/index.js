@@ -1,18 +1,14 @@
 import React, { useEffect, useContext, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeVolume } from 'slices/youtubeSlice';
-import { ClientPositionContext } from 'contexts/clientposition';
 import {
-  Box,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  Button,
-  useDisclosure,
-} from '@chakra-ui/react';
+  changeVolume,
+  reportStatus,
+  reportError,
+  clearError,
+} from 'slices/youtubeSlice';
+import { ClientPositionContext } from 'contexts/clientposition';
+import { Box } from '@chakra-ui/react';
+import ErrorBox from './components/ErrorBox';
 
 // Adjusts for circle size, which is 64x64 + 4px of border
 const X_OFFSET = 32 + 4;
@@ -82,7 +78,6 @@ const baseBoundingBox = {
 function YoutubePlayer(props) {
   const { isAuth, id, height, width, currentSongNumber } = props;
   const { clientPosition } = useContext(ClientPositionContext);
-  const { isOpen, onOpen, onClose } = useDisclosure(); // Autoplay modal
   const dispatch = useDispatch();
   const volume = useSelector(state => state.youtube.volume);
   const player = useRef(null);
@@ -157,12 +152,7 @@ function YoutubePlayer(props) {
   const onPlayerReady = event => {
     event.target.playVideo();
     console.log('isAuth', isAuth);
-    if (isAuth) {
-      // Open modal to allow autoplay videos
-      // Only open if authed, because the spectator mode modal
-      // will show for non authed users
-      onOpen();
-    } else {
+    if (!isAuth) {
       // Set player volume for non authed users,
       // because they can't control volume by moving bubble
       dispatch(changeVolume(100));
@@ -175,23 +165,28 @@ function YoutubePlayer(props) {
     const { data } = event;
     switch (data) {
       case -1:
-        console.log('YT unstarted -1');
+        dispatch(reportStatus('unstarted'));
+        dispatch(clearError());
         break;
       case 0:
-        console.log('YT ended 0');
+        dispatch(reportStatus('ended'));
+        dispatch(clearError());
         break;
       case 1:
-        console.log('YT playing 1');
-        if (isOpen) onClose();
+        dispatch(reportStatus('playing'));
+        dispatch(clearError());
         break;
       case 2:
-        console.log('YT paused 2');
+        dispatch(reportStatus('paused'));
+        dispatch(clearError());
         break;
       case 3:
-        console.log('YT buffering 3');
+        dispatch(reportStatus('buffering'));
+        dispatch(clearError());
         break;
       case 5:
-        console.log('YT cued 5');
+        dispatch(reportStatus('cued'));
+        dispatch(clearError());
         break;
       default:
         break;
@@ -199,14 +194,9 @@ function YoutubePlayer(props) {
   };
 
   const onError = event => {
-    console.log('onError', event);
-  };
-
-  const onGrantAutoplay = () => {
-    if (player.current) {
-      player.current.playVideo();
-      onClose();
-    }
+    const { data } = event;
+    console.log('onError', data);
+    dispatch(reportError(data));
   };
 
   return (
@@ -223,18 +213,7 @@ function YoutubePlayer(props) {
         borderColor="blue.300"
         id="youtube-player"
       />
-      <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Allow autoplay</ModalHeader>
-          <ModalBody>Click the button to let us autoplay videos 👇</ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onGrantAutoplay}>
-              OK
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ErrorBox height={height} width={width} />
     </>
   );
 }

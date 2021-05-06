@@ -26,17 +26,13 @@ export const queueSlice = createSlice({
         state.status = 'failed';
       }
     },
-    enqueue: (state, { payload }) => {
-      state.queue = payload;
-    },
-    dequeue: (state, { payload }) => {
-      state.queue = payload;
-    },
-    joinQueue: state => {
+    joinQueue: (state, { payload }) => {
       state.inQueue = true;
+      state.queue.push(payload);
     },
-    leaveQueue: state => {
+    leaveQueue: (state, { payload }) => {
       state.inQueue = false;
+      state.queue = state.queue.filter(username => username !== payload);
     },
     changeCurrentSong: (state, { payload }) => {
       state.currentSong = payload;
@@ -46,8 +42,6 @@ export const queueSlice = createSlice({
 
 export const {
   populate,
-  enqueue,
-  dequeue,
   joinQueue,
   leaveQueue,
   changeCurrentSong,

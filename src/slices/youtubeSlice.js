@@ -6,6 +6,8 @@ export const youtubeSlice = createSlice({
   initialState: {
     volume: 0,
     videoId: null,
+    status: 'unstarted',
+    errorCode: null,
   },
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
@@ -18,9 +20,25 @@ export const youtubeSlice = createSlice({
     changeVideoId: (state, { payload }) => {
       state.videoId = payload;
     },
+    reportStatus: (state, { payload }) => {
+      state.status = payload;
+    },
+    reportError: (state, { payload }) => {
+      state.errorCode = payload;
+    },
+    clearError: state => {
+      state.errorCode = null;
+    },
   },
 });
 
-export const { changeVolume, changeVideoId, muteVideo } = youtubeSlice.actions;
+export const {
+  changeVolume,
+  changeVideoId,
+  muteVideo,
+  reportStatus,
+  reportError,
+  clearError,
+} = youtubeSlice.actions;
 
 export default youtubeSlice.reducer;

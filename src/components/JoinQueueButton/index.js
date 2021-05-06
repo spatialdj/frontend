@@ -14,20 +14,20 @@ function JoinQueueButton() {
   useEffect(() => {
     socket.on('user_join_queue', (position, userFragment) => {
       if (userFragment.username === currentUser.username) {
-        dispatch(joinQueue());
+        dispatch(joinQueue(currentUser.username));
         setIsLoading(false);
       } else {
-        // TODO: handle join queue for other users
+        dispatch(joinQueue(userFragment.username));
       }
       console.log('user_join_queue', { position, userFragment });
     });
 
     socket.on('user_leave_queue', username => {
       if (username === currentUser.username) {
-        dispatch(leaveQueue());
+        dispatch(leaveQueue(currentUser.username));
         setIsLoading(false);
       } else {
-        // TODO: handle leave queue for other users
+        dispatch(joinQueue(username));
       }
       console.log('user_leave_queue', username);
     });
