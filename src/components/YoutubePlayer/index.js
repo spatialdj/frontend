@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { SocketContext } from 'contexts/socket';
 import { changeVolume } from 'slices/youtubeSlice';
 import { ClientPositionContext } from 'contexts/clientposition';
 import {
@@ -82,6 +83,7 @@ const baseBoundingBox = {
 function YoutubePlayer(props) {
   const { isAuth, id, height, width, currentSongNumber } = props;
   const { clientPosition } = useContext(ClientPositionContext);
+  const socket = useContext(SocketContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // Autoplay modal
   const dispatch = useDispatch();
   const volume = useSelector(state => state.youtube.volume);
@@ -123,13 +125,28 @@ function YoutubePlayer(props) {
     });
     // console.log(volume);
     dispatch(changeVolume(volume));
-  }, [clientPosition, player]);
+  }, [clientPosition, player, dispatch]);
 
   useEffect(() => {
     if (player.current?.setVolume) {
       player.current.setVolume(volume);
     }
   }, [volume]);
+
+  useEffect(() => {
+    console.log('use effect')
+    socket.on('sync_song', (data) => {
+      const seekTimeSec = data.seekTime / 1000;
+
+      if (player.current?.getCurrentTime && Math.abs(player.current.getCurrentTime() - seekTimeSec) > 2) {
+        player.current.seekTo(seekTimeSec);
+      }
+    });
+
+    return () => {
+      socket.removeAllListeners('sync_song');
+    }
+  }, [player, socket]);
 
   const loadVideo = () => {
     player.current = new window.YT.Player('youtube-player', {
