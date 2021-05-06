@@ -126,7 +126,7 @@ function RoomBox(props) {
       socket.removeAllListeners('room_closed');
       socket.removeAllListeners('play_song');
     };
-  }, [socket, roomId]);
+  }, [socket, roomId, currentUser]);
 
   const handlePosChange = (username, position) => {
     if (currentUser?.username === username) return;
