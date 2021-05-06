@@ -16,9 +16,6 @@ const Bar = styled(Flex)`
 
 export default function SongBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const currentSong = 'Glace - "Ocean"';
-  const nextSong = 'Darude - "Sandstorm"';
-  const playlistName = 'Epic Bangers';
 
   return (
     <Bar
@@ -32,12 +29,8 @@ export default function SongBar() {
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
         <SongDrawer handleOnClose={onClose} />
       </Drawer>
-      <LeftSide
-        openDrawer={onOpen}
-        currentSong={currentSong}
-        nextSong={nextSong}
-      />
-      <RightSide playlistName={playlistName} />
+      <LeftSide openDrawer={onOpen} />
+      <RightSide />
     </Bar>
   );
 }

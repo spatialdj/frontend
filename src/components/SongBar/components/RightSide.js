@@ -9,6 +9,7 @@ import {
   SliderThumb,
   SliderFilledTrack,
   Text,
+  Icon,
 } from '@chakra-ui/react';
 import {
   ImVolumeHigh,
@@ -16,11 +17,13 @@ import {
   ImVolumeLow,
   ImVolumeMute2,
 } from 'react-icons/im';
+import { BiBarChart } from 'react-icons/bi';
 
-function RightSide(props) {
+function RightSide() {
   const lastVolumeRef = useRef(50);
   const dispatch = useDispatch();
   const volume = useSelector(state => state.youtube.volume);
+  const currentSong = useSelector(state => state.queue.currentSong);
 
   const handleMute = e => {
     e.preventDefault();
@@ -38,9 +41,14 @@ function RightSide(props) {
 
   return (
     <HStack>
-      <Text fontWeight="bold" mr="2rem">
-        Current Playlist: {props.playlistName}
-      </Text>
+      {currentSong != null ? (
+        <>
+          <Icon as={BiBarChart} />
+          <Text fontWeight="bold" mr="2rem">
+            {currentSong?.title}
+          </Text>
+        </>
+      ) : null}
       <IconButton
         onClick={handleMute}
         variant="ghost"

@@ -10,7 +10,7 @@ import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 import ViewOnlyModal from 'components/ViewOnlyModal';
-import { cycleSelectedPlaylist } from '../../slices/playlistsSlice'
+import { cycleSelectedPlaylist } from '../../slices/playlistsSlice';
 
 function RoomBox(props) {
   const socket = useContext(SocketContext);
@@ -105,9 +105,8 @@ function RoomBox(props) {
       });
 
       if (username === currentUser?.username) {
-        console.log("dispatch");
         // update redux cycle playlist
-        dispatch(cycleSelectedPlaylist())
+        dispatch(cycleSelectedPlaylist());
       }
 
       setCurrentSongNumber(currentSongNumber => currentSongNumber + 1);
