@@ -53,7 +53,8 @@ function Login() {
           isClosable: true,
         });
       } else if (res.type === 'user/login/fulfilled') {
-        dispatch(authenticate());
+        // dispatch(authenticate());
+        window.location.reload();
       }
     });
   };

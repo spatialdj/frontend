@@ -72,7 +72,8 @@ function Register() {
           isClosable: true,
         });
       } else if (res.type === 'user/register/fulfilled') {
-        dispatch(authenticate());
+        // dispatch(authenticate());
+        window.location.reload();
       }
     });
   };
