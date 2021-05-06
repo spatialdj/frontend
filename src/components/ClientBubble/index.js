@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { ClientPositionContext } from 'contexts/clientposition';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { joinRoom } from 'slices/currentRoomSlice';
 import { populate } from 'slices/queueSlice';
 import { Avatar, Tag, Flex } from '@chakra-ui/react';
@@ -13,14 +13,12 @@ const ClientBubble = props => {
     ClientPositionContext
   );
   const dispatch = useDispatch();
-  const currentUser = useSelector(state => state.user);
   const { roomId, profilePicture, username, prefix } = props;
 
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
       console.log('join_room', response);
       const { success, guest, room } = response;
-      const { username } = currentUser;
 
       dispatch(joinRoom(response));
 
@@ -42,7 +40,7 @@ const ClientBubble = props => {
         }
       }
     });
-  }, [socket, roomId]);
+  }, [socket, dispatch, setClientPosition, roomId, username]);
 
   useEffect(() => {
     socket.emit('pos_change', clientPosition);

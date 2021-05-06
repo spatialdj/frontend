@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { get } from 'slices/roomsSlice';
 import { Text, Button, HStack } from '@chakra-ui/react';
 
@@ -18,8 +18,6 @@ function RoomFilter() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const dispatch = useDispatch();
   const firstLoad = useRef(true);
-  const rooms = useSelector(state => state.rooms);
-  const { searchQuery } = rooms;
 
   const selectFilter = key => {
     const isSelected = selectedFilters.includes(key);
@@ -36,14 +34,13 @@ function RoomFilter() {
     } else {
       dispatch(
         get({
-          searchQuery: searchQuery,
-          limit: 20,
           skip: 0,
+          limit: 20,
           filters: selectedFilters,
         })
       );
     }
-  }, [selectedFilters]);
+  }, [selectedFilters, dispatch]);
 
   return (
     <HStack my={4} spacing={4}>

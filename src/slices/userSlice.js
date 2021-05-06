@@ -1,10 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as userAPI from 'services/user';
+import { populate } from 'slices/playlistsSlice';
 
-export const authenticate = createAsyncThunk('user/auth', async () => {
-  const response = await userAPI.auth();
-  return response.data;
-});
+export const authenticate = createAsyncThunk(
+  'user/auth',
+  async (_, thunkAPI) => {
+    const response = await userAPI.auth();
+    thunkAPI.dispatch(
+      populate({
+        playlist: response.data.playlist,
+        selectedPlaylist: response.data.selectedPlaylist,
+      })
+    );
+    return response.data;
+  }
+);
 
 export const login = createAsyncThunk('user/login', async request => {
   const response = await userAPI.login(request);
@@ -28,8 +38,6 @@ export const userSlice = createSlice({
     profilePicture: '',
     authenticated: false,
     status: 'idle',
-    selectedPlaylist: null,
-    playlist: {},
   },
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
@@ -42,8 +50,6 @@ export const userSlice = createSlice({
       state.status = 'success';
       state.username = payload.username;
       state.profilePicture = payload.profilePicture;
-      state.selectedPlaylist = payload.selectedPlaylist;
-      state.playlist = payload.playlist;
     },
     [authenticate.pending]: state => {
       state.status = 'loading';
@@ -57,8 +63,6 @@ export const userSlice = createSlice({
       state.status = 'failed';
       state.username = '';
       state.profilePicture = '';
-      state.selectedPlaylist = null;
-      state.playlist = {};
     },
   },
 });

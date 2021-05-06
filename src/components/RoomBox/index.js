@@ -26,15 +26,18 @@ function RoomBox(props) {
   const [showViewOnly, setShowViewOnly] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user);
+  const {
+    username: clientUsername,
+    profilePicture,
+    authenticated,
+  } = currentUser;
   const currentRoom = useSelector(state => state.currentRoom);
+  const { status, data } = currentRoom;
   const toast = useToast();
   const history = useHistory();
   const roomId = props.roomId;
 
   useEffect(() => {
-    const { username, authenticated } = currentUser;
-    const { status, data } = currentRoom;
-
     if (status === 'success' && data) {
       if (!authenticated) {
         setShowViewOnly(true);
@@ -42,7 +45,7 @@ function RoomBox(props) {
       // Populate bubbles data, but ignore if member.username is
       // same as client's username
       setBubblesData(
-        data.members.filter(member => member.username !== username)
+        data.members.filter(member => member.username !== clientUsername)
       );
 
       setSong(data.currentSong);
@@ -56,9 +59,86 @@ function RoomBox(props) {
       });
       history.push('/rooms');
     }
-  }, [currentRoom, currentUser]);
+  }, [status, data, authenticated, clientUsername, history, toast]);
 
   useEffect(() => {
+    const handlePosChange = (username, position) => {
+      if (clientUsername === username) return;
+
+      const index = bubblesRef.current.findIndex(
+        user => user.username === username
+      );
+
+      // TODO: find a better way to update this
+      if (index !== -1) {
+        setBubblesData([
+          ...bubblesRef.current.slice(0, index),
+          {
+            profilePicture: bubblesRef.current[index].profilePicture,
+            prefix: bubblesRef.current[index].prefix,
+            username: bubblesRef.current[index].username,
+            type: bubblesRef.current[index].type,
+            position: position,
+          },
+          ...bubblesRef.current.slice(index + 1),
+        ]);
+      }
+    };
+
+    const handleJoin = (user, position) => {
+      const { username, profilePicture } = user;
+      toast({
+        title: `${username} joined`,
+        status: 'info',
+        variant: 'top-accent',
+        isClosable: true,
+        duration: 5000,
+      });
+      setBubblesData(data => [
+        ...data,
+        {
+          profilePicture: profilePicture,
+          prefix: '',
+          username: username,
+          type: 'other',
+          position: position,
+        },
+      ]);
+    };
+
+    const handleLeave = username => {
+      toast({
+        title: `${username} left`,
+        status: 'error',
+        variant: 'top-accent',
+        isClosable: true,
+        duration: 5000,
+      });
+      setBubblesData(data => data.filter(user => user.username !== username));
+    };
+
+    const handleTransferHost = username => {
+      toast({
+        title: `${username} is the host now!`,
+        status: 'warning',
+        variant: 'top-accent',
+        isClosable: true,
+        duration: 5000,
+      });
+      // TODO: change bubblesData to reflect host?
+    };
+
+    const handleRoomClosed = () => {
+      toast({
+        title: 'Room closed',
+        description: 'The room you were in is now closed',
+        status: 'error',
+        isClosable: true,
+        duration: 20000,
+      });
+      history.push('/rooms');
+    };
+
     // Listen to user moving
     socket.on('pos_change', (username, position) => {
       handlePosChange(username, position);
@@ -69,9 +149,8 @@ function RoomBox(props) {
     socket.on('user_join', response => {
       console.log('user_join', response);
       const { user, position } = response;
-      const { username } = currentUser;
       // Don't show own join toast to user
-      if (user?.username !== username) {
+      if (user?.username !== clientUsername) {
         handleJoin(user, position);
       }
     });
@@ -96,15 +175,15 @@ function RoomBox(props) {
     });
 
     socket.on('play_song', (song, startTime) => {
-      const { username, videoId } = song
-      
+      const { username: songPicker, videoId } = song;
+
       console.log('play_song');
       setSong({
-        username,
+        username: songPicker,
         id: videoId,
       });
 
-      if (username === currentUser?.username) {
+      if (songPicker === clientUsername) {
         // update redux cycle playlist
         dispatch(cycleSelectedPlaylist());
       }
@@ -126,84 +205,7 @@ function RoomBox(props) {
       socket.removeAllListeners('room_closed');
       socket.removeAllListeners('play_song');
     };
-  }, [socket, roomId]);
-
-  const handlePosChange = (username, position) => {
-    if (currentUser?.username === username) return;
-
-    const index = bubblesRef.current.findIndex(
-      user => user.username === username
-    );
-
-    // TODO: find a better way to update this
-    if (index !== -1) {
-      setBubblesData([
-        ...bubblesRef.current.slice(0, index),
-        {
-          profilePicture: bubblesRef.current[index].profilePicture,
-          prefix: bubblesRef.current[index].prefix,
-          username: bubblesRef.current[index].username,
-          type: bubblesRef.current[index].type,
-          position: position,
-        },
-        ...bubblesRef.current.slice(index + 1),
-      ]);
-    }
-  };
-
-  const handleJoin = (user, position) => {
-    const { username, profilePicture } = user;
-    toast({
-      title: `${username} joined`,
-      status: 'info',
-      variant: 'top-accent',
-      isClosable: true,
-      duration: 5000,
-    });
-    setBubblesData(data => [
-      ...data,
-      {
-        profilePicture: profilePicture,
-        prefix: '',
-        username: username,
-        type: 'other',
-        position: position,
-      },
-    ]);
-  };
-
-  const handleLeave = username => {
-    toast({
-      title: `${username} left`,
-      status: 'error',
-      variant: 'top-accent',
-      isClosable: true,
-      duration: 5000,
-    });
-    setBubblesData(data => data.filter(user => user.username !== username));
-  };
-
-  const handleTransferHost = username => {
-    toast({
-      title: `${username} is the host now!`,
-      status: 'warning',
-      variant: 'top-accent',
-      isClosable: true,
-      duration: 5000,
-    });
-    // TODO: change bubblesData to reflect host?
-  };
-
-  const handleRoomClosed = () => {
-    toast({
-      title: 'Room closed',
-      description: 'The room you were in is now closed',
-      status: 'error',
-      isClosable: true,
-      duration: 20000,
-    });
-    history.push('/rooms');
-  };
+  }, [dispatch, socket, history, toast, roomId, clientUsername]);
 
   return (
     <Box id="canvas" overflow="hidden" h="calc(100vh - 80px)" w="100%">
@@ -212,7 +214,7 @@ function RoomBox(props) {
       </Helmet>
       <LeaveRoomButton />
       <YoutubePlayer
-        isAuth={currentUser?.authenticated}
+        isAuth={authenticated}
         id={song?.id}
         height="390"
         width="640"
@@ -230,9 +232,9 @@ function RoomBox(props) {
       ))}
       <ClientBubble
         roomId={roomId}
-        profilePicture={currentUser?.profilePicture}
+        profilePicture={profilePicture}
         prefix="👋"
-        username={currentUser?.username}
+        username={clientUsername}
       />
       <ViewOnlyModal
         isOpen={showViewOnly}

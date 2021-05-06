@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { HStack, IconButton, Text, VStack } from '@chakra-ui/react';
+import { HStack, IconButton, Text, VStack, Tag } from '@chakra-ui/react';
 import { FaChevronUp } from 'react-icons/fa';
 
 function LeftSide(props) {
@@ -8,15 +8,17 @@ function LeftSide(props) {
   const playlist = useSelector(state => state.playlists);
   const { playlists, selectedPlaylist } = playlist;
 
+  if (!authenticated) {
+    return <Tag size="lg">👀 SPECTATOR MODE</Tag>;
+  }
+
   return (
     <HStack spacing="2rem">
-      {authenticated ? (
-        <IconButton
-          variant="outline"
-          onClick={props.openDrawer}
-          icon={<FaChevronUp />}
-        />
-      ) : null}
+      <IconButton
+        variant="outline"
+        onClick={props.openDrawer}
+        icon={<FaChevronUp />}
+      />
       {selectedPlaylist == null ? (
         <Text>No playlist selected</Text>
       ) : (

@@ -51,7 +51,7 @@ function RoomCard(props) {
         >
           {room.description}
         </Text>
-        <HStack style={{ 'margin-top': 'auto' }}>
+        <HStack style={{ marginTop: 'auto' }}>
           <Avatar size="xs" src={room.host.profilePicture} alt="pfp" />
           <Text color="white" mx="2" my="6">
             {room.host.username}

@@ -111,6 +111,7 @@ function YoutubePlayer(props) {
       // Destroy player object
       player.current?.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, currentSongNumber]);
 
   // Handle proximity audio
@@ -123,7 +124,7 @@ function YoutubePlayer(props) {
     });
     // console.log(volume);
     dispatch(changeVolume(volume));
-  }, [clientPosition, player]);
+  }, [clientPosition, player, dispatch]);
 
   useEffect(() => {
     if (player.current?.setVolume) {
@@ -158,7 +159,7 @@ function YoutubePlayer(props) {
     console.log('isAuth', isAuth);
     if (isAuth) {
       // Open modal to allow autoplay videos
-      // Only open if authed, because the view only modal
+      // Only open if authed, because the spectator mode modal
       // will show for non authed users
       onOpen();
     } else {
