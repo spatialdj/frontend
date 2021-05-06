@@ -38,6 +38,9 @@ export const queueSlice = createSlice({
     leaveQueue: state => {
       state.inQueue = false;
     },
+    changeCurrentSong: (state, { payload }) => {
+      state.currentSong = payload;
+    },
   },
 });
 
@@ -47,6 +50,7 @@ export const {
   dequeue,
   joinQueue,
   leaveQueue,
+  changeCurrentSong,
 } = queueSlice.actions;
 
 export default queueSlice.reducer;
