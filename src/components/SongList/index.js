@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import Song from '../SongCard';
-import { List, ListItem } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 const getRenderItem = (selectedPlaylist, list, isInSearch) => (
@@ -18,14 +18,12 @@ const getRenderItem = (selectedPlaylist, list, isInSearch) => (
       ref={provided.innerRef}
       style={{ ...provided.draggableProps.style, marginBottom: '0.5rem' }}
     >
-      {
-        <Song
-          selectedPlaylist={selectedPlaylist}
-          key={song.id}
-          data={song}
-          isInSearch={isInSearch}
-        />
-      }
+      <Song
+        selectedPlaylist={selectedPlaylist}
+        key={song.id}
+        data={song}
+        isInSearch={isInSearch}
+      />
     </div>
   );
 };
@@ -33,11 +31,14 @@ const getRenderItem = (selectedPlaylist, list, isInSearch) => (
 function SongList({ selectedPlaylist, list, isInSearch, handleOnDragEnd }) {
   const renderItem = getRenderItem(selectedPlaylist, list, isInSearch);
 
+  // For non-full height drawer and to fix offset bug
+  // add renderClone={renderItem} to Droppable
+  // Note: this will cause thumbnail image to flicker
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <Droppable droppableId="songList" renderClone={renderItem}>
         {(provided, snapshot) => (
-          <List
+          <Box
             style={{
               scrollbarColor: '#404040 #000000',
             }}
@@ -57,7 +58,7 @@ function SongList({ selectedPlaylist, list, isInSearch, handleOnDragEnd }) {
               </Draggable>
             ))}
             {provided.placeholder}
-          </List>
+          </Box>
         )}
       </Droppable>
     </DragDropContext>

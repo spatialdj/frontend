@@ -147,7 +147,8 @@ export default function SongDrawer(props) {
   };
 
   return (
-    <DrawerOverlay>
+    <>
+      <DrawerOverlay />
       <DrawerContent>
         <DrawerHeader borderBottomWidth="1px" bgColor="black">
           <IconButton
@@ -239,6 +240,6 @@ export default function SongDrawer(props) {
           </SimpleGrid>
         </DrawerBody>
       </DrawerContent>
-    </DrawerOverlay>
+    </>
   );
 }
