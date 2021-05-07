@@ -73,7 +73,8 @@ function Register() {
         });
       } else if (res.type === 'user/register/fulfilled') {
         // dispatch(authenticate());
-        window.location.reload();
+        // window.location.reload();
+        history.go(0);
       }
     });
   };

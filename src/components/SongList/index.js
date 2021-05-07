@@ -16,7 +16,7 @@ const getRenderItem = (selectedPlaylist, list, isInSearch) => (
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       ref={provided.innerRef}
-      style={{ ...provided.draggableProps.style, marginBottom: 5 }}
+      style={{ ...provided.draggableProps.style, marginBottom: '0.5rem' }}
     >
       {
         <Song

@@ -4,7 +4,7 @@ import { FaSearch } from 'react-icons/fa';
 
 function SongSearch({ query, setQuery, onKeyDown }) {
   return (
-    <InputGroup mb="2">
+    <InputGroup mb={4}>
       <InputLeftElement
         pointerEvents="none"
         children={<Icon as={FaSearch} color="#8F8F8F" />}

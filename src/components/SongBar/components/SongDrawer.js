@@ -6,8 +6,10 @@ import {
   DrawerHeader,
   DrawerContent,
   DrawerBody,
+  SimpleGrid,
   Flex,
   Heading,
+  Text,
   HStack,
   IconButton,
   VStack,
@@ -16,6 +18,7 @@ import SongSearch from '../../SongSearch';
 import SongList from '../../SongList';
 import { search } from '../../../services/song.js';
 import { FaChevronDown } from 'react-icons/fa';
+import { MdDelete, MdEdit } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import * as playlistAPI from '../../../services/playlist.js';
 import {
@@ -145,7 +148,7 @@ export default function SongDrawer(props) {
 
   return (
     <DrawerOverlay>
-      <DrawerContent maxH="75%">
+      <DrawerContent>
         <DrawerHeader borderBottomWidth="1px" bgColor="black">
           <IconButton
             variant="outline"
@@ -155,16 +158,16 @@ export default function SongDrawer(props) {
           />
           Playlist Manager
         </DrawerHeader>
-        <DrawerBody bgColor="black" pl="0">
-          <Flex>
-            <Box my="4" minW="260px">
+        <DrawerBody bgColor="black">
+          <SimpleGrid my={2} columns={2} templateColumns="1fr 3fr" spacing={8}>
+            <Box minW="260px">
               <HStack
-                px="1rem"
-                pb="1rem"
-                spacing="5"
+                h="var(--chakra-sizes-10)"
+                mb={4}
+                spacing={0}
                 justifyContent="space-between"
               >
-                <Heading fontSize="lg">Your Playlists 🔥</Heading>
+                <Heading fontSize="lg">Your Playlists</Heading>
                 <Button
                   isLoading={pendingNew}
                   loadingText=""
@@ -176,35 +179,51 @@ export default function SongDrawer(props) {
                 </Button>
               </HStack>
               <VStack
+                mt={1}
                 maxH="475px"
-                spacing="0"
+                spacing={1}
                 overflowY="auto"
                 style={{
                   scrollbarColor: '#404040 #000000',
                 }}
               >
                 {playlists.map(playlist => (
-                  <Box
-                    style={{
-                      cursor: 'pointer',
-                    }}
+                  <HStack
+                    spacing={0}
+                    justifyContent="space-between"
+                    alignItems="center"
+                    cursor="pointer"
+                    borderRadius="0.375rem"
                     bgColor={
                       playlist.id === selectedPlaylistId ? '#404040' : 'black'
                     }
                     key={playlist.id}
                     w="100%"
-                    py="0.75rem"
-                    pl="1rem"
+                    py={1}
+                    pl={4}
                     onClick={async () =>
                       await handlePlaylistChange(playlist.id)
                     }
                   >
-                    {playlist.name}
-                  </Box>
+                    <Text>{playlist.name}</Text>
+                    <span>
+                      <IconButton
+                        aria-label="Rename playlist"
+                        icon={<MdEdit />}
+                        variant="ghost"
+                      />
+                      <IconButton
+                        aria-label="Delete playlist"
+                        icon={<MdDelete />}
+                        variant="ghost"
+                        colorScheme="red"
+                      />
+                    </span>
+                  </HStack>
                 ))}
               </VStack>
             </Box>
-            <Box mx="8" my="4" w="full">
+            <Box w="full">
               <SongSearch
                 query={query}
                 setQuery={e => setQuery(e.target.value)}
@@ -217,7 +236,7 @@ export default function SongDrawer(props) {
                 handleOnDragEnd={handleOnDragEnd}
               />
             </Box>
-          </Flex>
+          </SimpleGrid>
         </DrawerBody>
       </DrawerContent>
     </DrawerOverlay>

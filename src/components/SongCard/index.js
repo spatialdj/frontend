@@ -12,9 +12,11 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  HStack,
+  VStack,
 } from '@chakra-ui/react';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import { FaPlus, FaTrashAlt } from 'react-icons/fa';
+import { FaPlus, FaTrashAlt, FaYoutube } from 'react-icons/fa';
 import he from 'he';
 import { useDispatch, useSelector } from 'react-redux';
 import * as playlistAPI from '../../services/playlist.js';
@@ -56,28 +58,42 @@ function Song({ selectedPlaylist, data, isInSearch }) {
   };
 
   return (
-    <Flex bg="#211E1E" px="8" py="4" justify="space-between" borderRadius="8px">
-      <Flex>
+    <Flex
+      bg="#211E1E"
+      px={4}
+      py={2}
+      justify="space-between"
+      alignItems="center"
+      borderRadius="0.375rem"
+    >
+      <Flex alignItems="center">
         {!isInSearch && (
           <Center>
             <Icon as={GiHamburgerMenu} pr="1rem" boxSize={8} />
           </Center>
         )}
-        <Image src={thumbnails.default.url} alt="thumbnail" />
-        <Box>
-          <Text m="4">{he.decode(title)}</Text>
-          <Text m="4">{he.decode(channelTitle)}</Text>
-        </Box>
+        <Image
+          src={thumbnails.default.url}
+          w="120px"
+          h="90px"
+          fallbackSrc="https://via.placeholder.com/120x90"
+          alt="thumbnail"
+        />
+        <Flex ml="4" flexDir="column">
+          <Text>{he.decode(title)}</Text>
+          <HStack>
+            <Icon as={FaYoutube} />
+            <Text>{he.decode(channelTitle)}</Text>
+          </HStack>
+        </Flex>
       </Flex>
 
       {isInSearch ? (
         <Menu>
           <MenuButton
-            style={{ marginTop: 'auto', marginBottom: 'auto' }}
             as={IconButton}
-            aria-label="Options"
+            aria-label="Add to playlist"
             icon={<FaPlus />}
-            color="gray.300"
           />
           <MenuList>
             {playlists.length > 0 ? (
@@ -95,14 +111,13 @@ function Song({ selectedPlaylist, data, isInSearch }) {
           </MenuList>
         </Menu>
       ) : (
-        <Button
-          style={{ marginTop: 'auto', marginBottom: 'auto' }}
-          bg="none"
-          _hover={{ opacity: 0.5 }}
+        <IconButton
+          aria-label="Remove song from playlist"
+          variant="ghost"
+          icon={<FaTrashAlt />}
+          colorScheme="red"
           onClick={async () => await handleOnClickDelete()}
-        >
-          <Icon as={FaTrashAlt} color={'red.300'} />
-        </Button>
+        />
       )}
     </Flex>
   );
