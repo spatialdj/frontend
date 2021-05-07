@@ -25,18 +25,23 @@ export const update = createAsyncThunk(
   }
 );
 
+const initialState = {
+  data: [],
+  searchQuery: '*',
+  limit: 10,
+  skip: 0,
+  filters: [],
+  status: 'idle',
+  getMoreStatus: 'idle',
+  hasMore: true
+}
+
 export const roomsSlice = createSlice({
   name: 'rooms',
-  initialState: {
-    data: [],
-    searchQuery: '*',
-    limit: 10,
-    skip: 0,
-    filters: [],
-    status: 'idle',
-  },
+  initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
+    reset: () => initialState
   },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -55,18 +60,21 @@ export const roomsSlice = createSlice({
       state.status = 'failed';
     },
     [getMore.fulfilled]: (state, { payload, meta }) => {
-      state.status = 'success';
-      state.data.concat(payload);
+      state.getMoreStatus = 'success';
+      state.data.push(...payload);
       state.searchQuery = meta.arg.searchQuery;
       state.limit = meta.arg.limit;
       state.skip = meta.arg.skip;
       state.filters = meta.arg.filters;
+      // if results returned is < limit, there are no more rooms
+      state.hasMore = payload.length !== 0 && payload.length === state.limit;
+      console.log(state.hasMore)
     },
     [getMore.pending]: state => {
-      state.status = 'loading';
+      state.getMoreStatus = 'loading';
     },
     [getMore.rejected]: state => {
-      state.status = 'failed';
+      state.getMoreStatus = 'failed';
     },
     [update.fulfilled]: state => {
       state.status = 'success';
@@ -79,5 +87,7 @@ export const roomsSlice = createSlice({
     },
   },
 });
+
+export const { reset } = roomsSlice.actions;
 
 export default roomsSlice.reducer;
