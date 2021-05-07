@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState, useRef } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { leaveRoom } from 'slices/currentRoomSlice';
+import { leaveRoom, playSong as roomPlaySong } from 'slices/currentRoomSlice';
 import { cycleSelectedPlaylist } from 'slices/playlistsSlice';
 import { changeCurrentSong } from 'slices/queueSlice';
 import { playSong, stopSong } from 'slices/youtubeSlice';
@@ -18,9 +18,8 @@ import ViewOnlyModal from 'components/ViewOnlyModal';
 function RoomBox(props) {
   const socket = useContext(SocketContext);
 
-  const [song, setSong] = useState();
+  const song = useSelector(state => state.currentRoom.data.currentSong);
   const [bubblesData, setBubblesData] = useState([]);
-  const [currentSongNumber, setCurrentSongNumber] = useState(0);
 
   // TODO: instead of storing pos in bubblesData,
   // maybe have a separate state for positions?
@@ -50,8 +49,6 @@ function RoomBox(props) {
       setBubblesData(
         data.members.filter(member => member.username !== clientUsername)
       );
-
-      setSong(data.currentSong);
       // todo: set video position to current time - data.songStartTime
     } else if (status === 'failed') {
       toast({
@@ -186,16 +183,10 @@ function RoomBox(props) {
       handleRoomClosed();
     });
 
-    socket.on('play_song', (song, startTime) => {
-      const { username: songPicker, videoId } = song;
+    socket.on('play_song', song => {
+      const { username: songPicker } = song;
 
-      console.log('play_song', { song, startTime });
-
-      setSong({
-        username: songPicker,
-        id: videoId,
-      });
-
+      dispatch(roomPlaySong({ song }));
       dispatch(changeCurrentSong(song));
 
       if (songPicker === clientUsername) {
@@ -205,9 +196,6 @@ function RoomBox(props) {
 
       dispatch(playSong());
       dispatch(clearVote());
-
-      setCurrentSongNumber(currentSongNumber => currentSongNumber + 1);
-      // todo: clamp and move video with startTime
     });
 
     socket.on('stop_song', () => {
@@ -240,10 +228,8 @@ function RoomBox(props) {
       <LeaveRoomButton />
       <YoutubePlayer
         isAuth={authenticated}
-        id={song?.id}
         height="390"
         width="640"
-        currentSongNumber={currentSongNumber}
       />
       {bubblesData.map(item => (
         <Bubble

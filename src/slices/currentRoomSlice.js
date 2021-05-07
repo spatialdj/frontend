@@ -13,7 +13,10 @@ const initialState = {
     },
     numMembers: 0,
     members: [],
+    currentSong: null
   },
+  // needed to replay the same song twice, we increment this when a new song plays and attach it to currentSong
+  currentSongNumber: 0,
   status: 'idle',
   isGuest: null,
 };
@@ -38,7 +41,9 @@ export const currentRoomSlice = createSlice({
         host,
         numMembers,
         members,
+        currentSong
       } = payload.room;
+
       state.data.id = id;
       state.data.name = name;
       state.data.description = description;
@@ -48,6 +53,7 @@ export const currentRoomSlice = createSlice({
       state.data.numMembers = numMembers;
       // Convert members from object to array
       state.data.members = Object.keys(members).map(key => members[key]);
+      state.data.currentSong = currentSong;
       state.status = 'success';
       state.isGuest = false;
     },
@@ -64,7 +70,9 @@ export const currentRoomSlice = createSlice({
           host,
           numMembers,
           members,
+          currentSong
         } = payload.room;
+
         state.data.id = id;
         state.data.name = name;
         state.data.description = description;
@@ -74,10 +82,20 @@ export const currentRoomSlice = createSlice({
         state.data.numMembers = numMembers;
         // Convert members from object to array
         state.data.members = Object.keys(members).map(key => members[key]);
+        state.data.currentSong = currentSong;
         state.status = 'success';
         state.isGuest = payload.guest;
       } else {
         state.status = 'failed';
+      }
+    },
+    playSong: (state, { payload }) => {
+      const { song } = payload;
+
+      state.data.currentSong = song;
+
+      if (state.data?.currentSong) {
+        state.data.currentSong.songNum = state.currentSongNumber++;
       }
     },
     leaveRoom: state => {
@@ -86,6 +104,6 @@ export const currentRoomSlice = createSlice({
   },
 });
 
-export const { createRoom, joinRoom, leaveRoom } = currentRoomSlice.actions;
+export const { createRoom, joinRoom, leaveRoom, playSong } = currentRoomSlice.actions;
 
 export default currentRoomSlice.reducer;

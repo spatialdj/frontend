@@ -78,15 +78,63 @@ const baseBoundingBox = {
 };
 
 function YoutubePlayer(props) {
-  const { isAuth, id, height, width, currentSongNumber } = props;
+  const { isAuth, height, width } = props;
   const { clientPosition } = useContext(ClientPositionContext);
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
   const volume = useSelector(state => state.youtube.volume);
   const player = useRef(null);
   const boundingBox = useRef(baseBoundingBox);
+  const song = useSelector(state => state.currentRoom.data.currentSong);
+  const isPlayerReady = useRef(false);
+
+  function loadVideo() {
+    console.log("loadVideo ", song)
+
+    player.current = new window.YT.Player('youtube-player', {
+      height: height,
+      width: width,
+      videoId: song?.videoId,
+      playerVars: {
+        rel: 0,
+        playsinline: 1,
+        controls: 0,
+        disablekb: 1,
+        enablejsapi: 1,
+        autoplay: 1,
+        iv_load_policy: 3,
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+        onError: onError,
+      },
+    });
+  }
+
+  function updateSong() {
+    console.log('call update song')
+    console.log(song)
+    if (song?.videoId == null) {
+      if (player.current.stopVideo) {
+        player.current.stopVideo();
+      }
+
+      return;
+    }
+
+    console.log("player exists");
+    console.log(player.current)
+    
+    if (player.current.loadVideoById && player.current.playVideo) {
+      console.log("attempt load", song.videoId)
+      player.current.loadVideoById(song.videoId, 0);
+      player.current.playVideo();
+    }
+  }
 
   useEffect(() => {
+    console.log("call");
     // Code adapted from Bill Feng:
     // https://stackoverflow.com/a/54921282/6216561
     // On mount, check to see if the API script is already loaded
@@ -100,17 +148,23 @@ function YoutubePlayer(props) {
 
       const firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    } else {
-      // If script is already there, load the video directly
+    } else if (player.current && isPlayerReady) {
+      updateSong();
+    } else if (song) {
+      console.log("load video 1", song);
       loadVideo();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [song, player]);
+
+  // cleanup hook
+  useEffect(() => {
     return () => {
       console.log('YoutubePlayer unmounted');
       // Destroy player object
       player.current?.destroy();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, currentSongNumber]);
+  }, [])
 
   // Handle proximity audio
   useEffect(() => {
@@ -131,7 +185,6 @@ function YoutubePlayer(props) {
   }, [volume]);
 
   useEffect(() => {
-    console.log('use effect');
     socket.on('sync_song', data => {
       const seekTimeSec = data.seekTime / 1000;
 
@@ -148,37 +201,16 @@ function YoutubePlayer(props) {
     };
   }, [player, socket]);
 
-  const loadVideo = () => {
-    player.current = new window.YT.Player('youtube-player', {
-      height: height,
-      width: width,
-      videoId: id,
-      playerVars: {
-        rel: 0,
-        playsinline: 1,
-        controls: 0,
-        disablekb: 1,
-        enablejsapi: 1,
-        autoplay: 1,
-        iv_load_policy: 3,
-      },
-      events: {
-        onReady: onPlayerReady,
-        onStateChange: onPlayerStateChange,
-        onError: onError,
-      },
-    });
-  };
-
   const onPlayerReady = event => {
     event.target.playVideo();
     console.log('isAuth', isAuth);
     if (!isAuth) {
       // Set player volume for non authed users,
       // because they can't control volume by moving bubble
-      dispatch(changeVolume(100));
+      dispatch(changeVolume(50));
     }
     boundingBox.current = event.target.getIframe().getBoundingClientRect();
+    isPlayerReady.current = true;
     console.log('boundingBox', boundingBox.current);
   };
 
