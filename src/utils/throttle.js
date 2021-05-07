@@ -1,7 +1,7 @@
 // From vsync and Clément Prévost
 // https://stackoverflow.com/a/27078401/6216561
 export default function (callback, limit) {
-  var waiting = false; // Initially, we're not waiting
+  let waiting = false; // Initially, we're not waiting
   return function () {
     // We return a throttled function
     if (!waiting) {

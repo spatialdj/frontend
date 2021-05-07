@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Tag, Flex, ScaleFade } from '@chakra-ui/react';
+import { Avatar, Tag, Flex, ScaleFade, Fade } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
 
 function Bubble(props) {
@@ -31,44 +31,46 @@ function Bubble(props) {
   };
 
   return (
-    <Draggable
-      disabled={true}
-      position={position}
-      defaultClassName="_draggable"
-      defaultClassNameDragging="__dragging"
-      defaultClassNameDragged="__dragged"
-      bounds="#canvas"
-    >
-      <Flex
-        transition="transform .1s linear"
-        position="absolute"
-        onMouseEnter={handleHover}
-        onMouseLeave={handleUnHover}
-        width="fit-content"
-        flexDir="column"
-        alignItems="center"
+    <Fade in={true}>
+      <Draggable
+        disabled={true}
+        position={position}
+        defaultClassName="_draggable"
+        defaultClassNameDragging="__dragging"
+        defaultClassNameDragged="__dragged"
+        bounds="#canvas"
       >
-        <Avatar
-          cursor={type !== 'you' ? 'pointer' : 'move'}
-          size="lg"
-          src={profilePicture}
-          name={username}
-          onDragStart={preventDragHandler}
-        />
+        <Flex
+          transition="transform .1s linear"
+          position="absolute"
+          onMouseEnter={handleHover}
+          onMouseLeave={handleUnHover}
+          width="128px"
+          flexDir="column"
+          alignItems="center"
+        >
+          <Avatar
+            cursor={type !== 'you' ? 'pointer' : 'move'}
+            size="lg"
+            src={profilePicture}
+            name={username}
+            onDragStart={preventDragHandler}
+          />
 
-        <ScaleFade in={showTag} initialScale={0.8}>
-          <Tag
-            mt={4}
-            variant="solid"
-            colorScheme={tagColor}
-            maxW="128px"
-            textAlign="center"
-          >
-            {prefix}&nbsp;{username.substr(0, 20)}
-          </Tag>
-        </ScaleFade>
-      </Flex>
-    </Draggable>
+          <ScaleFade in={showTag} initialScale={0.8}>
+            <Tag
+              mt={4}
+              variant="solid"
+              colorScheme={tagColor}
+              maxW="128px"
+              textAlign="center"
+            >
+              {prefix}&nbsp;{username.substr(0, 20)}
+            </Tag>
+          </ScaleFade>
+        </Flex>
+      </Draggable>
+    </Fade>
   );
 }
 
