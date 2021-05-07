@@ -44,7 +44,7 @@ function Bubble(props) {
         position="absolute"
         onMouseEnter={handleHover}
         onMouseLeave={handleUnHover}
-        width="fit-content"
+        width="128px"
         flexDir="column"
         alignItems="center"
       >

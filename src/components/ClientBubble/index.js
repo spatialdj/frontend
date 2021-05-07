@@ -81,7 +81,7 @@ const ClientBubble = props => {
     >
       <Flex
         position="absolute"
-        width="fit-content"
+        width="128px"
         flexDir="column"
         alignItems="center"
       >
