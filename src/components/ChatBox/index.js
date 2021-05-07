@@ -60,7 +60,7 @@ function ChatBox() {
     return () => {
       socket.removeAllListeners('chat_message');
     };
-  }, [socket]);
+  }, [socket, currentUser.username]);
 
   const mySubmit = e => {
     e.preventDefault();
