@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { useSelector, useDispatch } from 'react-redux';
-import { like, save, dislike } from 'slices/voteSlice';
+import { clientLike, clientSave, clientDislike } from 'slices/voteSlice';
 import { Box, IconButton, ButtonGroup } from '@chakra-ui/react';
 import { IoMdThumbsUp, IoMdThumbsDown } from 'react-icons/io';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
@@ -14,16 +14,16 @@ function Vote() {
 
   const likeSong = () => {
     socket.emit('vote', 'like');
-    dispatch(like());
+    dispatch(clientLike());
   };
 
   const saveSong = () => {
-    dispatch(save());
+    dispatch(clientSave());
   };
 
   const dislikeSong = () => {
     socket.emit('vote', 'dislike');
-    dispatch(dislike());
+    dispatch(clientDislike());
   };
 
   return (
@@ -31,7 +31,7 @@ function Vote() {
       <ButtonGroup size="lg" isAttached>
         <IconButton
           onClick={likeSong}
-          colorScheme={clientVote === 'LIKE' ? 'green' : 'gray'}
+          colorScheme={clientVote === 'like' ? 'green' : 'gray'}
           aria-label="Like this song"
           icon={<IoMdThumbsUp />}
         />
@@ -43,7 +43,7 @@ function Vote() {
         />
         <IconButton
           onClick={dislikeSong}
-          colorScheme={clientVote === 'DISLIKE' ? 'red' : 'gray'}
+          colorScheme={clientVote === 'dislike' ? 'red' : 'gray'}
           aria-label="Dislike this song"
           icon={<IoMdThumbsDown />}
         />

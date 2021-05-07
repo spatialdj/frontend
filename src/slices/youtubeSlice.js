@@ -24,7 +24,12 @@ export const youtubeSlice = createSlice({
       state.status = 'playing';
       state.errorCode = null;
     },
+    // Handles socket.io stop_song event
     stopSong: state => {
+      state.status = 'stopped';
+    },
+    // Handles client youtube player ended current song
+    endSong: state => {
       state.status = 'ended';
     },
     reportError: (state, { payload }) => {
@@ -42,6 +47,7 @@ export const {
   muteVideo,
   playSong,
   stopSong,
+  endSong,
   reportError,
   clearError,
 } = youtubeSlice.actions;

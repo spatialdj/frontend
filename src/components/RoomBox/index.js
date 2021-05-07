@@ -6,6 +6,7 @@ import { leaveRoom } from 'slices/currentRoomSlice';
 import { cycleSelectedPlaylist } from 'slices/playlistsSlice';
 import { changeCurrentSong } from 'slices/queueSlice';
 import { playSong, stopSong } from 'slices/youtubeSlice';
+import { populate, clearVote } from 'slices/voteSlice';
 import { Box, useToast } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
 import Bubble from 'components/Bubble';
@@ -163,6 +164,12 @@ function RoomBox(props) {
       handleLeave(username);
     });
 
+    // Listen to user voting
+    socket.on('user_vote', votes => {
+      console.log('user_vote', votes);
+      populate({ votes, clientUsername });
+    });
+
     // Listen to new host transfewr
     socket.on('new_host', response => {
       console.log('new_host', response);
@@ -194,6 +201,7 @@ function RoomBox(props) {
       }
 
       dispatch(playSong());
+      dispatch(clearVote());
 
       setCurrentSongNumber(currentSongNumber => currentSongNumber + 1);
       // todo: clamp and move video with startTime
