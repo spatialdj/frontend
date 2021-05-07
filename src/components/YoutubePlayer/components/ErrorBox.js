@@ -21,7 +21,10 @@ function ErrorBox(props) {
     );
   }
   // Show when youtube player encountered error and no one in queue
-  else if (queueStatus === 'success' && queue.length === 0) {
+  else if (
+    queueStatus === 'success' &&
+    (ytStatus === 'stopped' || ytStatus === 'unstarted')
+  ) {
     return (
       <ErrorContainer width={width} height={height} borderColor="yellow.500">
         <EmptyQueueMessage />

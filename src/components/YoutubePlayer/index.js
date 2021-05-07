@@ -6,7 +6,7 @@ import {
   reportError,
   clearError,
   playSong,
-  stopSong,
+  endSong,
 } from 'slices/youtubeSlice';
 import { ClientPositionContext } from 'contexts/clientposition';
 import { Box } from '@chakra-ui/react';
@@ -190,7 +190,7 @@ function YoutubePlayer(props) {
         dispatch(clearError());
         break;
       case 0:
-        dispatch(stopSong());
+        dispatch(endSong());
         dispatch(clearError());
         break;
       case 1:
