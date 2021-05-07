@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { SocketContext } from 'contexts/socket';
 import { useSelector } from 'react-redux';
 import {
   Avatar,
@@ -9,6 +10,7 @@ import {
   InputGroup,
   InputRightElement,
   Flex,
+  useToast,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { IoMdSend } from 'react-icons/io';
@@ -26,6 +28,7 @@ const ChatContainer = styled(Flex)`
 `;
 
 function ChatBox() {
+  const socket = useContext(SocketContext);
   const currentUser = useSelector(state => state.user);
   const {
     register,
@@ -35,8 +38,30 @@ function ChatBox() {
   } = useForm();
   const [messages, setMessages] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
+  const toast = useToast();
 
-  // TODO: connect messages to backend to listen and update state?
+  useEffect(() => {
+    socket.on('chat_message', response => {
+      const { message, timeSent, sender } = response;
+      // console.log('receive chat_message', response);
+      // Prevent showing client's message twice
+      if (sender.username !== currentUser.username) {
+        setMessages(messages => [
+          ...messages,
+          {
+            id: messages.length + 1,
+            username: sender.username,
+            profilePicture: sender.profilePicture,
+            message: message,
+          },
+        ]);
+      }
+    });
+    return () => {
+      socket.removeAllListeners('chat_message');
+    };
+  }, [socket]);
+
   const mySubmit = e => {
     e.preventDefault();
     handleSubmit(onSubmit)(e);
@@ -44,18 +69,38 @@ function ChatBox() {
 
   const onSubmit = data => {
     const { message } = data;
-    if (message !== '') {
-      setMessages(messages => [
-        ...messages,
-        {
-          id: messages.length + 1,
-          username: currentUser.username,
-          profilePicture: currentUser.profilePicture,
-          message: message,
-        },
-      ]);
-      reset({ message: '' });
-    }
+    return new Promise(resolve => {
+      if (message?.trim() !== '') {
+        const timeSent = Date.now();
+        socket.emit('chat_message', message, timeSent, response => {
+          // console.log('chat_message', response);
+          if (response?.success) {
+            setMessages(messages => [
+              ...messages,
+              {
+                id: messages.length + 1,
+                username: currentUser.username,
+                profilePicture: currentUser.profilePicture,
+                message: message,
+              },
+            ]);
+            reset({ message: '' });
+          } else {
+            toast({
+              title: 'Error sending message',
+              description: "Couldn't send your message",
+              status: 'error',
+              position: 'top-right',
+              duration: 1000,
+              isClosable: true,
+            });
+          }
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    });
   };
 
   const onMinimizeChat = () => {
