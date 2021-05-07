@@ -6,6 +6,7 @@ import { leaveRoom } from 'slices/currentRoomSlice';
 import { cycleSelectedPlaylist } from 'slices/playlistsSlice';
 import { changeCurrentSong } from 'slices/queueSlice';
 import { playSong, stopSong } from 'slices/youtubeSlice';
+import { clearVote } from 'slices/voteSlice';
 import { Box, useToast } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
 import Bubble from 'components/Bubble';
@@ -194,6 +195,7 @@ function RoomBox(props) {
       }
 
       dispatch(playSong());
+      dispatch(clearVote());
 
       setCurrentSongNumber(currentSongNumber => currentSongNumber + 1);
       // todo: clamp and move video with startTime

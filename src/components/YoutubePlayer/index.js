@@ -131,18 +131,21 @@ function YoutubePlayer(props) {
   }, [volume]);
 
   useEffect(() => {
-    console.log('use effect')
-    socket.on('sync_song', (data) => {
+    console.log('use effect');
+    socket.on('sync_song', data => {
       const seekTimeSec = data.seekTime / 1000;
 
-      if (player.current?.getCurrentTime && Math.abs(player.current.getCurrentTime() - seekTimeSec) > 2) {
+      if (
+        player.current?.getCurrentTime &&
+        Math.abs(player.current.getCurrentTime() - seekTimeSec) > 2
+      ) {
         player.current.seekTo(seekTimeSec);
       }
     });
 
     return () => {
       socket.removeAllListeners('sync_song');
-    }
+    };
   }, [player, socket]);
 
   const loadVideo = () => {

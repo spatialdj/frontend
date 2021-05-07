@@ -1,15 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  likes: 0,
+  dislikes: 0,
+  saves: 0,
+  clientVote: null, // 'LIKE' or 'DISLIKE'
+  clientSaved: false,
+};
+
 // This is for storing voting data for the current song
 export const voteSlice = createSlice({
   name: 'vote',
-  initialState: {
-    likes: 0,
-    dislikes: 0,
-    saves: 0,
-    clientVote: null, // 'LIKE' or 'DISLIKE'
-    clientSaved: false,
-  },
+  initialState: initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
     like: state => {
@@ -66,9 +68,12 @@ export const voteSlice = createSlice({
         state.clientSaved = true;
       }
     },
+    clearVote: state => {
+      state = Object.assign(state, initialState);
+    },
   },
 });
 
-export const { like, dislike, save } = voteSlice.actions;
+export const { like, dislike, save, clearVote } = voteSlice.actions;
 
 export default voteSlice.reducer;
