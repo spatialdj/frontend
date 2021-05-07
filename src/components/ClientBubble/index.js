@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { ClientPositionContext } from 'contexts/clientposition';
 import { useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import { populate as populateQueue } from 'slices/queueSlice';
 import { populate as populateVote } from 'slices/voteSlice';
 import { Avatar, Tag, Flex } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
+import throttle from 'utils/throttle';
 
 const ClientBubble = props => {
   const socket = useContext(SocketContext);
@@ -14,6 +15,9 @@ const ClientBubble = props => {
     ClientPositionContext
   );
   const dispatch = useDispatch();
+  const throttledPosChange = useRef(
+    throttle(pos => socket.emit('pos_change', pos), 50)
+  );
   const { roomId, profilePicture, username, prefix } = props;
 
   useEffect(() => {
@@ -45,7 +49,8 @@ const ClientBubble = props => {
   }, [socket, dispatch, setClientPosition, roomId, username]);
 
   useEffect(() => {
-    socket.emit('pos_change', clientPosition);
+    throttledPosChange.current(clientPosition);
+    // socket.emit('pos_change', pos)
   }, [socket, clientPosition]);
 
   // Prevents dragging text and images
