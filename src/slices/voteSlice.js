@@ -4,7 +4,7 @@ const initialState = {
   likes: 0,
   dislikes: 0,
   saves: 0,
-  clientVote: null, // 'LIKE' or 'DISLIKE'
+  clientVote: null, // 'like' or 'dislike'
   clientSaved: false,
 };
 
@@ -14,42 +14,62 @@ export const voteSlice = createSlice({
   initialState: initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
-    like: state => {
+    populate: (state, { payload }) => {
+      // votes is a map of usernames to their votes
+      const { votes, clientUsername } = payload;
+      if (votes && clientUsername) {
+        state.clientVote = votes?.[clientUsername] ?? null;
+        let likes = 0;
+        let dislikes = 0;
+
+        Object.keys(votes).forEach(username => {
+          if (votes[username] === 'like') {
+            likes = likes + 1;
+          } else if (votes[username] === 'dislike') {
+            dislikes = dislikes + 1;
+          }
+        });
+
+        state.likes = likes;
+        state.dislikes = dislikes;
+      }
+    },
+    clientLike: state => {
       switch (state.clientVote) {
         case null:
           // didn't vote yet
           state.likes++;
-          state.clientVote = 'LIKE';
+          state.clientVote = 'like';
           break;
-        case 'LIKE':
+        case 'like':
           // already voted LIKE
           state.likes--;
           state.clientVote = null;
           break;
-        case 'DISLIKE':
+        case 'dislike':
           // already voted DISLIKE
           state.dislikes--;
           state.likes++;
-          state.clientVote = 'LIKE';
+          state.clientVote = 'like';
           break;
         default:
           break;
       }
     },
-    dislike: state => {
+    clientDislike: state => {
       switch (state.clientVote) {
         case null:
           // didn't vote yet
           state.dislikes++;
-          state.clientVote = 'DISLIKE';
+          state.clientVote = 'dislike';
           break;
-        case 'LIKE':
+        case 'like':
           // already voted LIKE
           state.likes--;
           state.dislikes++;
-          state.clientVote = 'DISLIKE';
+          state.clientVote = 'dislike';
           break;
-        case 'DISLIKE':
+        case 'dislike':
           // already voted DISLIKE
           state.dislikes--;
           state.clientVote = null;
@@ -58,7 +78,7 @@ export const voteSlice = createSlice({
           break;
       }
     },
-    save: state => {
+    clientSave: state => {
       // Toggle save
       if (state.clientSaved) {
         state.saves--;
@@ -74,6 +94,12 @@ export const voteSlice = createSlice({
   },
 });
 
-export const { like, dislike, save, clearVote } = voteSlice.actions;
+export const {
+  populate,
+  clientLike,
+  clientDislike,
+  clientSave,
+  clearVote,
+} = voteSlice.actions;
 
 export default voteSlice.reducer;

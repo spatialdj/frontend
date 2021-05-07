@@ -6,7 +6,7 @@ import { leaveRoom } from 'slices/currentRoomSlice';
 import { cycleSelectedPlaylist } from 'slices/playlistsSlice';
 import { changeCurrentSong } from 'slices/queueSlice';
 import { playSong, stopSong } from 'slices/youtubeSlice';
-import { clearVote } from 'slices/voteSlice';
+import { populate, clearVote } from 'slices/voteSlice';
 import { Box, useToast } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
 import Bubble from 'components/Bubble';
@@ -162,6 +162,12 @@ function RoomBox(props) {
     socket.on('user_leave', username => {
       console.log('user_leave', username);
       handleLeave(username);
+    });
+
+    // Listen to user voting
+    socket.on('user_vote', votes => {
+      console.log('user_vote', votes);
+      populate({ votes, clientUsername });
     });
 
     // Listen to new host transfewr
