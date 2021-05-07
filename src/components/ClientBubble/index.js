@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { joinRoom } from 'slices/currentRoomSlice';
 import { populate as populateQueue } from 'slices/queueSlice';
 import { populate as populateVote } from 'slices/voteSlice';
-import { Avatar, Tag, Flex } from '@chakra-ui/react';
+import { Avatar, Tag, Flex, Fade } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
 import throttle from 'utils/throttle';
 
@@ -46,6 +46,10 @@ const ClientBubble = props => {
         }
       }
     });
+    return () => {
+      console.log('clientbubble umounted');
+      setClientPosition({ x: -1, y: -1 });
+    };
   }, [socket, dispatch, setClientPosition, roomId, username]);
 
   useEffect(() => {
@@ -71,41 +75,43 @@ const ClientBubble = props => {
   }
 
   return (
-    <Draggable
-      onDrag={handleOnDrag}
-      position={clientPosition}
-      defaultClassName="_draggable"
-      defaultClassNameDragging="__dragging"
-      defaultClassNameDragged="__dragged"
-      bounds="#canvas"
-    >
-      <Flex
-        position="absolute"
-        width="128px"
-        flexDir="column"
-        alignItems="center"
+    <Fade in={true}>
+      <Draggable
+        onDrag={handleOnDrag}
+        position={clientPosition}
+        defaultClassName="_draggable"
+        defaultClassNameDragging="__dragging"
+        defaultClassNameDragged="__dragged"
+        bounds="#canvas"
       >
-        <Avatar
-          boxShadow={`0 0 4px 4px ${tagColor}`}
-          bgColor={`${tagColor}.500`}
-          cursor="move"
-          size="lg"
-          src={profilePicture}
-          name={username}
-          onDragStart={preventDragHandler}
-        />
-
-        <Tag
-          mt={4}
-          variant="solid"
-          colorScheme={tagColor}
-          maxW="128px"
-          textAlign="center"
+        <Flex
+          position="absolute"
+          width="128px"
+          flexDir="column"
+          alignItems="center"
         >
-          {`${prefix} ${username.substr(0, 20)} (you)`}
-        </Tag>
-      </Flex>
-    </Draggable>
+          <Avatar
+            boxShadow={`0 0 4px 4px ${tagColor}`}
+            bgColor={`${tagColor}.500`}
+            cursor="move"
+            size="lg"
+            src={profilePicture}
+            name={username}
+            onDragStart={preventDragHandler}
+          />
+
+          <Tag
+            mt={4}
+            variant="solid"
+            colorScheme={tagColor}
+            maxW="128px"
+            textAlign="center"
+          >
+            {`${prefix} ${username.substr(0, 20)} (you)`}
+          </Tag>
+        </Flex>
+      </Draggable>
+    </Fade>
   );
 };
 

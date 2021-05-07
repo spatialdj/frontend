@@ -94,8 +94,9 @@ function RoomBox(props) {
         title: `${username} joined`,
         status: 'info',
         variant: 'top-accent',
+        position: 'top-right',
         isClosable: true,
-        duration: 5000,
+        duration: 3000,
       });
       setBubblesData(data => [
         ...data,
@@ -114,8 +115,9 @@ function RoomBox(props) {
         title: `${username} left`,
         status: 'error',
         variant: 'top-accent',
+        position: 'top-right',
         isClosable: true,
-        duration: 5000,
+        duration: 3000,
       });
       setBubblesData(data => data.filter(user => user.username !== username));
     };
@@ -125,8 +127,9 @@ function RoomBox(props) {
         title: `${username} is the host now!`,
         status: 'warning',
         variant: 'top-accent',
+        position: 'top-right',
         isClosable: true,
-        duration: 5000,
+        duration: 3000,
       });
       // TODO: change bubblesData to reflect host?
     };
