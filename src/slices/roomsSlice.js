@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as roomsAPI from 'services/rooms';
 
-export const get = createAsyncThunk('rooms/get', async (params, thunkAPI) => {
+export const get = createAsyncThunk('/api/rooms/get', async (params, thunkAPI) => {
   // If params didn't include a searchQuery, add current searchQuery to it
   if (params.searchQuery === undefined) {
     const searchQuery = thunkAPI.getState().rooms.searchQuery;
@@ -12,7 +12,7 @@ export const get = createAsyncThunk('rooms/get', async (params, thunkAPI) => {
 });
 
 // infinite scroll
-export const getMore = createAsyncThunk('rooms/getMore', async params => {
+export const getMore = createAsyncThunk('/api/rooms/getMore', async params => {
   const response = await roomsAPI.get(params);
   return response.data;
 });
