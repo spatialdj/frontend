@@ -87,9 +87,8 @@ function YoutubePlayer(props) {
   const player = useRef(null);
   const boundingBox = useRef(baseBoundingBox);
   const song = useSelector(state => state.currentRoom.data.currentSong);
-  const isPlayerReady = useRef(false);
 
-  function loadVideo() {
+  function createPlayer() {
     player.current = new window.YT.Player('youtube-player', {
       height: height,
       width: width,
@@ -126,6 +125,7 @@ function YoutubePlayer(props) {
     }
   }
 
+  //
   useEffect(() => {
     // Code adapted from Bill Feng:
     // https://stackoverflow.com/a/54921282/6216561
@@ -137,13 +137,23 @@ function YoutubePlayer(props) {
 
       const firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    } else if (player.current && isPlayerReady) {
-      updateSong();
-    } else if (song) {
-      loadVideo();
-    }
+    } 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [song, player]);
+  }, []);
+
+  useEffect(() => {
+    if (!window.YT?.Player) {
+      return
+    }
+
+    // create a youtube player if there isn't already one
+    if (!player.current) {
+      createPlayer();
+    } else {
+      // reuse the old youtube player
+      updateSong();
+    }
+  }, [song, window.YT])
 
   // cleanup hook
   useEffect(() => {
@@ -205,7 +215,6 @@ function YoutubePlayer(props) {
       dispatch(changeVolume(50));
     }
     boundingBox.current = event.target.getIframe().getBoundingClientRect();
-    isPlayerReady.current = true;
     // console.log('boundingBox', boundingBox.current);
   };
 
