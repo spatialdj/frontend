@@ -7,6 +7,7 @@ import {
   clearError,
   playSong,
   endSong,
+  stopSong,
 } from 'slices/youtubeSlice';
 import { ClientPositionContext } from 'contexts/clientposition';
 import { Box } from '@chakra-ui/react';
@@ -182,8 +183,16 @@ function YoutubePlayer(props) {
       }
     });
 
+    socket.on('stop_song', () => {
+      // Sent when current song ends AND there are no more users in queue
+      // console.log('stop_song');
+      player.current?.stopVideo();
+      dispatch(stopSong());
+    });
+
     return () => {
       socket.removeAllListeners('sync_song');
+      socket.removeAllListeners('stop_song');
     };
   }, [player, socket]);
 
@@ -243,9 +252,6 @@ function YoutubePlayer(props) {
         right="0"
         m="auto"
         borderRadius="0 0 8px 8px"
-        border="1px solid"
-        borderTop="none"
-        borderColor="blue.300"
         id="youtube-player"
       />
       <ErrorBox height={height} width={width} />

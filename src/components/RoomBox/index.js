@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { leaveRoom, playSong as roomPlaySong } from 'slices/currentRoomSlice';
 import { cycleSelectedPlaylist } from 'slices/playlistsSlice';
 import { changeCurrentSong } from 'slices/queueSlice';
-import { playSong, stopSong } from 'slices/youtubeSlice';
+import { playSong } from 'slices/youtubeSlice';
 import { populate, clearVote } from 'slices/voteSlice';
 import { Box, useToast } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
@@ -198,12 +198,6 @@ function RoomBox(props) {
       dispatch(clearVote());
     });
 
-    socket.on('stop_song', () => {
-      // Sent when current song ends AND there are no more users in queue
-      // console.log('stop_song');
-      dispatch(stopSong());
-    });
-
     return () => {
       // console.log('room unmounted');
       socket.emit('leave_room', response => {
@@ -216,7 +210,6 @@ function RoomBox(props) {
       socket.removeAllListeners('new_host');
       socket.removeAllListeners('room_closed');
       socket.removeAllListeners('play_song');
-      socket.removeAllListeners('stop_song');
     };
   }, [dispatch, socket, history, toast, roomId, clientUsername]);
 
