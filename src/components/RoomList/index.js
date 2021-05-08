@@ -11,7 +11,6 @@ function RoomList() {
   const { data, searchQuery, limit, skip, filters, status, hasMore, getMoreStatus } = rooms;
 
   function onScrollBottom() {
-    console.log("reached bottom", data.length)
     if (hasMore && status === 'success' && getMoreStatus !== 'loading') {
       dispatch(getMore({
         searchQuery: searchQuery,

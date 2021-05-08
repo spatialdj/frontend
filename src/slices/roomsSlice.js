@@ -68,7 +68,6 @@ export const roomsSlice = createSlice({
       state.filters = meta.arg.filters;
       // if results returned is < limit, there are no more rooms
       state.hasMore = payload.length !== 0 && payload.length === state.limit;
-      console.log(state.hasMore)
     },
     [getMore.pending]: state => {
       state.getMoreStatus = 'loading';
