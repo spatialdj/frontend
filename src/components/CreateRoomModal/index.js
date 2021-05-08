@@ -79,7 +79,7 @@ function CreateRoomModal(props) {
           });
           resolve();
         }
-        console.log('create_room', response);
+        // console.log('create_room', response);
       });
     });
   };

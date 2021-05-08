@@ -150,7 +150,7 @@ function RoomBox(props) {
 
     // Listen to user joining room
     socket.on('user_join', response => {
-      console.log('user_join', response);
+      // console.log('user_join', response);
       const { user, position } = response;
       // Don't show own join toast to user
       if (user?.username !== clientUsername) {
@@ -160,26 +160,26 @@ function RoomBox(props) {
 
     // Listen to user leaving room
     socket.on('user_leave', username => {
-      console.log('user_leave', username);
+      // console.log('user_leave', username);
       handleLeave(username);
     });
 
     // Listen to user voting
     socket.on('user_vote', votes => {
-      console.log('user_vote', votes);
+      // console.log('user_vote', votes);
       populate({ votes, clientUsername });
     });
 
     // Listen to new host transfewr
     socket.on('new_host', response => {
-      console.log('new_host', response);
+      // console.log('new_host', response);
       const { username } = response;
       handleTransferHost(username);
     });
 
     // Listen to room closed
     socket.on('room_closed', () => {
-      console.log('room_closed');
+      // console.log('room_closed');
       handleRoomClosed();
     });
 
@@ -200,14 +200,14 @@ function RoomBox(props) {
 
     socket.on('stop_song', () => {
       // Sent when current song ends AND there are no more users in queue
-      console.log('stop_song');
+      // console.log('stop_song');
       dispatch(stopSong());
     });
 
     return () => {
-      console.log('room unmounted');
+      // console.log('room unmounted');
       socket.emit('leave_room', response => {
-        console.log('leave_room', response);
+        // console.log('leave_room', response);
       });
       dispatch(leaveRoom());
       socket.removeAllListeners('pos_change');

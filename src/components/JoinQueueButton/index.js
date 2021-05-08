@@ -19,7 +19,7 @@ function JoinQueueButton() {
       } else {
         dispatch(enqueue(userFragment.username));
       }
-      console.log('user_join_queue', { position, userFragment });
+      // console.log('user_join_queue', { position, userFragment });
     });
 
     socket.on('user_leave_queue', username => {
@@ -29,12 +29,12 @@ function JoinQueueButton() {
       } else {
         dispatch(dequeue(username));
       }
-      console.log('user_leave_queue', username);
+      // console.log('user_leave_queue', username);
     });
 
     socket.on('dequeued', username => {
       // Sent when user is kicked from the queue
-      console.log('dequeued', username);
+      // console.log('dequeued', username);
       dispatch(dequeue(username));
     });
 

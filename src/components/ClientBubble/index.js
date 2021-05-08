@@ -22,7 +22,7 @@ const ClientBubble = props => {
 
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
-      console.log('join_room', response);
+      // console.log('join_room', response);
       const { success, guest, room } = response;
 
       dispatch(joinRoom(response));
@@ -47,7 +47,7 @@ const ClientBubble = props => {
       }
     });
     return () => {
-      console.log('clientbubble umounted');
+      // console.log('clientbubble umounted');
       setClientPosition({ x: -1, y: -1 });
     };
   }, [socket, dispatch, setClientPosition, roomId, username]);

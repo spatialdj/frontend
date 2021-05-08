@@ -21,7 +21,7 @@ const TagsSelector = React.forwardRef((props, ref) => {
         ref.current = [];
       }
     } catch (err) {
-      console.log('Error', err.message);
+      // console.log('Error', err.message);
     }
   };
 

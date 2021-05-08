@@ -40,7 +40,7 @@ function Song({ selectedPlaylist, data, isInSearch }) {
     dispatch(removeSong({ songId: data.id, playlistId: selectedPlaylist }));
 
     const res = await playlistAPI.removeSong(selectedPlaylist, { id: data.id });
-    console.log(data.id);
+    // console.log(data.id);
 
     if (res.status !== 200) {
       // todo: unable to remove song from playlist

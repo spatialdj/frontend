@@ -189,7 +189,7 @@ function YoutubePlayer(props) {
 
   const onPlayerReady = event => {
     event.target.playVideo();
-    console.log('isAuth', isAuth);
+    // console.log('isAuth', isAuth);
     if (!isAuth) {
       // Set player volume for non authed users,
       // because they can't control volume by moving bubble
@@ -197,12 +197,12 @@ function YoutubePlayer(props) {
     }
     boundingBox.current = event.target.getIframe().getBoundingClientRect();
     isPlayerReady.current = true;
-    console.log('boundingBox', boundingBox.current);
+    // console.log('boundingBox', boundingBox.current);
   };
 
   const onPlayerStateChange = event => {
     const { data } = event;
-    console.log('onPlayerStateChange', data);
+    // console.log('onPlayerStateChange', data);
     switch (data) {
       case -1:
         dispatch(clearError());
@@ -230,7 +230,7 @@ function YoutubePlayer(props) {
 
   const onError = event => {
     const { data } = event;
-    console.log('onError', data);
+    // console.log('onError', data);
     dispatch(reportError(data));
   };
 
