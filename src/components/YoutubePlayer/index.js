@@ -168,7 +168,8 @@ function YoutubePlayer(props) {
     }
 
     if (player.current.loadVideoById && player.current.playVideo) {
-      player.current.loadVideoById(song.videoId, 0);
+      player.current.loadVideoById(song.videoId);
+      player.current.seekTo(0);
     }
   }
 
