@@ -38,7 +38,7 @@ function RoomBox(props) {
   const roomId = props.roomId;
 
   useEffect(() => {
-    if (status === 'success' && data) {
+    if (status === 'success' && data.members) {
       if (!authenticated) {
         setShowViewOnly(true);
       }

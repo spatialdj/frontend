@@ -12,7 +12,7 @@ const initialState = {
       profilePicture: null,
     },
     numMembers: 0,
-    members: [],
+    members: null,
     currentSong: null,
   },
   // needed to replay the same song twice, we increment this when a new song plays and attach it to currentSong
