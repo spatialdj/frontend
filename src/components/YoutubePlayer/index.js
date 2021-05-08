@@ -8,7 +8,7 @@ import {
   playSong,
   endSong,
   stopSong,
-  youtubeAPIReady
+  youtubeAPIReady,
 } from 'slices/youtubeSlice';
 import { ClientPositionContext } from 'contexts/clientposition';
 import { Box } from '@chakra-ui/react';
@@ -88,53 +88,64 @@ function YoutubePlayer(props) {
   const player = useRef(null);
   const boundingBox = useRef(baseBoundingBox);
   const song = useSelector(state => state.currentRoom.data.currentSong);
-  const isYouTubeAPIReady = useSelector(state => state.youtube.isYouTubeAPIReady)
+  const isYouTubeAPIReady = useSelector(
+    state => state.youtube.isYouTubeAPIReady
+  );
 
-  const onError = useCallback(event => {
-    const { data } = event;
+  const onError = useCallback(
+    event => {
+      const { data } = event;
 
-    dispatch(reportError(data));
-  }, [dispatch])
+      dispatch(reportError(data));
+    },
+    [dispatch]
+  );
 
-  const onPlayerStateChange = useCallback(event => {
-    const { data } = event;
+  const onPlayerStateChange = useCallback(
+    event => {
+      const { data } = event;
 
-    switch (data) {
-      case -1:
-        dispatch(clearError());
-        break;
-      case 0:
-        dispatch(endSong());
-        dispatch(clearError());
-        break;
-      case 1:
-        dispatch(playSong());
-        break;
-      case 2:
-        dispatch(clearError());
-        break;
-      case 3:
-        dispatch(clearError());
-        break;
-      case 5:
-        dispatch(clearError());
-        break;
-      default:
-        break;
-    }
-  }, [dispatch])
+      switch (data) {
+        case -1:
+          dispatch(clearError());
+          break;
+        case 0:
+          dispatch(endSong());
+          dispatch(clearError());
+          break;
+        case 1:
+          dispatch(playSong());
+          break;
+        case 2:
+          dispatch(clearError());
+          break;
+        case 3:
+          dispatch(clearError());
+          break;
+        case 5:
+          dispatch(clearError());
+          break;
+        default:
+          break;
+      }
+    },
+    [dispatch]
+  );
 
-  const onPlayerReady = useCallback(event => {
-    event.target.playVideo();
+  const onPlayerReady = useCallback(
+    event => {
+      event.target.playVideo();
 
-    if (!isAuth) {
-      // Set player volume for non authed users,
-      // because they can't control volume by moving bubble
-      dispatch(changeVolume(50));
-    }
+      if (!isAuth) {
+        // Set player volume for non authed users,
+        // because they can't control volume by moving bubble
+        dispatch(changeVolume(50));
+      }
 
-    boundingBox.current = event.target.getIframe().getBoundingClientRect();
-  }, [dispatch, isAuth])
+      boundingBox.current = event.target.getIframe().getBoundingClientRect();
+    },
+    [dispatch, isAuth]
+  );
 
   const createPlayer = useCallback(() => {
     player.current = new window.YT.Player('youtube-player', {
@@ -156,7 +167,7 @@ function YoutubePlayer(props) {
         onError: onError,
       },
     });
-  }, [height, width, song, onPlayerReady, onPlayerStateChange, onError])
+  }, [height, width, song, onPlayerReady, onPlayerStateChange, onError]);
 
   function updateSong(song) {
     if (song?.videoId == null) {
@@ -176,13 +187,13 @@ function YoutubePlayer(props) {
   useEffect(() => {
     // callback for youtube iframe api
     window.onYouTubeIframeAPIReady = () => {
-      dispatch(youtubeAPIReady())
-    }
+      dispatch(youtubeAPIReady());
+    };
 
     // if youtube iframe api was loaded before
     if (isYouTubeAPIReady) {
       if (!song) {
-        return
+        return;
       }
 
       // create a youtube player if there isn't already one

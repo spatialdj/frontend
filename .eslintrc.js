@@ -8,35 +8,29 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'standard',
-    'prettier'
+    'prettier',
   ],
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
     },
     ecmaVersion: 12,
-    sourceType: 'module'
+    sourceType: 'module',
   },
-  plugins: [
-    'react',
-    'react-hooks'
-  ],
+  plugins: ['react', 'react-hooks'],
   rules: {
     'react/prop-types': 'off',
     'no-unused-vars': 'off',
-    'react/no-children-prop': 'off'
+    'react/no-children-prop': 'off',
   },
   settings: {
     react: {
       version: 'detect',
-    }
+    },
   },
   overrides: [
     {
-      files: [
-        '**/*.test.js',
-        '**/*.test.jsx'
-      ]
-    }
-  ]
-}
+      files: ['**/*.test.js', '**/*.test.jsx'],
+    },
+  ],
+};

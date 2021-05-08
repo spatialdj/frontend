@@ -43,9 +43,11 @@ function RoomBox(props) {
         setShowViewOnly(true);
       }
       // Populate bubbles data, but don't add client's bubble
-      setBubblesData(produce(data.members, draft => {
-        delete draft[clientUsername];
-      }));
+      setBubblesData(
+        produce(data.members, draft => {
+          delete draft[clientUsername];
+        })
+      );
       // todo: set video position to current time - data.songStartTime
     } else if (status === 'failed') {
       toast({
@@ -63,9 +65,12 @@ function RoomBox(props) {
       if (clientUsername === username) return;
 
       // TODO: find a better way to update this
-      setBubblesData(data => produce(data, draft => {
-        if (draft?.[username]?.position) draft[username].position = newPosition;
-      }));
+      setBubblesData(data =>
+        produce(data, draft => {
+          if (draft?.[username]?.position)
+            draft[username].position = newPosition;
+        })
+      );
     };
 
     const handleJoin = (user, position) => {
@@ -78,15 +83,17 @@ function RoomBox(props) {
         isClosable: true,
         duration: 3000,
       });
-      setBubblesData(data => produce(data, draft => {
-        draft[username] = {
-          profilePicture: profilePicture,
-          prefix: '',
-          username: username,
-          type: 'other',
-          position: position,
-        };
-      }));
+      setBubblesData(data =>
+        produce(data, draft => {
+          draft[username] = {
+            profilePicture: profilePicture,
+            prefix: '',
+            username: username,
+            type: 'other',
+            position: position,
+          };
+        })
+      );
     };
 
     const handleLeave = username => {
@@ -98,9 +105,11 @@ function RoomBox(props) {
         isClosable: true,
         duration: 3000,
       });
-      setBubblesData(data => produce(data, draft => {
-        delete draft[username];
-      }));
+      setBubblesData(data =>
+        produce(data, draft => {
+          delete draft[username];
+        })
+      );
     };
 
     const handleTransferHost = username => {

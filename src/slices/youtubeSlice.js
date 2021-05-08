@@ -5,7 +5,7 @@ const initialState = {
   videoId: null,
   status: 'unstarted',
   errorCode: null,
-  isYouTubeAPIReady: false
+  isYouTubeAPIReady: false,
 };
 
 // This is for storing youtube player data
@@ -50,7 +50,7 @@ export const youtubeSlice = createSlice({
     },
     youtubeAPIReady: state => {
       state.isYouTubeAPIReady = true;
-    }
+    },
   },
 });
 
@@ -64,7 +64,7 @@ export const {
   reportError,
   clearError,
   reset,
-  youtubeAPIReady
+  youtubeAPIReady,
 } = youtubeSlice.actions;
 
 export default youtubeSlice.reducer;

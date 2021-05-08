@@ -81,7 +81,7 @@ export const currentRoomSlice = createSlice({
         state.data.host = host;
         state.data.numMembers = numMembers;
         // Convert members from object to array
-        state.data.members =  members;
+        state.data.members = members;
         state.data.currentSong = currentSong;
         state.status = 'success';
         state.isGuest = payload.guest;
