@@ -90,7 +90,7 @@ export const voteSlice = createSlice({
         state.clientSaved = true;
       }
     },
-    clearVote: state => {
+    reset: state => {
       state = Object.assign(state, initialState);
     },
   },
@@ -101,7 +101,7 @@ export const {
   clientLike,
   clientDislike,
   clientSave,
-  clearVote,
+  reset,
 } = voteSlice.actions;
 
 export default voteSlice.reducer;

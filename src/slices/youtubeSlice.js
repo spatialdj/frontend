@@ -1,14 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  volume: 0,
+  videoId: null,
+  status: 'unstarted',
+  errorCode: null,
+};
+
 // This is for storing youtube player data
 export const youtubeSlice = createSlice({
   name: 'youtube',
-  initialState: {
-    volume: 0,
-    videoId: null,
-    status: 'unstarted',
-    errorCode: null,
-  },
+  initialState: initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
     changeVolume: (state, { payload }) => {
@@ -38,6 +40,9 @@ export const youtubeSlice = createSlice({
     clearError: state => {
       state.errorCode = null;
     },
+    reset: state => {
+      state = Object.assign(state, initialState);
+    },
   },
 });
 
@@ -50,6 +55,7 @@ export const {
   endSong,
   reportError,
   clearError,
+  reset,
 } = youtubeSlice.actions;
 
 export default youtubeSlice.reducer;

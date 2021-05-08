@@ -4,9 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { leaveRoom, playSong as roomPlaySong } from 'slices/currentRoomSlice';
 import { cycleSelectedPlaylist } from 'slices/playlistsSlice';
-import { changeCurrentSong } from 'slices/queueSlice';
-import { playSong } from 'slices/youtubeSlice';
-import { populate, clearVote } from 'slices/voteSlice';
+import { changeCurrentSong, reset as resetQueue } from 'slices/queueSlice';
+import { reset as resetYoutube, playSong } from 'slices/youtubeSlice';
+import { populate, reset as resetVote } from 'slices/voteSlice';
 import { Box, useToast } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
 import Bubble from 'components/Bubble';
@@ -195,7 +195,7 @@ function RoomBox(props) {
       }
 
       dispatch(playSong());
-      dispatch(clearVote());
+      dispatch(resetVote());
     });
 
     return () => {
@@ -204,6 +204,9 @@ function RoomBox(props) {
         // console.log('leave_room', response);
       });
       dispatch(leaveRoom());
+      dispatch(resetVote());
+      dispatch(resetYoutube());
+      dispatch(resetQueue());
       socket.removeAllListeners('pos_change');
       socket.removeAllListeners('user_join');
       socket.removeAllListeners('user_leave');

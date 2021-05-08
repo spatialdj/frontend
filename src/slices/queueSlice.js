@@ -1,5 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  queue: [],
+  currentSong: 'null',
+  inQueue: false, // Client in queue
+  status: 'idle',
+};
+
 // There is no async here, the socket.io stuff is handled
 // on a per-component basis. Whatever response from socket.io
 // is sent as payload to this reducer and stored in Redux state.
@@ -7,12 +14,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // COMPONENT -> socket.emit/.on  -> dispatch(action here) -> queueSlice
 export const queueSlice = createSlice({
   name: 'queue',
-  initialState: {
-    queue: [],
-    currentSong: 'null',
-    inQueue: false, // Client in queue
-    status: 'idle',
-  },
+  initialState: initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
     populate: (state, { payload }) => {
@@ -45,6 +47,9 @@ export const queueSlice = createSlice({
     changeCurrentSong: (state, { payload }) => {
       state.currentSong = payload;
     },
+    reset: state => {
+      state = Object.assign(state, initialState);
+    },
   },
 });
 
@@ -55,6 +60,7 @@ export const {
   enqueue,
   dequeue,
   changeCurrentSong,
+  reset,
 } = queueSlice.actions;
 
 export default queueSlice.reducer;
