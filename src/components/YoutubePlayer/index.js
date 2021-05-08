@@ -118,7 +118,7 @@ function YoutubePlayer(props) {
 
       return;
     }
-    
+
     if (player.current.loadVideoById && player.current.playVideo) {
       player.current.loadVideoById(song.videoId, 0);
       player.current.playVideo();
@@ -150,7 +150,7 @@ function YoutubePlayer(props) {
       // Destroy player object
       player.current?.destroy();
     };
-  }, [])
+  }, []);
 
   // Handle proximity audio
   useEffect(() => {

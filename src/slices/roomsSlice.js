@@ -33,15 +33,15 @@ const initialState = {
   filters: [],
   status: 'idle',
   getMoreStatus: 'idle',
-  hasMore: true
-}
+  hasMore: true,
+};
 
 export const roomsSlice = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
-    reset: () => initialState
+    reset: () => initialState,
   },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed

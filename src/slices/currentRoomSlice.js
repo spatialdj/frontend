@@ -13,7 +13,7 @@ const initialState = {
     },
     numMembers: 0,
     members: [],
-    currentSong: null
+    currentSong: null,
   },
   // needed to replay the same song twice, we increment this when a new song plays and attach it to currentSong
   currentSongNumber: 0,
@@ -41,7 +41,7 @@ export const currentRoomSlice = createSlice({
         host,
         numMembers,
         members,
-        currentSong
+        currentSong,
       } = payload.room;
 
       state.data.id = id;
@@ -70,7 +70,7 @@ export const currentRoomSlice = createSlice({
           host,
           numMembers,
           members,
-          currentSong
+          currentSong,
         } = payload.room;
 
         state.data.id = id;
@@ -104,6 +104,11 @@ export const currentRoomSlice = createSlice({
   },
 });
 
-export const { createRoom, joinRoom, leaveRoom, playSong } = currentRoomSlice.actions;
+export const {
+  createRoom,
+  joinRoom,
+  leaveRoom,
+  playSong,
+} = currentRoomSlice.actions;
 
 export default currentRoomSlice.reducer;

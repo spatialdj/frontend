@@ -8,37 +8,59 @@ import RoomCard from 'components/RoomCard';
 function RoomList() {
   const dispatch = useDispatch();
   const rooms = useSelector(state => state.rooms);
-  const { data, searchQuery, limit, skip, filters, status, hasMore, getMoreStatus } = rooms;
+  const {
+    data,
+    searchQuery,
+    limit,
+    skip,
+    filters,
+    status,
+    hasMore,
+    getMoreStatus,
+  } = rooms;
 
-  function onScrollBottom() {
-    if (hasMore && status === 'success' && getMoreStatus !== 'loading') {
-      dispatch(getMore({
-        searchQuery: searchQuery,
-        limit: limit,
-        skip: data.length,
-        filters: filters
-      }));
-    }
-  }
+  useEffect(() => {
+    const onScrollBottom = () => {
+      if (hasMore && status === 'success' && getMoreStatus !== 'loading') {
+        dispatch(
+          getMore({
+            searchQuery: searchQuery,
+            limit: limit,
+            skip: data.length,
+            filters: filters,
+          })
+        );
+      }
+    };
 
-  function handleScroll() {
-    const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight;
+    const handleScroll = () => {
+      const bottom =
+        Math.ceil(window.innerHeight + window.scrollY) >=
+        document.documentElement.scrollHeight;
 
-    if (bottom) {
-      onScrollBottom();
-    }
-  };
+      if (bottom) {
+        onScrollBottom();
+      }
+    };
 
-  React.useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [data, status, getMoreStatus]);
+  }, [
+    data,
+    status,
+    getMoreStatus,
+    dispatch,
+    filters,
+    hasMore,
+    limit,
+    searchQuery,
+  ]);
 
   useEffect(() => {
-    dispatch(reset())
+    dispatch(reset());
     // Initial get 20 rooms
     dispatch(
       get({
@@ -57,15 +79,13 @@ function RoomList() {
   } else {
     return (
       <>
-      <SimpleGrid id="scrollable" minChildWidth="364px" spacing={10}>
-        {data?.map(room => (
-          <RoomCard key={room.id} room={room} />
-        ))}
-      </SimpleGrid>
+        <SimpleGrid id="scrollable" minChildWidth="364px" spacing={10}>
+          {data?.map(room => (
+            <RoomCard key={room.id} room={room} />
+          ))}
+        </SimpleGrid>
 
-      {getMoreStatus === 'loading' &&
-          <LoadingView />
-      }
+        {getMoreStatus === 'loading' && <LoadingView />}
       </>
     );
   }
