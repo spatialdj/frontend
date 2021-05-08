@@ -16,17 +16,17 @@ export const authenticate = createAsyncThunk(
   }
 );
 
-export const login = createAsyncThunk('/api/user/login', async request => {
+export const login = createAsyncThunk('user/login', async request => {
   const response = await userAPI.login(request);
   return response.data;
 });
 
-export const register = createAsyncThunk('/api/user/register', async request => {
+export const register = createAsyncThunk('user/register', async request => {
   const response = await userAPI.register(request);
   return response.data;
 });
 
-export const logout = createAsyncThunk('/api/user/logout', async () => {
+export const logout = createAsyncThunk('user/logout', async () => {
   const response = await userAPI.logout();
   return response.data;
 });

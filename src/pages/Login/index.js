@@ -54,8 +54,8 @@ function Login() {
         });
       } else if (res.type === 'user/login/fulfilled') {
         // dispatch(authenticate());
-        // window.location.reload();
-        history.go(0);
+        window.location.reload();
+        // history.go(0);
       }
     });
   };
