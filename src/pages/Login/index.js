@@ -64,7 +64,7 @@ function Login() {
       <Helmet>
         <title>Login - Spatial.dj</title>
       </Helmet>
-      <Box h="calc(100vh - 72px)" maxW="md" mx="auto" py="5%">
+      <Box maxW="md" mx="auto" py="5%">
         <Heading textAlign="center" size="xl" padding="1rem">
           Login
         </Heading>

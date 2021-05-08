@@ -44,7 +44,6 @@ function AccountSettings() {
 
   return (
     <Container
-      h="calc(100vh - 72px)"
       maxW={{
         base: 'container.sm',
         sm: 'container.sm',

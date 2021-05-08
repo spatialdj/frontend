@@ -83,7 +83,7 @@ function Register() {
       <Helmet>
         <title>Register - Spatial.dj</title>
       </Helmet>
-      <Box h="calc(100vh - 72px)" maxW="md" mx="auto" py="5%">
+      <Box maxW="md" mx="auto" py="5%">
         <Heading textAlign="center" size="xl" padding="1rem">
           Register
         </Heading>
