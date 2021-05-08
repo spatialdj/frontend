@@ -167,7 +167,7 @@ function RoomBox(props) {
     // Listen to user voting
     socket.on('user_vote', votes => {
       // console.log('user_vote', votes);
-      populate({ votes, clientUsername });
+      dispatch(populate({ votes, clientUsername }));
     });
 
     // Listen to new host transfewr

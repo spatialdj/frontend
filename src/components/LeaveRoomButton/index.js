@@ -13,6 +13,7 @@ function LeaveRoomButton() {
   return (
     <Button
       zIndex="1"
+      top="6px"
       leftIcon={<TiArrowBack />}
       variant="solid"
       onClick={handleLeaveRoom}

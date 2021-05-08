@@ -22,7 +22,7 @@ const ClientBubble = props => {
 
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
-      // console.log('join_room', response);
+      console.log('join_room', response);
       const { success, guest, room } = response;
 
       dispatch(joinRoom(response));

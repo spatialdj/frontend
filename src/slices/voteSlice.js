@@ -17,8 +17,10 @@ export const voteSlice = createSlice({
     populate: (state, { payload }) => {
       // votes is a map of usernames to their votes
       const { votes, clientUsername } = payload;
-      if (votes && clientUsername) {
-        state.clientVote = votes?.[clientUsername] ?? null;
+      if (votes) {
+        if (clientUsername) {
+          state.clientVote = votes?.[clientUsername] ?? null;
+        }
         let likes = 0;
         let dislikes = 0;
 

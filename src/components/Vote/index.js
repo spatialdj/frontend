@@ -31,7 +31,7 @@ function Vote() {
       <ButtonGroup size="lg" isAttached>
         <IconButton
           onClick={likeSong}
-          colorScheme={clientVote === 'like' ? 'green' : 'gray'}
+          colorScheme={clientVote === 'like' ? 'blue' : 'gray'}
           aria-label="Like this song"
           icon={<IoMdThumbsUp />}
         />
@@ -43,7 +43,7 @@ function Vote() {
         />
         <IconButton
           onClick={dislikeSong}
-          colorScheme={clientVote === 'dislike' ? 'red' : 'gray'}
+          colorScheme={clientVote === 'dislike' ? 'blue' : 'gray'}
           aria-label="Dislike this song"
           icon={<IoMdThumbsDown />}
         />
