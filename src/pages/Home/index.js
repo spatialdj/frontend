@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Box,
   Container,
   Heading,
   Text,
@@ -14,35 +13,36 @@ import { Helmet } from 'react-helmet-async';
 import CreateRoomModal from 'components/CreateRoomModal';
 import { Link } from 'react-router-dom';
 
-const VerticalHeading1 = styled.div`
+const VerticalHeading1 = styled.h1`
   z-index: -1;
   color: black;
   font-weight: 900;
   font-size: 288px;
-  line-height: 288px;
-  mix-blend-mode: overlay;
-  overflow: hidden;
-  opacity: 0.25;
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 0;
-  margin: 0;
-  pointer-events: none;
-`;
-
-const VerticalHeading2 = styled.div`
-  z-index: -1;
-  color: black;
-  font-weight: 700;
-  font-size: 188px;
-  line-height: 188px;
+  line-height: 210px;
   mix-blend-mode: overlay;
   overflow: hidden;
   opacity: 0.1;
-  position: absolute;
-  left: 0;
-  bottom: 120px;
+  position: fixed;
+  right: 0;
+  top: 288px;
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+  transform: rotate(-90deg);
+`;
+
+const VerticalHeading2 = styled.h1`
+  z-index: -1;
+  color: black;
+  font-weight: 900;
+  font-size: 288px;
+  line-height: 210px;
+  mix-blend-mode: overlay;
+  overflow: hidden;
+  opacity: 0.05;
+  position: fixed;
+  left: -80px;
+  bottom: 0;
   padding: 0;
   margin: 0;
   pointer-events: none;
@@ -70,7 +70,7 @@ function Home(props) {
   };
 
   return (
-    <Box overflow="hidden">
+    <>
       <Helmet>
         <title>Spatial.dj</title>
       </Helmet>
@@ -108,7 +108,7 @@ function Home(props) {
       <VerticalHeading1>SPATIAL</VerticalHeading1>
       <VerticalHeading2>SPATIAL</VerticalHeading2>
       <CreateRoomModal isOpen={isOpen} onClose={onClose} />
-    </Box>
+    </>
   );
 }
 

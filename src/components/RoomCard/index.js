@@ -21,8 +21,8 @@ function RoomCard(props) {
       <Flex
         cursor="pointer"
         flexDir="column"
-        bgColor="rgba(25,37,59,0.4)"
-        border="1px solid #1D2638"
+        bgColor="rgba(12, 15, 49, 0.6)"
+        border="1px solid #2A3448"
         transition=".2s all"
         _hover={{
           opacity: 0.8,
@@ -57,7 +57,7 @@ function RoomCard(props) {
           </Text>
         </HStack>
         <Text
-          color="#8193B2"
+          color="#AFB5CA"
           fontWeight="light"
           maxH="4.5em"
           lineHeight="1.5em"

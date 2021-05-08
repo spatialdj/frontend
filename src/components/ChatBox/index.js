@@ -116,7 +116,7 @@ function ChatBox() {
       maxH="460px"
       minW="345px"
       shadow="base"
-      rounded={{ sm: 'lg' }}
+      borderRadius="8px 8px 0 0"
     >
       <HStack maxH="48px" justifyContent="space-between" px={4} py={2}>
         <Heading fontSize="2xl">Chat</Heading>

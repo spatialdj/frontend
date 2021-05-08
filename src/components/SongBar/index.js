@@ -23,7 +23,7 @@ export default function SongBar() {
       justify="space-between"
       wrap="wrap"
       padding={4}
-      bgColor="rgba(12, 22, 45, 1)"
+      bgColor="rgba(14, 22, 40, 0.85)"
       color="white"
     >
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
