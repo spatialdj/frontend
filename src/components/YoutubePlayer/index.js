@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef } from 'react';
+import React, { useEffect, useContext, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SocketContext } from 'contexts/socket';
 import {
@@ -8,6 +8,7 @@ import {
   playSong,
   endSong,
   stopSong,
+  youtubeAPIReady
 } from 'slices/youtubeSlice';
 import { ClientPositionContext } from 'contexts/clientposition';
 import { Box } from '@chakra-ui/react';
@@ -46,7 +47,7 @@ const calculateVolume = (boundingBox, position) => {
   // Distance from left/right/bottom edge
   let dx = Math.max(left - x, 0, x - right);
   let dy = Math.max(y - bottom, 0);
-  // console.log({dx, dy});
+
   dx = linearTransform(dx, 0, left, 0, 100);
   dy = linearTransform(dy, 0, bottom, 0, 100);
 
@@ -87,138 +88,17 @@ function YoutubePlayer(props) {
   const player = useRef(null);
   const boundingBox = useRef(baseBoundingBox);
   const song = useSelector(state => state.currentRoom.data.currentSong);
+  const isYouTubeAPIReady = useSelector(state => state.youtube.isYouTubeAPIReady)
 
-  function createPlayer() {
-    player.current = new window.YT.Player('youtube-player', {
-      height: height,
-      width: width,
-      videoId: song?.videoId,
-      playerVars: {
-        rel: 0,
-        playsinline: 1,
-        controls: 0,
-        disablekb: 1,
-        enablejsapi: 1,
-        autoplay: 1,
-        iv_load_policy: 3,
-      },
-      events: {
-        onReady: onPlayerReady,
-        onStateChange: onPlayerStateChange,
-        onError: onError,
-      },
-    });
-  }
-
-  function updateSong() {
-    if (song?.videoId == null) {
-      if (player.current.stopVideo) {
-        player.current.stopVideo();
-      }
-
-      return;
-    }
-
-    if (player.current.loadVideoById && player.current.playVideo) {
-      player.current.loadVideoById(song.videoId, 0);
-    }
-  }
-
-  //
-  useEffect(() => {
-    // Code adapted from Bill Feng:
-    // https://stackoverflow.com/a/54921282/6216561
-    // On mount, check to see if the API script is already loaded
-    if (!window.YT) {
-      // If not, load the script asynchronously
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!window.YT?.Player) {
-      return
-    }
-
-    // create a youtube player if there isn't already one
-    if (!player.current) {
-      createPlayer();
-    } else {
-      // reuse the old youtube player
-      updateSong();
-    }
-  }, [song, window.YT])
-
-  // cleanup hook
-  useEffect(() => {
-    return () => {
-      // Destroy player object
-      player.current?.destroy();
-    };
-  }, []);
-
-  // Handle proximity audio
-  useEffect(() => {
-    // The closer clientPosition is to youtube embed
-    // the louder the volume gets.
-    const volume = calculateVolume(boundingBox.current, {
-      x: clientPosition.x + X_OFFSET,
-      y: clientPosition.y + Y_OFFSET,
-    });
-    // console.log(volume);
-    dispatch(changeVolume(volume));
-  }, [clientPosition, player, dispatch]);
-
-  useEffect(() => {
-    if (player.current?.setVolume) {
-      player.current.setVolume(volume);
-    }
-  }, [volume]);
-
-  useEffect(() => {
-    socket.on('sync_song', data => {
-      const seekTimeSec = data.seekTime / 1000;
-
-      if (
-        player.current?.getCurrentTime &&
-        Math.abs(player.current.getCurrentTime() - seekTimeSec) > 2
-      ) {
-        player.current.seekTo(seekTimeSec);
-      }
-    });
-
-    socket.on('stop_song', () => {
-      // Sent when current song ends AND there are no more users in queue
-      // console.log('stop_song');
-      player.current?.stopVideo();
-      dispatch(stopSong());
-    });
-
-    return () => {
-      socket.removeAllListeners('sync_song');
-      socket.removeAllListeners('stop_song');
-    };
-  }, [player, socket]);
-
-  const onPlayerReady = event => {
-    event.target.playVideo();
-    // console.log('isAuth', isAuth);
-    if (!isAuth) {
-      // Set player volume for non authed users,
-      // because they can't control volume by moving bubble
-      dispatch(changeVolume(50));
-    }
-    boundingBox.current = event.target.getIframe().getBoundingClientRect();
-    // console.log('boundingBox', boundingBox.current);
-  };
-
-  const onPlayerStateChange = event => {
+  const onError = useCallback(event => {
     const { data } = event;
-    // console.log('onPlayerStateChange', data);
+
+    dispatch(reportError(data));
+  }, [dispatch])
+
+  const onPlayerStateChange = useCallback(event => {
+    const { data } = event;
+
     switch (data) {
       case -1:
         dispatch(clearError());
@@ -242,13 +122,141 @@ function YoutubePlayer(props) {
       default:
         break;
     }
-  };
+  }, [dispatch])
 
-  const onError = event => {
-    const { data } = event;
-    // console.log('onError', data);
-    dispatch(reportError(data));
-  };
+  const onPlayerReady = useCallback(event => {
+    event.target.playVideo();
+
+    if (!isAuth) {
+      // Set player volume for non authed users,
+      // because they can't control volume by moving bubble
+      dispatch(changeVolume(50));
+    }
+
+    boundingBox.current = event.target.getIframe().getBoundingClientRect();
+  }, [dispatch, isAuth])
+
+  const createPlayer = useCallback(() => {
+    player.current = new window.YT.Player('youtube-player', {
+      height: height,
+      width: width,
+      videoId: song?.videoId,
+      playerVars: {
+        rel: 0,
+        playsinline: 1,
+        controls: 0,
+        disablekb: 1,
+        enablejsapi: 1,
+        autoplay: 1,
+        iv_load_policy: 3,
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+        onError: onError,
+      },
+    });
+  }, [height, width, song, onPlayerReady, onPlayerStateChange, onError])
+
+  function updateSong(song) {
+    if (song?.videoId == null) {
+      if (player.current.stopVideo) {
+        player.current.stopVideo();
+      }
+
+      return;
+    }
+
+    if (player.current.loadVideoById && player.current.playVideo) {
+      player.current.loadVideoById(song.videoId, 0);
+    }
+  }
+
+  useEffect(() => {
+    // callback for youtube iframe api
+    window.onYouTubeIframeAPIReady = () => {
+      dispatch(youtubeAPIReady())
+    }
+
+    // if youtube iframe api was loaded before
+    if (isYouTubeAPIReady) {
+      if (!song) {
+        return
+      }
+
+      // create a youtube player if there isn't already one
+      if (!player.current) {
+        createPlayer();
+      } else {
+        // reuse the old youtube player
+        updateSong(song);
+      }
+
+      return;
+    }
+
+    // Code adapted from Bill Feng:
+    // https://stackoverflow.com/a/54921282/6216561
+    // On mount, check to see if the API script is already loaded
+    if (!window.YT) {
+      // If not, load the script asynchronously
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+  }, [isYouTubeAPIReady, song, createPlayer, dispatch]);
+
+  // cleanup hook
+  useEffect(() => {
+    return () => {
+      // Destroy player object
+      player.current?.destroy();
+    };
+  }, []);
+
+  // Handle proximity audio
+  useEffect(() => {
+    // The closer clientPosition is to youtube embed
+    // the louder the volume gets.
+    const volume = calculateVolume(boundingBox.current, {
+      x: clientPosition.x + X_OFFSET,
+      y: clientPosition.y + Y_OFFSET,
+    });
+
+    dispatch(changeVolume(volume));
+  }, [clientPosition, player, dispatch]);
+
+  useEffect(() => {
+    if (player.current?.setVolume) {
+      player.current.setVolume(volume);
+    }
+  }, [volume]);
+
+  useEffect(() => {
+    socket.on('sync_song', data => {
+      const seekTimeSec = data.seekTime / 1000;
+
+      if (
+        player.current?.getCurrentTime &&
+        Math.abs(player.current.getCurrentTime() - seekTimeSec) > 2
+      ) {
+        player.current.seekTo(seekTimeSec);
+      }
+    });
+
+    socket.on('stop_song', () => {
+      // Sent when current song ends AND there are no more users in queue
+      player.current?.stopVideo();
+      dispatch(stopSong());
+    });
+
+    return () => {
+      socket.removeAllListeners('sync_song');
+      socket.removeAllListeners('stop_song');
+    };
+  }, [dispatch, player, socket]);
 
   return (
     <>
