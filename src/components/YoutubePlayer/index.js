@@ -89,8 +89,6 @@ function YoutubePlayer(props) {
   const isPlayerReady = useRef(false);
 
   function loadVideo() {
-    console.log("loadVideo ", song)
-
     player.current = new window.YT.Player('youtube-player', {
       height: height,
       width: width,
@@ -113,8 +111,6 @@ function YoutubePlayer(props) {
   }
 
   function updateSong() {
-    console.log('call update song')
-    console.log(song)
     if (song?.videoId == null) {
       if (player.current.stopVideo) {
         player.current.stopVideo();
@@ -122,19 +118,14 @@ function YoutubePlayer(props) {
 
       return;
     }
-
-    console.log("player exists");
-    console.log(player.current)
     
     if (player.current.loadVideoById && player.current.playVideo) {
-      console.log("attempt load", song.videoId)
       player.current.loadVideoById(song.videoId, 0);
       player.current.playVideo();
     }
   }
 
   useEffect(() => {
-    console.log("call");
     // Code adapted from Bill Feng:
     // https://stackoverflow.com/a/54921282/6216561
     // On mount, check to see if the API script is already loaded
@@ -143,15 +134,11 @@ function YoutubePlayer(props) {
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
 
-      // onYouTubeIframeAPIReady will load the video after the script is loaded
-      window.onYouTubeIframeAPIReady = loadVideo;
-
       const firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     } else if (player.current && isPlayerReady) {
       updateSong();
     } else if (song) {
-      console.log("load video 1", song);
       loadVideo();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,7 +147,6 @@ function YoutubePlayer(props) {
   // cleanup hook
   useEffect(() => {
     return () => {
-      console.log('YoutubePlayer unmounted');
       // Destroy player object
       player.current?.destroy();
     };
