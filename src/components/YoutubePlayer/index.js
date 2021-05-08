@@ -121,7 +121,6 @@ function YoutubePlayer(props) {
 
     if (player.current.loadVideoById && player.current.playVideo) {
       player.current.loadVideoById(song.videoId, 0);
-      player.current.playVideo();
     }
   }
 
@@ -137,8 +136,7 @@ function YoutubePlayer(props) {
 
       const firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    } 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
   }, []);
 
   useEffect(() => {
