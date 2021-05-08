@@ -10,7 +10,7 @@ function VoteBar() {
   const totalVotes = votes.likes + votes.dislikes;
   const likePercentage = Math.floor((votes.likes / totalVotes) * 100);
   const dislikePercentage = 100 - likePercentage;
-  const numDislikesToSkip = Math.floor(numMembers / 2);
+  const numDislikesToSkip = Math.ceil(numMembers / 2);
   const tooltipTabel =
     numDislikesToSkip - votes.dislikes <= 0
       ? 'Skipping song...'
