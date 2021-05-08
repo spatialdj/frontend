@@ -21,7 +21,6 @@ import {
 import { Helmet } from 'react-helmet-async';
 import { Link as ReactLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import GradientBackground from 'components/GradientBackground';
 
 const validateUsername = value => {
   return value ? true : 'Enter your username';
@@ -61,11 +60,11 @@ function Login() {
   };
 
   return (
-    <GradientBackground>
+    <>
       <Helmet>
         <title>Login - Spatial.dj</title>
       </Helmet>
-      <Box maxW="md" mx="auto" py="5%">
+      <Box h="calc(100vh - 72px)" maxW="md" mx="auto" py="5%">
         <Heading textAlign="center" size="xl" padding="1rem">
           Login
         </Heading>
@@ -132,7 +131,7 @@ function Login() {
           </form>
         </Box>
       </Box>
-    </GradientBackground>
+    </>
   );
 }
 

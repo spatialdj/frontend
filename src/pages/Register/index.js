@@ -21,7 +21,6 @@ import {
 import { Helmet } from 'react-helmet-async';
 import { Link as ReactLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import GradientBackground from 'components/GradientBackground';
 
 function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -80,11 +79,11 @@ function Register() {
   };
 
   return (
-    <GradientBackground>
+    <>
       <Helmet>
         <title>Register - Spatial.dj</title>
       </Helmet>
-      <Box maxW="md" mx="auto" py="5%">
+      <Box h="calc(100vh - 72px)" maxW="md" mx="auto" py="5%">
         <Heading textAlign="center" size="xl" padding="1rem">
           Register
         </Heading>
@@ -179,7 +178,7 @@ function Register() {
           </form>
         </Box>
       </Box>
-    </GradientBackground>
+    </>
   );
 }
 

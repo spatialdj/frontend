@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
   chakra,
+  Container,
   Box,
   Flex,
   useColorModeValue,
@@ -42,7 +43,19 @@ function AccountSettings() {
   };
 
   return (
-    <Box bg={useColorModeValue('gray.50', 'inherit')} color="white" p={10}>
+    <Container
+      h="calc(100vh - 72px)"
+      maxW={{
+        base: 'container.sm',
+        sm: 'container.sm',
+        md: 'container.md',
+        lg: 'container.lg',
+        xl: 'container.xl',
+      }}
+      bg={useColorModeValue('gray.50', 'inherit')}
+      color="white"
+      p={10}
+    >
       <Helmet>
         <title>My Account - Spatial.dj</title>
       </Helmet>
@@ -154,7 +167,7 @@ function AccountSettings() {
           </Button>
         </Box>
       </chakra.form>
-    </Box>
+    </Container>
   );
 }
 

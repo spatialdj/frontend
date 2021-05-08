@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { Helmet } from 'react-helmet-async';
-import GradientBackground from 'components/GradientBackground';
 import CreateRoomModal from 'components/CreateRoomModal';
 import { Link } from 'react-router-dom';
 
@@ -56,40 +55,38 @@ function Home(props) {
       <Helmet>
         <title>Spatial.dj</title>
       </Helmet>
-      <GradientBackground>
-        <Container
-          d="flex"
-          justifyContent="center"
-          flexDir="column"
-          maxW={{
-            base: 'container.sm',
-            sm: 'container.sm',
-            md: 'container.md',
-            lg: 'container.lg',
-            xl: 'container.xl',
-          }}
-          minH="80%"
-          color="white"
-        >
-          <Heading as="h1" size="4xl">
-            LISTEN TO MUSIC WITH YOUR FRIENDS.
-          </Heading>
-          <Text fontSize="xl" mt="12px">
-            Create a room or join a public room. Make friends through music.
-          </Text>
-          <ButtonGroup variant="outline" spacing="6" mt="48px">
-            <Link to="/rooms">
-              <Button colorScheme="blue" variant="solid" size="lg">
-                View Rooms
-              </Button>
-            </Link>
-            <Button size="lg" onClick={handleOpenCreateRoom}>
-              Create Room
+      <Container
+        h="calc(100vh - 72px)"
+        d="flex"
+        justifyContent="center"
+        flexDir="column"
+        maxW={{
+          base: 'container.sm',
+          sm: 'container.sm',
+          md: 'container.md',
+          lg: 'container.lg',
+          xl: 'container.xl',
+        }}
+        color="white"
+      >
+        <Heading as="h1" size="4xl">
+          LISTEN TO MUSIC WITH YOUR FRIENDS.
+        </Heading>
+        <Text fontSize="xl" mt="12px">
+          Create a room or join a public room. Make friends through music.
+        </Text>
+        <ButtonGroup variant="outline" spacing="6" mt="48px">
+          <Link to="/rooms">
+            <Button colorScheme="blue" variant="solid" size="lg">
+              View Rooms
             </Button>
-          </ButtonGroup>
-        </Container>
-        <VerticalHeading>SPATIAL</VerticalHeading>
-      </GradientBackground>
+          </Link>
+          <Button size="lg" onClick={handleOpenCreateRoom}>
+            Create Room
+          </Button>
+        </ButtonGroup>
+      </Container>
+      <VerticalHeading>SPATIAL</VerticalHeading>
       <CreateRoomModal isOpen={isOpen} onClose={onClose} />
     </>
   );
