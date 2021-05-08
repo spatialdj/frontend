@@ -13,17 +13,17 @@ import { Helmet } from 'react-helmet-async';
 import CreateRoomModal from 'components/CreateRoomModal';
 import { Link } from 'react-router-dom';
 
-const VerticalHeading1 = styled.h1`
+const VerticalHeading1 = styled.div`
   z-index: -1;
-  color: black;
+  color: white !important;
   font-weight: 900;
   font-size: 288px;
   line-height: 210px;
-  mix-blend-mode: overlay;
+  mix-blend-mode: soft-light;
   overflow: hidden;
-  opacity: 0.1;
+  opacity: 0.25;
   position: fixed;
-  right: 0;
+  right: -510px;
   top: 288px;
   padding: 0;
   margin: 0;
@@ -31,15 +31,15 @@ const VerticalHeading1 = styled.h1`
   transform: rotate(-90deg);
 `;
 
-const VerticalHeading2 = styled.h1`
+const VerticalHeading2 = styled.div`
   z-index: -1;
-  color: black;
+  color: #171717 !important;
   font-weight: 900;
   font-size: 288px;
   line-height: 210px;
   mix-blend-mode: overlay;
   overflow: hidden;
-  opacity: 0.05;
+  opacity: 0.1;
   position: fixed;
   left: -80px;
   bottom: 0;
