@@ -21,7 +21,8 @@ function RoomCard(props) {
       <Flex
         cursor="pointer"
         flexDir="column"
-        bgColor="gray.900"
+        bgColor="rgba(25,37,59,0.4)"
+        border="1px solid #1D2638"
         transition=".2s all"
         _hover={{
           opacity: 0.8,
