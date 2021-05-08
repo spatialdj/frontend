@@ -4,9 +4,7 @@ import { Flex, Tooltip } from '@chakra-ui/react';
 
 function VoteBar() {
   const votes = useSelector(state => state.vote);
-  const numMembers = useSelector(
-    state => Object.keys(state.currentRoom.data.members).length
-  );
+  const numMembers = useSelector(state => state.currentRoom.data.numMembers);
   const totalVotes = votes.likes + votes.dislikes;
   const likePercentage = Math.floor((votes.likes / totalVotes) * 100);
   const dislikePercentage = 100 - likePercentage;
