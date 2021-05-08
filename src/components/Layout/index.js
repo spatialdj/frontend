@@ -6,12 +6,20 @@ import GradientBackground from 'components/GradientBackground';
 function Layout(props) {
   const inRoomPage = useRouteMatch('/room/:id');
 
-  return (
-    <GradientBackground>
-      {inRoomPage?.isExact ? null : <Header />}
-      {props.children}
-    </GradientBackground>
-  );
+  if (inRoomPage?.isExact) {
+    return (
+      <GradientBackground src="/DarkGradient14.jpg">
+        {props.children}
+      </GradientBackground>
+    );
+  } else {
+    return (
+      <GradientBackground src="/DarkGradient14.jpg">
+        <Header />
+        {props.children}
+      </GradientBackground>
+    );
+  }
 }
 
 export default Layout;
