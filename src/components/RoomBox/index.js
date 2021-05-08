@@ -9,6 +9,7 @@ import { reset as resetYoutube, playSong } from 'slices/youtubeSlice';
 import { populate, reset as resetVote } from 'slices/voteSlice';
 import { Box, useToast } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
+import produce from 'immer';
 import Bubble from 'components/Bubble';
 import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
@@ -17,14 +18,11 @@ import ViewOnlyModal from 'components/ViewOnlyModal';
 
 function RoomBox(props) {
   const socket = useContext(SocketContext);
-
-  const song = useSelector(state => state.currentRoom.data.currentSong);
-  const [bubblesData, setBubblesData] = useState([]);
+  // Handles bubbles for all other members
+  const [bubblesData, setBubblesData] = useState({});
 
   // TODO: instead of storing pos in bubblesData,
   // maybe have a separate state for positions?
-  const bubblesRef = useRef([]);
-  bubblesRef.current = bubblesData;
   const [showViewOnly, setShowViewOnly] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user);
@@ -44,11 +42,10 @@ function RoomBox(props) {
       if (!authenticated) {
         setShowViewOnly(true);
       }
-      // Populate bubbles data, but ignore if member.username is
-      // same as client's username
-      setBubblesData(
-        data.members.filter(member => member.username !== clientUsername)
-      );
+      // Populate bubbles data, but don't add client's bubble
+      setBubblesData(produce(data.members, draft => {
+        delete draft[clientUsername];
+      }));
       // todo: set video position to current time - data.songStartTime
     } else if (status === 'failed') {
       toast({
@@ -59,30 +56,16 @@ function RoomBox(props) {
       });
       history.push('/rooms');
     }
-  }, [status, data, authenticated, clientUsername, history, toast]);
+  }, [status, data.members, authenticated, clientUsername, history, toast]);
 
   useEffect(() => {
-    const handlePosChange = (username, position) => {
+    const handlePosChange = (username, newPosition) => {
       if (clientUsername === username) return;
 
-      const index = bubblesRef.current.findIndex(
-        user => user.username === username
-      );
-
       // TODO: find a better way to update this
-      if (index !== -1) {
-        setBubblesData([
-          ...bubblesRef.current.slice(0, index),
-          {
-            profilePicture: bubblesRef.current[index].profilePicture,
-            prefix: bubblesRef.current[index].prefix,
-            username: bubblesRef.current[index].username,
-            type: bubblesRef.current[index].type,
-            position: position,
-          },
-          ...bubblesRef.current.slice(index + 1),
-        ]);
-      }
+      setBubblesData(data => produce(data, draft => {
+        if (draft?.[username]?.position) draft[username].position = newPosition;
+      }));
     };
 
     const handleJoin = (user, position) => {
@@ -95,16 +78,15 @@ function RoomBox(props) {
         isClosable: true,
         duration: 3000,
       });
-      setBubblesData(data => [
-        ...data,
-        {
+      setBubblesData(data => produce(data, draft => {
+        draft[username] = {
           profilePicture: profilePicture,
           prefix: '',
           username: username,
           type: 'other',
           position: position,
-        },
-      ]);
+        };
+      }));
     };
 
     const handleLeave = username => {
@@ -116,7 +98,9 @@ function RoomBox(props) {
         isClosable: true,
         duration: 3000,
       });
-      setBubblesData(data => data.filter(user => user.username !== username));
+      setBubblesData(data => produce(data, draft => {
+        delete draft[username];
+      }));
     };
 
     const handleTransferHost = username => {
@@ -223,14 +207,14 @@ function RoomBox(props) {
       </Helmet>
       <LeaveRoomButton />
       <YoutubePlayer isAuth={authenticated} height="390" width="640" />
-      {bubblesData.map(item => (
+      {Object.entries(bubblesData).map(([key, val]) => (
         <Bubble
-          key={item.username}
-          profilePicture={item.profilePicture}
-          prefix={item.prefix}
-          username={item.username}
-          position={item.position}
-          type={item.type}
+          key={key}
+          profilePicture={val.profilePicture}
+          prefix={val.prefix}
+          username={val.username}
+          position={val.position}
+          type={val.type}
         />
       ))}
       <ClientBubble
