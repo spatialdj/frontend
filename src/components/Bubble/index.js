@@ -17,7 +17,7 @@ function Bubble(props) {
   const socket = useContext(SocketContext);
   const { profilePicture, username, prefix, type, position } = props;
   const [isHover, setIsHover] = useState(false);
-  const showTag = isHover;
+  const showTag = isHover || type === 'songPicker';
 
   const [openPopover, setOpenPopover] = useState(false);
   const [reaction, setReaction] = useState('');
@@ -117,7 +117,7 @@ function Bubble(props) {
             maxW="128px"
             textAlign="center"
           >
-            {prefix}&nbsp;{username.substr(0, 20)}
+            {`${prefix} ${username.substr(0, 20)}`}
           </Tag>
         </ScaleFade>
       </motion.div>

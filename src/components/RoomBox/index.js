@@ -21,6 +21,7 @@ function RoomBox(props) {
   const socket = useContext(SocketContext);
   // Handles bubbles for all other members
   const [bubblesData, setBubblesData] = useState({});
+  const prevSongPicker = useRef(null);
 
   // TODO: instead of storing pos in bubblesData,
   // maybe have a separate state for positions?
@@ -186,7 +187,34 @@ function RoomBox(props) {
       if (songPicker === clientUsername) {
         // update redux cycle playlist
         dispatch(cycleSelectedPlaylist());
+        setBubblesData(data =>
+          produce(data, draft => {
+            // Remove prefix from prev songPicker
+            if (prevSongPicker.current && draft[prevSongPicker.current]) {
+              draft[prevSongPicker.current].type = 'other';
+              draft[prevSongPicker.current].prefix = '';
+            }
+            prevSongPicker.current = songPicker;
+          })
+        );
+      } else {
+        // update bubbles data to reflect songpicker
+        setBubblesData(data =>
+          produce(data, draft => {
+            // Remove prefix from prev songPicker
+            if (prevSongPicker.current && draft[prevSongPicker.current]) {
+              draft[prevSongPicker.current].type = 'other';
+              draft[prevSongPicker.current].prefix = '';
+            }
+            // Set prefix for current songPicker
+            draft[songPicker].type = 'songPicker';
+            draft[songPicker].prefix = '🎶';
+            prevSongPicker.current = songPicker;
+          })
+        );
       }
+
+      console.log('prevSongPicker.current', prevSongPicker.current);
 
       dispatch(playSong());
       dispatch(resetVote());

@@ -152,7 +152,7 @@ const ClientBubble = props => {
             maxW="128px"
             textAlign="center"
           >
-            {`${prefix} ${username.substr(0, 20)} (you)`}
+            {`${prefix} ${username.substr(0, 20)}`}
           </Tag>
         </Flex>
       </Draggable>
