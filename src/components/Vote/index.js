@@ -11,7 +11,6 @@ function Vote() {
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
   const like = () => {
-    console.log('likeSong');
     socket.emit('vote', 'like');
     dispatch(clientLike());
   };
