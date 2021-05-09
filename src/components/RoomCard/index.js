@@ -10,6 +10,7 @@ import {
   Icon,
   Avatar,
 } from '@chakra-ui/react';
+import he from 'he';
 import { BiBarChart } from 'react-icons/bi';
 import { MdGroup } from 'react-icons/md';
 
@@ -53,7 +54,7 @@ function RoomCard(props) {
             textOverflow="ellipsis"
             overflow="hidden"
           >
-            {room.currentSong?.title ?? 'Unknown song'}
+            {he.decode(room.currentSong?.title ?? 'Unknown song')}
           </Text>
         </HStack>
         <Text
