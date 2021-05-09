@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -13,18 +13,20 @@ import {
   HStack,
   IconButton,
   VStack,
+  Input,
 } from '@chakra-ui/react';
 import SongSearch from '../../SongSearch';
 import SongList from '../../SongList';
 import { search } from '../../../services/song.js';
 import { FaChevronDown } from 'react-icons/fa';
-import { MdDelete, MdEdit } from 'react-icons/md';
+import { MdDelete, MdEdit, MdCheck } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import * as playlistAPI from '../../../services/playlist.js';
 import {
   updatePlaylist,
   createPlaylist,
   selectPlaylist,
+  deletePlaylist,
   populate,
 } from '../../../slices/playlistsSlice';
 
@@ -41,6 +43,10 @@ export default function SongDrawer(props) {
   const [queryInProgress, setQueryInProgress] = useState(false);
   const [results, setResults] = useState([]);
   const [pendingNew, setPendingNew] = useState(false);
+  const [pendingRename, setPendingRename] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const renameInputValue = useRef('UNDEFINED');
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
 
@@ -123,7 +129,7 @@ export default function SongDrawer(props) {
 
     const res = await playlistAPI.update(newPlaylist.id, newPlaylist);
 
-    if (res !== 200) {
+    if (res.status !== 200) {
       // todo: failed to rearrange playlist
     }
   };
@@ -144,6 +150,70 @@ export default function SongDrawer(props) {
     }
 
     setPendingNew(false);
+  };
+
+  const onClickDeleteButton = async (e, id) => {
+    e.stopPropagation();
+    if (editingId === null) {
+      setPendingDelete(id);
+
+      const res = await playlistAPI.deletePlaylist(id);
+
+      if (res.status === 200) {
+        setPendingDelete(null);
+        dispatch(deletePlaylist({ playlistId: id }));
+      } else {
+        // todo: error occurred unable to delete
+      }
+    } else {
+      renameInputValue.current = 'UNDEFINED';
+      setEditingId(null);
+    }
+  };
+
+  const onClickEditButton = (e, id, name) => {
+    e.stopPropagation();
+    if (editingId === null) {
+      renameInputValue.current = name;
+      setEditingId(id);
+    } else {
+      renameInputValue.current = 'UNDEFINED';
+      setEditingId(null);
+      // onClickConfirmRenameButton(e, editingId);
+    }
+  };
+
+  const onClickConfirmRenameButton = async (e, id) => {
+    e.stopPropagation();
+    setPendingRename(true);
+
+    const foundPlaylist = playlists.find(playlist => playlist.id === id);
+
+    if (foundPlaylist) {
+      const newPlaylist = {
+        id: id,
+        name: renameInputValue.current,
+        user: foundPlaylist.user,
+        queue: foundPlaylist.queue,
+      };
+
+      dispatch(updatePlaylist({ playlist: newPlaylist }));
+
+      const res = await playlistAPI.update(id, newPlaylist);
+      setPendingRename(false);
+
+      if (res.status === 200) {
+        renameInputValue.current = 'UNDEFINED';
+        setEditingId(null);
+      } else {
+        // todo: failed to update name
+      }
+    }
+  };
+
+  const handleRenameChange = e => {
+    e.stopPropagation();
+    renameInputValue.current = e.target.value;
   };
 
   return (
@@ -202,24 +272,52 @@ export default function SongDrawer(props) {
                     w="100%"
                     py={1}
                     pl={4}
-                    onClick={async () =>
-                      await handlePlaylistChange(playlist.id)
-                    }
+                    onClick={() => handlePlaylistChange(playlist.id)}
                   >
-                    <Text>{playlist.name}</Text>
-                    <span>
-                      <IconButton
-                        aria-label="Rename playlist"
-                        icon={<MdEdit />}
-                        variant="ghost"
+                    {editingId === playlist.id ? (
+                      <Input
+                        autoFocus
+                        placeholder="Playlist name"
+                        variant="flushed"
+                        disabled={pendingRename}
+                        defaultValue={playlist.name}
+                        onChange={handleRenameChange}
+                        onClick={e => e.stopPropagation()}
                       />
+                    ) : (
+                      <Text>{playlist.name}</Text>
+                    )}
+                    <Flex>
+                      {editingId === playlist.id ? (
+                        <IconButton
+                          isLoading={pendingRename}
+                          onClick={e =>
+                            onClickConfirmRenameButton(e, playlist.id)
+                          }
+                          aria-label="Confirm rename playlist"
+                          icon={<MdCheck />}
+                          variant="ghost"
+                        />
+                      ) : (
+                        <IconButton
+                          onClick={e =>
+                            onClickEditButton(e, playlist.id, playlist.name)
+                          }
+                          aria-label="Rename playlist"
+                          icon={<MdEdit />}
+                          variant="ghost"
+                        />
+                      )}
+
                       <IconButton
+                        isLoading={pendingDelete === playlist.id}
+                        onClick={e => onClickDeleteButton(e, playlist.id)}
                         aria-label="Delete playlist"
                         icon={<MdDelete />}
                         variant="ghost"
                         colorScheme="red"
                       />
-                    </span>
+                    </Flex>
                   </HStack>
                 ))}
               </VStack>
