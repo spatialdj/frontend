@@ -36,7 +36,7 @@ function Bubble(props) {
       }
     });
     return () => {
-      socket.removeAllListeners('chat_message');
+      socket.removeAllListeners('reaction');
     };
   }, [socket, username]);
 

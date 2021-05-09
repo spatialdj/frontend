@@ -204,6 +204,7 @@ function RoomBox(props) {
       socket.removeAllListeners('pos_change');
       socket.removeAllListeners('user_join');
       socket.removeAllListeners('user_leave');
+      socket.removeAllListeners('user_vote');
       socket.removeAllListeners('new_host');
       socket.removeAllListeners('room_closed');
       socket.removeAllListeners('play_song');
