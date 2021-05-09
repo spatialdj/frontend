@@ -31,6 +31,11 @@ export const logout = createAsyncThunk('user/logout', async () => {
   return response.data;
 });
 
+export const update = createAsyncThunk('user/update', async request => {
+  const response = await userAPI.update(request);
+  return response.data;
+});
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: {

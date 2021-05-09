@@ -11,7 +11,7 @@ const UserIcon = props => {
     // all logged in users have this (including admin)
     return (
       <MenuButton display="flex" alignItems="center">
-        <Avatar size="sm" src={image} />
+        <Avatar size="sm" bg="gray.800" src={image} />
       </MenuButton>
     );
   } else {

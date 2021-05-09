@@ -15,3 +15,7 @@ export const register = request => {
 export const logout = () => {
   return axios.post('/api/auth/logout');
 };
+
+export const update = request => {
+  return axios.put('/api/auth/update', request);
+};
