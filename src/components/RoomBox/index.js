@@ -2,7 +2,12 @@ import React, { useEffect, useContext, useState, useRef } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { leaveRoom, playSong as roomPlaySong } from 'slices/currentRoomSlice';
+import {
+  leaveRoom,
+  userJoinRoom,
+  userLeaveRoom,
+  playSong as roomPlaySong,
+} from 'slices/currentRoomSlice';
 import { cycleSelectedPlaylist } from 'slices/playlistsSlice';
 import { changeCurrentSong, reset as resetQueue } from 'slices/queueSlice';
 import { reset as resetYoutube, playSong } from 'slices/youtubeSlice';
@@ -77,6 +82,7 @@ function RoomBox(props) {
 
     const handleJoin = (user, position) => {
       const { username, profilePicture } = user;
+      dispatch(userJoinRoom());
       toast({
         title: `${username} joined`,
         status: 'info',
@@ -99,6 +105,7 @@ function RoomBox(props) {
     };
 
     const handleLeave = username => {
+      dispatch(userLeaveRoom());
       toast({
         title: `${username} left`,
         status: 'error',

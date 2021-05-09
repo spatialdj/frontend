@@ -101,6 +101,12 @@ export const currentRoomSlice = createSlice({
     leaveRoom: state => {
       state = Object.assign(state, initialState);
     },
+    userJoinRoom: state => {
+      state.data.numMembers += 1;
+    },
+    userLeaveRoom: state => {
+      state.data.numMembers -= 1;
+    },
   },
 });
 
@@ -109,6 +115,8 @@ export const {
   joinRoom,
   leaveRoom,
   playSong,
+  userJoinRoom,
+  userLeaveRoom,
 } = currentRoomSlice.actions;
 
 export default currentRoomSlice.reducer;
