@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { SocketContext } from 'contexts/socket';
 import { Button, Flex, useToast } from '@chakra-ui/react';
 import styled from '@emotion/styled';
@@ -14,6 +15,7 @@ const ReactionsContainer = styled(Flex)`
 
 function Reactions() {
   const socket = useContext(SocketContext);
+  const currentUser = useSelector(state => state.user);
   const toast = useToast();
 
   const submit = reaction => {
@@ -36,6 +38,11 @@ function Reactions() {
       resolve();
     });
   };
+
+  // if user is not authenticated then do not display
+  if (!currentUser.authenticated) {
+    return null;
+  }
 
   return (
     <ReactionsContainer>
