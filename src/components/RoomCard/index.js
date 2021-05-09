@@ -13,6 +13,7 @@ import {
 import he from 'he';
 import { BiBarChart } from 'react-icons/bi';
 import { MdGroup } from 'react-icons/md';
+import './marquee.css';
 
 function RoomCard(props) {
   const { room } = props;
@@ -48,14 +49,11 @@ function RoomCard(props) {
         </Flex>
         <HStack mt={1}>
           <Icon as={BiBarChart} />
-          <Text
-            color="gray.100"
-            whiteSpace="nowrap"
-            textOverflow="ellipsis"
-            overflow="hidden"
-          >
-            {he.decode(room.currentSong?.title ?? 'Unknown song')}
-          </Text>
+          <Flex overflow="hidden">
+            <Text className="marquee" color="gray.100" whiteSpace="nowrap">
+              {he.decode(room.currentSong?.title ?? 'Unknown song')}
+            </Text>
+          </Flex>
         </HStack>
         <Text
           color="#AFB5CA"
