@@ -1,11 +1,21 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { ClientPositionContext } from 'contexts/clientposition';
 import { useDispatch } from 'react-redux';
 import { joinRoom } from 'slices/currentRoomSlice';
 import { populate as populateQueue } from 'slices/queueSlice';
 import { populate as populateVote } from 'slices/voteSlice';
-import { Avatar, Tag, Flex, Fade } from '@chakra-ui/react';
+import {
+  Avatar,
+  Tag,
+  Flex,
+  Fade,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
+} from '@chakra-ui/react';
 import Draggable from 'react-draggable';
 import throttle from 'utils/throttle';
 
@@ -19,6 +29,27 @@ const ClientBubble = props => {
     throttle(pos => socket.emit('pos_change', pos), 50)
   );
   const { roomId, profilePicture, username, prefix } = props;
+
+  const [openPopover, setOpenPopover] = useState(false);
+  const [reaction, setReaction] = useState('');
+  const showReaction = () => {
+    // Open reaction popover for 10 seconds
+    setOpenPopover(true);
+    setTimeout(() => setOpenPopover(false), 5000);
+  };
+
+  useEffect(() => {
+    socket.on('reaction', response => {
+      // Only show popover if sender is current user
+      if (response?.sender?.username === username) {
+        setReaction(response?.message);
+        showReaction();
+      }
+    });
+    return () => {
+      socket.removeAllListeners('chat_message');
+    };
+  }, [socket, username]);
 
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
@@ -90,15 +121,29 @@ const ClientBubble = props => {
           flexDir="column"
           alignItems="center"
         >
-          <Avatar
-            boxShadow={`0 0 4px 4px ${tagColor}`}
-            bgColor={`${tagColor}.500`}
-            cursor="move"
-            size="lg"
-            src={profilePicture}
-            name={username}
-            onDragStart={preventDragHandler}
-          />
+          <Popover
+            autoFocus={false}
+            isOpen={openPopover}
+            placement="top"
+            arrowSize={10}
+            arrowShadowColor="rgba(12, 22, 45, 0.5)"
+          >
+            <PopoverTrigger>
+              <Avatar
+                boxShadow={`0 0 4px 4px ${tagColor}`}
+                bgColor={`${tagColor}.500`}
+                cursor="move"
+                size="lg"
+                src={profilePicture}
+                name={username}
+                onDragStart={preventDragHandler}
+              />
+            </PopoverTrigger>
+            <PopoverContent bg="rgba(12, 22, 45)" maxW="43px">
+              <PopoverArrow bg="#0c162d" />
+              <PopoverBody px="10px">{reaction}</PopoverBody>
+            </PopoverContent>
+          </Popover>
 
           <Tag
             mt={4}

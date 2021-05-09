@@ -18,12 +18,20 @@ import { VscChromeMinimize } from 'react-icons/vsc';
 import { FiMaximize2 } from 'react-icons/fi';
 import styled from '@emotion/styled';
 import MessagesList from './components/MessagesList';
+import Reactions from './components/Reactions';
+
+const BottomRight = styled(Flex)`
+  flex-direction: column;
+  bottom: 80px;
+  right: 0;
+  position: absolute;
+  width: 20%;
+  min-width: 345px;
+`;
 
 const ChatContainer = styled(Flex)`
   flex-direction: column;
   justify-content: space-between;
-  bottom: 80px;
-  right: 0;
   background-color: rgba(12, 22, 45, 0.5);
 `;
 
@@ -44,18 +52,15 @@ function ChatBox() {
     socket.on('chat_message', response => {
       const { message, timeSent, sender } = response;
       // console.log('receive chat_message', response);
-      // Prevent showing client's message twice
-      if (sender.username !== currentUser.username) {
-        setMessages(messages => [
-          ...messages,
-          {
-            id: messages.length + 1,
-            username: sender.username,
-            profilePicture: sender.profilePicture,
-            message: message,
-          },
-        ]);
-      }
+      setMessages(messages => [
+        ...messages,
+        {
+          id: messages.length + 1,
+          username: sender.username,
+          profilePicture: sender.profilePicture,
+          message: message,
+        },
+      ]);
     });
     return () => {
       socket.removeAllListeners('chat_message');
@@ -75,15 +80,6 @@ function ChatBox() {
         socket.emit('chat_message', message, timeSent, response => {
           // console.log('chat_message', response);
           if (response?.success) {
-            setMessages(messages => [
-              ...messages,
-              {
-                id: messages.length + 1,
-                username: currentUser.username,
-                profilePicture: currentUser.profilePicture,
-                message: message,
-              },
-            ]);
             reset({ message: '' });
           } else {
             toast({
@@ -108,68 +104,68 @@ function ChatBox() {
   };
 
   return (
-    <ChatContainer
-      position="absolute"
-      py="auto"
-      width="20%"
-      height={isOpen ? '460px' : '48px'}
-      maxH="460px"
-      minW="345px"
-      shadow="base"
-      borderRadius="8px 8px 0 0"
-    >
-      <HStack maxH="48px" justifyContent="space-between" px={4} py={2}>
-        <Heading fontSize="2xl">Chat</Heading>
-        <IconButton
-          onClick={onMinimizeChat}
-          variant="ghost"
-          size="sm"
-          icon={
-            isOpen ? (
-              <VscChromeMinimize size="24px" />
-            ) : (
-              <FiMaximize2 size="24px" />
-            )
-          }
-        />
-      </HStack>
+    <BottomRight py="auto" minW="345px">
+      <Reactions />
+      <ChatContainer
+        height={isOpen ? '460px' : '48px'}
+        maxH="460px"
+        minW="345px"
+        shadow="base"
+        borderRadius="8px 8px 0 0"
+      >
+        <HStack maxH="48px" justifyContent="space-between" px={4} py={2}>
+          <Heading fontSize="2xl">Chat</Heading>
+          <IconButton
+            onClick={onMinimizeChat}
+            variant="ghost"
+            size="sm"
+            icon={
+              isOpen ? (
+                <VscChromeMinimize size="24px" />
+              ) : (
+                <FiMaximize2 size="24px" />
+              )
+            }
+          />
+        </HStack>
 
-      {isOpen ? (
-        <>
-          <MessagesList messages={messages} />
-          {currentUser.authenticated ? (
-            <HStack p="1rem">
-              <Avatar size="xs" src={currentUser.profilePicture} alt="pfp" />
-              <form
-                style={{ width: '100%' }}
-                onSubmit={mySubmit}
-                autoComplete="off"
-              >
-                <InputGroup>
-                  <Input
-                    id="message"
-                    type="text"
-                    {...register('message')}
-                    variant="filled"
-                    placeholder="Message room"
-                  />
-                  <InputRightElement>
-                    <IconButton
-                      isLoading={isSubmitting}
-                      type="submit"
-                      variant="ghost"
-                      colorScheme="blue"
-                      size="md"
-                      icon={<IoMdSend size="28px" />}
+        {isOpen ? (
+          <>
+            <MessagesList messages={messages} />
+            {currentUser.authenticated ? (
+              <HStack p="1rem">
+                <Avatar size="xs" src={currentUser.profilePicture} alt="pfp" />
+                <form
+                  style={{ width: '100%' }}
+                  onSubmit={mySubmit}
+                  autoComplete="off"
+                >
+                  <InputGroup>
+                    <Input
+                      id="message"
+                      type="text"
+                      {...register('message')}
+                      variant="filled"
+                      placeholder="Message room"
                     />
-                  </InputRightElement>
-                </InputGroup>
-              </form>
-            </HStack>
-          ) : null}
-        </>
-      ) : null}
-    </ChatContainer>
+                    <InputRightElement>
+                      <IconButton
+                        isLoading={isSubmitting}
+                        type="submit"
+                        variant="ghost"
+                        colorScheme="blue"
+                        size="md"
+                        icon={<IoMdSend size="28px" />}
+                      />
+                    </InputRightElement>
+                  </InputGroup>
+                </form>
+              </HStack>
+            ) : null}
+          </>
+        ) : null}
+      </ChatContainer>
+    </BottomRight>
   );
 }
 
