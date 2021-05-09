@@ -21,7 +21,7 @@ function LeftSide(props) {
         onClick={props.openDrawer}
         icon={<FaChevronUp />}
       />
-      {selectedPlaylist == null ? (
+      {selectedPlaylist == null || playlists?.[selectedPlaylist] == null ? (
         <Text>No playlist selected</Text>
       ) : (
         <VStack align="left" spacing={0}>
@@ -38,7 +38,8 @@ function LeftSide(props) {
             <Flex w="300px" overflow="hidden">
               <Text className="marquee" whiteSpace="nowrap">
                 {he.decode(
-                  playlists?.[selectedPlaylist]?.queue?.[0]?.title ?? ''
+                  playlists?.[selectedPlaylist]?.queue?.[0]?.title ??
+                    'None selected'
                 )}
               </Text>
             </Flex>
