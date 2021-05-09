@@ -15,6 +15,7 @@ import ClientBubble from 'components/ClientBubble';
 import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 import ViewOnlyModal from 'components/ViewOnlyModal';
+import { AnimatePresence } from 'framer-motion';
 
 function RoomBox(props) {
   const socket = useContext(SocketContext);
@@ -216,16 +217,18 @@ function RoomBox(props) {
       </Helmet>
       <LeaveRoomButton />
       <YoutubePlayer isAuth={authenticated} height="390" width="640" />
-      {Object.entries(bubblesData).map(([key, val]) => (
-        <Bubble
-          key={key}
-          profilePicture={val.profilePicture}
-          prefix={val.prefix}
-          username={val.username}
-          position={val.position}
-          type={val.type}
-        />
-      ))}
+      <AnimatePresence>
+        {Object.entries(bubblesData).map(([key, val]) => (
+          <Bubble
+            key={key}
+            profilePicture={val.profilePicture}
+            prefix={val.prefix}
+            username={val.username}
+            position={val.position}
+            type={val.type}
+          />
+        ))}
+      </AnimatePresence>
       <ClientBubble
         roomId={roomId}
         profilePicture={profilePicture}

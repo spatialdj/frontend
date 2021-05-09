@@ -3,9 +3,7 @@ import { SocketContext } from 'contexts/socket';
 import {
   Avatar,
   Tag,
-  Flex,
   ScaleFade,
-  Fade,
   Popover,
   PopoverTrigger,
   PopoverArrow,
@@ -13,6 +11,7 @@ import {
   PopoverContent,
 } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
+import { motion } from 'framer-motion';
 
 function Bubble(props) {
   const socket = useContext(SocketContext);
@@ -65,59 +64,64 @@ function Bubble(props) {
   };
 
   return (
-    <Fade in={true}>
-      <Draggable
-        disabled={true}
-        position={position}
-        defaultClassName="_draggable"
-        defaultClassNameDragging="__dragging"
-        defaultClassNameDragged="__dragged"
-        bounds="#canvas"
+    <Draggable
+      disabled={true}
+      position={position}
+      defaultClassName="_draggable"
+      defaultClassNameDragging="__dragging"
+      defaultClassNameDragged="__dragged"
+      bounds="#canvas"
+    >
+      <motion.div
+        style={{
+          position: 'absolute',
+          display: 'flex',
+          transition: 'transform .1s linear',
+          width: '128px',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleUnHover}
+        key="test"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
       >
-        <Flex
-          transition="transform .1s linear"
-          position="absolute"
-          onMouseEnter={handleHover}
-          onMouseLeave={handleUnHover}
-          width="128px"
-          flexDir="column"
-          alignItems="center"
+        <Popover
+          autoFocus={false}
+          isOpen={openPopover}
+          placement="top"
+          arrowSize={10}
         >
-          <Popover
-            autoFocus={false}
-            isOpen={openPopover}
-            placement="top"
-            arrowSize={10}
-          >
-            <PopoverTrigger>
-              <Avatar
-                cursor={type !== 'you' ? 'pointer' : 'move'}
-                size="lg"
-                src={profilePicture}
-                name={username}
-                onDragStart={preventDragHandler}
-              />
-            </PopoverTrigger>
-            <PopoverContent maxW="43px" bg="rgba(12, 22, 45)">
-              <PopoverArrow bg="#0c162d" />
-              <PopoverBody px="10px">{reaction}</PopoverBody>
-            </PopoverContent>
-          </Popover>
+          <PopoverTrigger>
+            <Avatar
+              cursor={type !== 'you' ? 'pointer' : 'move'}
+              size="lg"
+              src={profilePicture}
+              name={username}
+              onDragStart={preventDragHandler}
+            />
+          </PopoverTrigger>
+          <PopoverContent maxW="43px" bg="rgba(12, 22, 45)">
+            <PopoverArrow bg="#0c162d" />
+            <PopoverBody px="10px">{reaction}</PopoverBody>
+          </PopoverContent>
+        </Popover>
 
-          <ScaleFade in={showTag} initialScale={0.8}>
-            <Tag
-              mt={4}
-              variant="solid"
-              colorScheme={tagColor}
-              maxW="128px"
-              textAlign="center"
-            >
-              {prefix}&nbsp;{username.substr(0, 20)}
-            </Tag>
-          </ScaleFade>
-        </Flex>
-      </Draggable>
-    </Fade>
+        <ScaleFade in={showTag} initialScale={0.8}>
+          <Tag
+            mt={4}
+            variant="solid"
+            colorScheme={tagColor}
+            maxW="128px"
+            textAlign="center"
+          >
+            {prefix}&nbsp;{username.substr(0, 20)}
+          </Tag>
+        </ScaleFade>
+      </motion.div>
+    </Draggable>
   );
 }
 
