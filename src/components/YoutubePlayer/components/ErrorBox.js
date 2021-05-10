@@ -9,11 +9,19 @@ function ErrorBox(props) {
   const { height, width } = props;
   const ytStatus = useSelector(state => state.youtube.status);
   const ytErrorCode = useSelector(state => state.youtube.errorCode);
+  const isYouTubeAPIReady = useSelector(
+    state => state.youtube.isYouTubeAPIReady
+  );
   const queueState = useSelector(state => state.queue);
-  const { queue, inQueue, status: queueStatus } = queueState;
+  const { currentSong, queue, inQueue, status: queueStatus } = queueState;
 
   // Show when youtube player encountered error and there are people in queue
-  if (ytErrorCode != null && queue.length > 0 && !inQueue) {
+  if (
+    ytErrorCode != null &&
+    queue.length > 0 &&
+    !inQueue &&
+    !isYouTubeAPIReady
+  ) {
     return (
       <ErrorContainer width={width} height={height} borderColor="red.500">
         <ErrorMessage />
@@ -22,6 +30,7 @@ function ErrorBox(props) {
   }
   // Show when youtube player encountered error and no one in queue
   else if (
+    !currentSong &&
     queueStatus === 'success' &&
     (ytStatus === 'stopped' || ytStatus === 'unstarted')
   ) {
