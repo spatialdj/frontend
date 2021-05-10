@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { joinQueue, leaveQueue, enqueue, dequeue } from 'slices/queueSlice';
 import { SocketContext } from 'contexts/socket';
-import { Button } from '@chakra-ui/react';
+import { Button, useToast } from '@chakra-ui/react';
 
 function JoinQueueButton() {
   const socket = useContext(SocketContext);
@@ -15,6 +15,7 @@ function JoinQueueButton() {
     Object.keys(playlist.playlists).length === 0 ||
     playlist.playlists?.[playlist.selectedPlaylist]?.queue?.length === 0;
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     socket.on('user_join_queue', (position, userFragment) => {
@@ -42,6 +43,14 @@ function JoinQueueButton() {
       // console.log('dequeued', username);
       if (username === currentUser.username) {
         dispatch(leaveQueue(currentUser.username));
+        toast({
+          title: 'You have been removed from the queue',
+          description:
+            'Because your selected playlist is empty/deleted or you did not select a playlist.',
+          status: 'error',
+          duration: 20000,
+          isClosable: true,
+        });
       } else {
         dispatch(dequeue(username));
       }
