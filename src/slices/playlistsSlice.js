@@ -27,6 +27,7 @@ export const playlistSlice = createSlice({
     deletePlaylist: (state, { payload }) => {
       const { playlistId } = payload;
 
+      state.selectedPlaylist = null;
       delete state.playlists[playlistId];
     },
     selectPlaylist: (state, { payload }) => {

@@ -9,6 +9,11 @@ function JoinQueueButton() {
   const dispatch = useDispatch();
   const inQueue = useSelector(state => state.queue.inQueue);
   const currentUser = useSelector(state => state.user);
+  const playlist = useSelector(state => state.playlists);
+  const disableJoinQueue =
+    !playlist.selectedPlaylist ||
+    Object.keys(playlist.playlists).length === 0 ||
+    playlist.playlists?.[playlist.selectedPlaylist]?.queue?.length === 0;
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -59,6 +64,7 @@ function JoinQueueButton() {
 
   return (
     <Button
+      disabled={disableJoinQueue}
       onClick={handleQueue}
       isLoading={isLoading}
       size="lg"
