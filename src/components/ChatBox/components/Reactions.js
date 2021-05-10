@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SocketContext } from 'contexts/socket';
-import { Button, Flex, useToast } from '@chakra-ui/react';
+import { Button, Flex, Tooltip, useToast } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
 const ReactionsContainer = styled(Flex)`
@@ -16,12 +16,21 @@ const ReactionsContainer = styled(Flex)`
 function Reactions() {
   const socket = useContext(SocketContext);
   const currentUser = useSelector(state => state.user);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   const toast = useToast();
 
   const submit = reaction => {
     return new Promise(resolve => {
+      // Disabled button for 5 seconds to prevent spamming
+      setButtonDisabled(true);
+      setTimeout(() => setButtonDisabled(false), 5500);
+
+      // Send reaction socket event
       const timeSent = Date.now();
       const message = 'reacted with ' + reaction;
+      socket.emit('reaction', reaction);
+
+      // Sent chat message socket event
       socket.emit('chat_message', message, timeSent, response => {
         if (!response?.success) {
           toast({
@@ -34,7 +43,6 @@ function Reactions() {
           });
         }
       });
-      socket.emit('reaction', reaction);
       resolve();
     });
   };
@@ -45,26 +53,59 @@ function Reactions() {
   }
 
   return (
-    <ReactionsContainer>
-      <Button variant="ghost" onClick={() => submit('🔥')}>
-        🔥
-      </Button>
-      <Button variant="ghost" onClick={() => submit('😃')}>
-        😃
-      </Button>
-      <Button variant="ghost" onClick={() => submit('😂')}>
-        😂
-      </Button>
-      <Button variant="ghost" onClick={() => submit('😈')}>
-        😈
-      </Button>
-      <Button variant="ghost" onClick={() => submit('💩')}>
-        💩
-      </Button>
-      <Button variant="ghost" onClick={() => submit('🤮')}>
-        🤮
-      </Button>
-    </ReactionsContainer>
+    <Tooltip
+      isDisabled={!buttonDisabled}
+      hasArrow
+      placement="top"
+      label="Please wait a few seconds before reacting again!"
+      bg="#0c162d"
+      color="white"
+    >
+      <ReactionsContainer>
+        <Button
+          isDisabled={buttonDisabled}
+          variant="ghost"
+          onClick={() => submit('🔥')}
+        >
+          🔥
+        </Button>
+        <Button
+          isDisabled={buttonDisabled}
+          variant="ghost"
+          onClick={() => submit('😃')}
+        >
+          😃
+        </Button>
+        <Button
+          isDisabled={buttonDisabled}
+          variant="ghost"
+          onClick={() => submit('😂')}
+        >
+          😂
+        </Button>
+        <Button
+          isDisabled={buttonDisabled}
+          variant="ghost"
+          onClick={() => submit('😈')}
+        >
+          😈
+        </Button>
+        <Button
+          isDisabled={buttonDisabled}
+          variant="ghost"
+          onClick={() => submit('💩')}
+        >
+          💩
+        </Button>
+        <Button
+          isDisabled={buttonDisabled}
+          variant="ghost"
+          onClick={() => submit('🤮')}
+        >
+          🤮
+        </Button>
+      </ReactionsContainer>
+    </Tooltip>
   );
 }
 
