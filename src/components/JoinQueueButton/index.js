@@ -61,7 +61,7 @@ function JoinQueueButton() {
       socket.removeAllListeners('user_leave_queue');
       socket.removeAllListeners('dequeued');
     };
-  }, [socket, dispatch, currentUser]);
+  }, [socket, dispatch, currentUser, toast]);
 
   const handleQueue = () => {
     // Artificial timeout
