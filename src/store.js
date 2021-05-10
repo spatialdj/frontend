@@ -17,4 +17,5 @@ export default configureStore({
     playlists: playlistReducer,
     vote: voteReducer,
   },
+  // devTools: false,
 });
