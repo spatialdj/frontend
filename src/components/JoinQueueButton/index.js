@@ -40,7 +40,11 @@ function JoinQueueButton() {
     socket.on('dequeued', username => {
       // Sent when user is kicked from the queue
       // console.log('dequeued', username);
-      dispatch(dequeue(username));
+      if (username === currentUser.username) {
+        dispatch(leaveQueue(currentUser.username));
+      } else {
+        dispatch(dequeue(username));
+      }
     });
 
     return () => {

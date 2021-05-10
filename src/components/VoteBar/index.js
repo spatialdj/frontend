@@ -5,6 +5,7 @@ import { Flex, Tooltip } from '@chakra-ui/react';
 function VoteBar() {
   const votes = useSelector(state => state.vote);
   const numMembers = useSelector(state => state.currentRoom.data.numMembers);
+  const currentSong = useSelector(state => state.queue.currentSong);
   const totalVotes = votes.likes + votes.dislikes;
   const likePercentage = Math.floor((votes.likes / totalVotes) * 100);
   const dislikePercentage = 100 - likePercentage;
@@ -14,7 +15,7 @@ function VoteBar() {
       ? 'Skipping song...'
       : `${numDislikesToSkip - votes.dislikes} more dislikes to skip`;
 
-  if (!votes || totalVotes === 0) {
+  if (!votes || totalVotes === 0 || !currentSong) {
     return null;
   }
 

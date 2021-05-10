@@ -10,6 +10,7 @@ import {
   stopSong,
   youtubeAPIReady,
 } from 'slices/youtubeSlice';
+import { changeCurrentSong } from 'slices/queueSlice';
 import { ClientPositionContext } from 'contexts/clientposition';
 import { Box } from '@chakra-ui/react';
 import ErrorBox from './components/ErrorBox';
@@ -262,6 +263,7 @@ function YoutubePlayer(props) {
       // Sent when current song ends AND there are no more users in queue
       player.current?.stopVideo();
       dispatch(stopSong());
+      dispatch(changeCurrentSong(null));
     });
 
     return () => {
