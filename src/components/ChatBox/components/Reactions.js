@@ -24,25 +24,9 @@ function Reactions() {
       // Disabled button for 5 seconds to prevent spamming
       setButtonDisabled(true);
       setTimeout(() => setButtonDisabled(false), 5500);
-
-      // Send reaction socket event
-      const timeSent = Date.now();
-      const message = 'reacted with ' + reaction;
+      
       socket.emit('reaction', reaction);
 
-      // Sent chat message socket event
-      socket.emit('chat_message', message, timeSent, response => {
-        if (!response?.success) {
-          toast({
-            title: 'Error sending reaction',
-            description: "Couldn't send your reaction",
-            status: 'error',
-            position: 'top-right',
-            duration: 1000,
-            isClosable: true,
-          });
-        }
-      });
       resolve();
     });
   };

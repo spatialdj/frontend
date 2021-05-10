@@ -44,6 +44,8 @@ function RoomBox(props) {
   const history = useHistory();
   const roomId = props.roomId;
 
+  const [userReaction, setUserReaction] = useState('');
+
   useEffect(() => {
     if (status === 'success' && data.members) {
       if (!authenticated) {
@@ -99,6 +101,7 @@ function RoomBox(props) {
             username: username,
             type: 'other',
             position: position,
+            reaction: '',
           };
         })
       );
@@ -142,6 +145,28 @@ function RoomBox(props) {
         duration: 20000,
       });
       history.push('/rooms');
+    };
+
+    const handleReactions = (username, reaction) => {
+      if (clientUsername === username) {
+        setUserReaction(reaction);
+        setTimeout(() => setUserReaction(''), 5000);
+      } else {
+        setBubblesData(data =>
+          produce(data, draft => {
+            if (draft[username]) draft[username].reaction = reaction;
+          })
+        );
+        setTimeout(
+          () =>
+            setBubblesData(data =>
+              produce(data, draft => {
+                if (draft[username]) draft[username].reaction = '';
+              })
+            ),
+          5000
+        );
+      }
     };
 
     // Listen to user moving
@@ -229,6 +254,10 @@ function RoomBox(props) {
       dispatch(resetVote());
     });
 
+    socket.on('reaction', response => {
+      handleReactions(response.sender.username, response.message);
+    });
+
     return () => {
       // console.log('room unmounted');
       socket.emit('leave_room', response => {
@@ -245,6 +274,7 @@ function RoomBox(props) {
       socket.removeAllListeners('new_host');
       socket.removeAllListeners('room_closed');
       socket.removeAllListeners('play_song');
+      socket.removeAllListeners('reaction');
     };
   }, [dispatch, socket, history, toast, roomId, clientUsername]);
 
@@ -270,6 +300,7 @@ function RoomBox(props) {
             username={val.username}
             position={val.position}
             type={val.type}
+            reaction={val.reaction !== '' ? val.reaction : null}
           />
         ))}
       </AnimatePresence>
@@ -278,6 +309,7 @@ function RoomBox(props) {
         profilePicture={profilePicture}
         prefix="👋"
         username={clientUsername}
+        reaction={userReaction !== '' ? userReaction : null}
       />
       <ViewOnlyModal
         isOpen={showViewOnly}

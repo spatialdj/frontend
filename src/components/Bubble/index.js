@@ -14,31 +14,9 @@ import Draggable from 'react-draggable';
 import { motion } from 'framer-motion';
 
 function Bubble(props) {
-  const socket = useContext(SocketContext);
-  const { profilePicture, username, prefix, type, position } = props;
+  const { profilePicture, username, prefix, type, position, reaction } = props;
   const [isHover, setIsHover] = useState(false);
   const showTag = isHover || type === 'songPicker';
-
-  const [openPopover, setOpenPopover] = useState(false);
-  const [reaction, setReaction] = useState('');
-  const showReaction = () => {
-    // Open reaction popover for 10 seconds
-    setOpenPopover(true);
-    setTimeout(() => setOpenPopover(false), 5000);
-  };
-
-  useEffect(() => {
-    socket.on('reaction', response => {
-      // Only show popover if sender is current user
-      if (response?.sender?.username === username) {
-        setReaction(response?.message);
-        showReaction();
-      }
-    });
-    return () => {
-      socket.removeAllListeners('reaction');
-    };
-  }, [socket, username]);
 
   // Prevents dragging text and images
   const preventDragHandler = e => {
@@ -90,7 +68,7 @@ function Bubble(props) {
       >
         <Popover
           autoFocus={false}
-          isOpen={openPopover}
+          isOpen={reaction}
           placement="top"
           arrowSize={10}
         >

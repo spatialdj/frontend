@@ -28,28 +28,7 @@ const ClientBubble = props => {
   const throttledPosChange = useRef(
     throttle(pos => socket.emit('pos_change', pos), 50)
   );
-  const { roomId, profilePicture, username, prefix } = props;
-
-  const [openPopover, setOpenPopover] = useState(false);
-  const [reaction, setReaction] = useState('');
-  const showReaction = () => {
-    // Open reaction popover for 10 seconds
-    setOpenPopover(true);
-    setTimeout(() => setOpenPopover(false), 5000);
-  };
-
-  useEffect(() => {
-    socket.on('reaction', response => {
-      // Only show popover if sender is current user
-      if (response?.sender?.username === username) {
-        setReaction(response?.message);
-        showReaction();
-      }
-    });
-    return () => {
-      socket.removeAllListeners('reaction');
-    };
-  }, [socket, username]);
+  const { roomId, profilePicture, username, prefix, reaction } = props;
 
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
@@ -123,7 +102,7 @@ const ClientBubble = props => {
         >
           <Popover
             autoFocus={false}
-            isOpen={openPopover}
+            isOpen={reaction}
             placement="top"
             arrowSize={10}
             arrowShadowColor="rgba(12, 22, 45, 0.5)"
