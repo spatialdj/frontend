@@ -181,7 +181,7 @@ function RoomBox(props) {
 
     // Listen to room closed
     socket.on('room_closed', () => {
-      // console.log('room_closed');
+      console.log('room_closed');
       handleRoomClosed();
     });
 
