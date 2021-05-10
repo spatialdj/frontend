@@ -214,8 +214,10 @@ function RoomBox(props) {
               draft[prevSongPicker.current].prefix = '';
             }
             // Set prefix for current songPicker
-            draft[songPicker].type = 'songPicker';
-            draft[songPicker].prefix = '🎶';
+            if (songPicker && draft[songPicker]) {
+              draft[songPicker].type = 'songPicker';
+              draft[songPicker].prefix = '🎶';
+            }
             prevSongPicker.current = songPicker;
           })
         );
@@ -247,7 +249,13 @@ function RoomBox(props) {
   }, [dispatch, socket, history, toast, roomId, clientUsername]);
 
   return (
-    <Box id="canvas" overflow="hidden" h="calc(100vh - 80px)" w="100%">
+    <Box
+      id="canvas"
+      position="relative"
+      overflow="hidden"
+      h="calc(100vh - 80px)"
+      w="100%"
+    >
       <Helmet>
         <title>{`${currentRoom?.data?.name} - Spatial.dj`}</title>
       </Helmet>
