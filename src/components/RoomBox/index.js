@@ -296,7 +296,7 @@ function RoomBox(props) {
           <Bubble
             key={key}
             profilePicture={val.profilePicture}
-            prefix={val.prefix}
+            prefix={val.prefix ?? ''}
             username={val.username}
             position={val.position}
             type={val.type}
