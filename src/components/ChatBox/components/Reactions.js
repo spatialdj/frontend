@@ -24,7 +24,7 @@ function Reactions() {
       // Disabled button for 5 seconds to prevent spamming
       setButtonDisabled(true);
       setTimeout(() => setButtonDisabled(false), 5500);
-      
+
       socket.emit('reaction', reaction);
 
       resolve();

@@ -1,7 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import he from 'he';
-import { HStack, IconButton, Text, VStack, Tag, Flex } from '@chakra-ui/react';
+import {
+  HStack,
+  IconButton,
+  Button,
+  ButtonGroup,
+  Text,
+  VStack,
+  Tag,
+  Flex,
+} from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { FaChevronUp } from 'react-icons/fa';
 import './marquee.css';
 
@@ -11,7 +21,19 @@ function LeftSide(props) {
   const { playlists, selectedPlaylist } = playlist;
 
   if (!authenticated) {
-    return <Tag size="lg">👀 SPECTATOR MODE</Tag>;
+    return (
+      <HStack spacing="2rem">
+        <Tag size="lg">👀 SPECTATOR MODE</Tag>
+        <ButtonGroup variant="outline">
+          <Link to="/login">
+            <Button>Login</Button>
+          </Link>
+          <Link to="/register">
+            <Button>Register</Button>
+          </Link>
+        </ButtonGroup>
+      </HStack>
+    );
   }
 
   return (
