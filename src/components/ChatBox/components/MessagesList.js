@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import Message from './Message';
+import '../index.css';
 
 export default function MessagesList(props) {
   const { messages } = props;
@@ -15,7 +16,14 @@ export default function MessagesList(props) {
   }, [messages]);
 
   return (
-    <Box h="100%" w="100%" px="1rem" pt="1rem" overflowY="scroll">
+    <Box
+      className="message-scrollbar"
+      h="100%"
+      w="100%"
+      px="1rem"
+      pt="1rem"
+      overflowY="scroll"
+    >
       {messages.map(message => (
         <Message key={message.id} data={message} />
       ))}

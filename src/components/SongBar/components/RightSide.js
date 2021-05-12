@@ -20,7 +20,7 @@ import {
   ImVolumeMute2,
 } from 'react-icons/im';
 import { BiBarChart } from 'react-icons/bi';
-import './marquee.css';
+import './index.css';
 
 function RightSide() {
   const lastVolumeRef = useRef(50);

@@ -1,11 +1,30 @@
-body {
+* {
+  scrollbar-color: #404040 #000000;
+}
+
+*::-webkit-scrollbar {
+  background: #000000;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #404040;
+}
+
+.dark-scrollbar {
   scrollbar-color: #404040 #000000 !important;
+  scrollbar-width: thin;
 }
 
-body::-webkit-scrollbar {
+.dark-scrollbar::-webkit-scrollbar {
   background: #000000 !important;
+  width: 8px;
 }
 
-body::-webkit-scrollbar-thumb {
+.dark-scrollbar::-webkit-scrollbar-thumb {
   background: #404040 !important;
+  border-radius: 8px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #4b4b4b !important;
 }

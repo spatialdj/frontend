@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { FaChevronUp } from 'react-icons/fa';
-import './marquee.css';
+import './index.css';
 
 function LeftSide(props) {
   const authenticated = useSelector(state => state.user.authenticated);

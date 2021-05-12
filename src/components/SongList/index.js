@@ -39,6 +39,7 @@ function SongList({ selectedPlaylist, list, isInSearch, handleOnDragEnd }) {
       <Droppable droppableId="songList" renderClone={renderItem}>
         {(provided, snapshot) => (
           <Box
+            className="dark-scrollbar"
             overflowY="auto"
             h="475px"
             {...provided.droppableProps}
