@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, Flex, useDisclosure } from '@chakra-ui/react';
+import { Drawer, Flex, useDisclosure, Spacer } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
@@ -19,7 +19,7 @@ export default function SongBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Flex>
+    <Flex flexDirection="column" alignItems="end" position="absolute" left={0} right={0} bottom={0}>
       <ChatBox />
       <Bar
         position="relative"

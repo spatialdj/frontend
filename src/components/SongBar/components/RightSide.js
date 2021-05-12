@@ -45,9 +45,9 @@ function RightSide() {
   return (
     <Stack
       direction={{ base: 'column', xl: 'row' }}
-      alignItems="center"
+      alignItems="flex-end"
       flex="1"
-      justifyContent="end"
+      justifyContent="flex-end"
     >
       {currentSong != null ? (
         <Flex alignItems="center">

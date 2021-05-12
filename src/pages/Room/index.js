@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import RoomBox from 'components/RoomBox';
 import SongBar from 'components/SongBar';
-import ChatBox from 'components/ChatBox';
+import { Global, css } from '@emotion/react'
 import Vote from 'components/Vote';
 import VoteBar from 'components/VoteBar';
 
@@ -12,8 +12,14 @@ function Room(props) {
 
   return (
     <>
+      <Global
+        styles={css`
+          html {
+            height: 100%;
+          }
+        `}
+      />
       <RoomBox roomId={roomId} />
-      {/* <ChatBox /> */}
       <SongBar />
       {authenticated ? <Vote /> : null}
       <VoteBar />

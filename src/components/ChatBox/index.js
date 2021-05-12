@@ -22,11 +22,9 @@ import Reactions from './components/Reactions';
 
 const BottomRight = styled(Flex)`
   flex-direction: column;
-  bottom: 0;
-  right: 0;
-  position: absolute;
   width: 20%;
-  min-width: 345px;
+  max-width: 345px;
+  align-self: flex-end;
 `;
 
 const ChatContainer = styled(Flex)`
