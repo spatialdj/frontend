@@ -50,7 +50,7 @@ export const currentRoomSlice = createSlice({
       state.data.privateRoom = privateRoom;
       state.data.genres = genres;
       state.data.host = host;
-      state.data.numMembers = numMembers;
+      state.data.numMembers = parseInt(numMembers);
       // Convert members from object to array
       state.data.members = members;
       state.data.currentSong = currentSong;
@@ -79,7 +79,7 @@ export const currentRoomSlice = createSlice({
         state.data.privateRoom = privateRoom;
         state.data.genres = genres;
         state.data.host = host;
-        state.data.numMembers = numMembers;
+        state.data.numMembers = parseInt(numMembers);
         // Convert members from object to array
         state.data.members = members;
         state.data.currentSong = currentSong;

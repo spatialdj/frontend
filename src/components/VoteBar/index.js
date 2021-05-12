@@ -7,8 +7,8 @@ function VoteBar() {
   const numMembers = useSelector(state => state.currentRoom.data.numMembers);
   const currentSong = useSelector(state => state.queue.currentSong);
   const totalVotes = votes.likes + votes.dislikes;
-  const likePercentage = Math.floor((votes.likes / totalVotes) * 100);
-  const dislikePercentage = 100 - likePercentage;
+  const likePercentage = (votes.likes / numMembers) * 100;
+  const dislikePercentage = (votes.dislikes / numMembers) * 100;
   const numDislikesToSkip = Math.ceil(numMembers / 2);
   const tooltipLabel =
     numDislikesToSkip - votes.dislikes <= 0
@@ -22,7 +22,7 @@ function VoteBar() {
   return (
     <Flex w="100%" position="absolute" top="0" h="6px">
       <Flex
-        flex={`${likePercentage}%`}
+        w={`${likePercentage}%`}
         bgGradient="linear(to-r, blue.300, blue.600)"
         boxShadow="0 0 20px 3px var(--chakra-colors-blue-300)"
       ></Flex>
@@ -34,7 +34,8 @@ function VoteBar() {
           isOpen={votes.dislikes / numDislikesToSkip >= 0.3}
         >
           <Flex
-            flex={`${dislikePercentage}%`}
+            ml="auto"
+            w={`${dislikePercentage}%`}
             bgGradient="linear(to-r, gray.600, gray.300)"
             boxShadow="0 0 20px 3px var(--chakra-colors-gray-500)"
           ></Flex>

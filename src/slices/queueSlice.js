@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   queue: [],
-  currentSong: 'null',
+  currentSong: null,
   inQueue: false, // Client in queue
   status: 'idle',
 };
@@ -21,7 +21,7 @@ export const queueSlice = createSlice({
       if (payload.success) {
         const { queue, currentSong, inQueue } = payload;
         state.queue = queue;
-        state.currentSong = currentSong;
+        state.currentSong = currentSong ?? null;
         state.inQueue = inQueue;
         state.status = 'success';
       } else {
