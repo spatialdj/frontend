@@ -19,7 +19,7 @@ export default function MessagesList(props) {
       h="100%"
       w="100%"
       style={{
-        scrollbarColor: '#2D3748 #171923',
+        scrollbarColor: '#EDF2F7 rgba(12, 22, 45, 0)',
       }}
       px="1rem"
       pt="1rem"
