@@ -37,7 +37,7 @@ function LeftSide(props) {
   }
 
   return (
-    <HStack spacing="2rem">
+    <HStack spacing="2rem" flex="1" justifyContent="start">
       <IconButton
         variant="outline"
         onClick={props.openDrawer}
@@ -47,17 +47,21 @@ function LeftSide(props) {
         <Text>No playlist selected</Text>
       ) : (
         <VStack align="left" spacing={0}>
-          <Flex fontWeight="bold">
-            <Text mr={2}>Selected playlist:</Text>
-            <Flex w="300px" overflow="hidden">
+          <Flex flexWrap="wrap" fontWeight="bold">
+            <Text whiteSpace="nowrap" mr={2}>
+              Selected playlist:
+            </Text>
+            <Flex maxW={{ base: '250px', xl: '300px' }} overflow="hidden">
               <Text className="marquee" whiteSpace="nowrap">
                 {he.decode(playlists?.[selectedPlaylist]?.name ?? '')}
               </Text>
             </Flex>
           </Flex>
-          <Flex>
-            <Text mr={2}>Your next song:</Text>
-            <Flex w="300px" overflow="hidden">
+          <Flex flexWrap="wrap">
+            <Text whiteSpace="nowrap" mr={2}>
+              Your next song:
+            </Text>
+            <Flex maxW={{ base: '250px', xl: '300px' }} overflow="hidden">
               <Text className="marquee" whiteSpace="nowrap">
                 {he.decode(
                   playlists?.[selectedPlaylist]?.queue?.[0]?.title ??

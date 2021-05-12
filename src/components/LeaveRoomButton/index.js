@@ -13,10 +13,15 @@ function LeaveRoomButton() {
   return (
     <Button
       zIndex="1"
-      top="6px"
+      top={4}
+      left={4}
       leftIcon={<TiArrowBack />}
       variant="solid"
       onClick={handleLeaveRoom}
+      bgColor="var(--chakra-colors-whiteAlpha-300)"
+      _hover={{
+        backgroundColor: 'var(--chakra-colors-whiteAlpha-400)',
+      }}
     >
       Leave room
     </Button>

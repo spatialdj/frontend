@@ -15,16 +15,7 @@ export default function MessagesList(props) {
   }, [messages]);
 
   return (
-    <Box
-      h="100%"
-      w="100%"
-      style={{
-        scrollbarColor: '#2D3748 #171923',
-      }}
-      px="1rem"
-      pt="1rem"
-      overflowY="scroll"
-    >
+    <Box h="100%" w="100%" px="1rem" pt="1rem" overflowY="scroll">
       {messages.map(message => (
         <Message key={message.id} data={message} />
       ))}

@@ -249,15 +249,7 @@ export default function SongDrawer(props) {
                   New
                 </Button>
               </HStack>
-              <VStack
-                mt={1}
-                maxH="475px"
-                spacing={1}
-                overflowY="auto"
-                style={{
-                  scrollbarColor: '#404040 #000000',
-                }}
-              >
+              <VStack mt={1} maxH="475px" spacing={1} overflowY="auto">
                 {playlists.map(playlist => (
                   <HStack
                     spacing={0}

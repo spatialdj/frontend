@@ -80,13 +80,8 @@ function JoinQueueButton() {
       disabled={disableJoinQueue}
       onClick={handleQueue}
       isLoading={isLoading}
-      size="lg"
+      size="md"
       colorScheme="blue"
-      position="absolute"
-      bottom="80px"
-      left="0"
-      right="0"
-      m="auto"
     >
       {inQueue ? 'Leave Queue' : 'Join Queue'}
     </Button>

@@ -10,7 +10,7 @@ function VoteBar() {
   const likePercentage = Math.floor((votes.likes / totalVotes) * 100);
   const dislikePercentage = 100 - likePercentage;
   const numDislikesToSkip = Math.ceil(numMembers / 2);
-  const tooltipTabel =
+  const tooltipLabel =
     numDislikesToSkip - votes.dislikes <= 0
       ? 'Skipping song...'
       : `${numDislikesToSkip - votes.dislikes} more dislikes to skip`;
@@ -28,8 +28,8 @@ function VoteBar() {
       ></Flex>
       {votes.dislikes > 0 ? (
         <Tooltip
-          placement="bottom-start"
-          label={tooltipTabel}
+          placement="auto"
+          label={tooltipLabel}
           hasArrow
           isOpen={votes.dislikes / numDislikesToSkip >= 0.3}
         >

@@ -22,7 +22,7 @@ import Reactions from './components/Reactions';
 
 const BottomRight = styled(Flex)`
   flex-direction: column;
-  bottom: 80px;
+  bottom: 0;
   right: 0;
   position: absolute;
   width: 20%;
