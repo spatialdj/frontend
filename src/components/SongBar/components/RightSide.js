@@ -45,7 +45,7 @@ function RightSide() {
   return (
     <Stack
       direction={{ base: 'column', xl: 'row' }}
-      alignItems="flex-end"
+      alignItems={{ base: 'center', md: 'flex-end', xl: 'center' }}
       flex="1"
       justifyContent="flex-end"
     >

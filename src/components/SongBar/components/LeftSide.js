@@ -51,7 +51,7 @@ function LeftSide(props) {
             <Text whiteSpace="nowrap" mr={2}>
               Selected playlist:
             </Text>
-            <Flex maxW={{ base: '250px', xl: '300px' }} overflow="hidden">
+            <Flex maxW={{ base: '300px', xl: '300px' }} overflow="hidden">
               <Text className="marquee" whiteSpace="nowrap">
                 {he.decode(playlists?.[selectedPlaylist]?.name ?? '')}
               </Text>
@@ -61,7 +61,7 @@ function LeftSide(props) {
             <Text whiteSpace="nowrap" mr={2}>
               Your next song:
             </Text>
-            <Flex maxW={{ base: '250px', xl: '300px' }} overflow="hidden">
+            <Flex maxW={{ base: '300px', xl: '300px' }} overflow="hidden">
               <Text className="marquee" whiteSpace="nowrap">
                 {he.decode(
                   playlists?.[selectedPlaylist]?.queue?.[0]?.title ??

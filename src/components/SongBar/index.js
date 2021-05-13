@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, Flex, useDisclosure, Spacer } from '@chakra-ui/react';
+import { Drawer, Stack, Flex, useDisclosure, Spacer } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
@@ -8,7 +8,7 @@ import SongDrawer from './components/SongDrawer';
 import ChatBox from 'components/ChatBox';
 import Vote from 'components/Vote';
 
-const Bar = styled(Flex)`
+const Bar = styled(Stack)`
   z-index: 1;
   width: 100%;
   bottom: 0;
@@ -34,6 +34,8 @@ export default function SongBar() {
         <ChatBox />
       </Flex>
       <Bar
+        spacing={4}
+        direction={{ base: 'column', sm: 'row' }}
         position="relative"
         align="center"
         justify="space-between"
@@ -42,13 +44,13 @@ export default function SongBar() {
         bgColor="rgba(14, 22, 40, 0.85)"
         color="white"
       >
-        <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
-          <SongDrawer handleOnClose={onClose} />
-        </Drawer>
         <LeftSide openDrawer={onOpen} />
         <Center />
         <RightSide />
       </Bar>
+      <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
+        <SongDrawer handleOnClose={onClose} />
+      </Drawer>
     </Flex>
   );
 }
