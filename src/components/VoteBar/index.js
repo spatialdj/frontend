@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Flex, Tooltip } from '@chakra-ui/react';
+import { motion } from "framer-motion";
 
 function VoteBar() {
   const votes = useSelector(state => state.vote);
@@ -20,25 +21,16 @@ function VoteBar() {
   }
 
   return (
-    <Flex w="100%" position="absolute" top="0" h="6px">
-      <Flex
-        w={`${likePercentage}%`}
-        bgGradient="linear(to-r, blue.300, blue.600)"
-        boxShadow="0 0 20px 3px var(--chakra-colors-blue-300)"
-      ></Flex>
+    <Flex w="100%" position="absolute" top="0" h="6px" overflow="hidden">
+      <motion.div style={{position: "absolute", left: "-100%", display: "flex", height: "6px", width: "100%", backgroundColor: "var(--chakra-colors-blue-300)", boxShadow: "0 0 20px 3px var(--chakra-colors-blue-300)"}} animate={{ x: `${likePercentage}%` }} />
       {votes.dislikes > 0 ? (
         <Tooltip
-          placement="auto"
+          placement="bottom"
           label={tooltipLabel}
           hasArrow
           isOpen={votes.dislikes / numDislikesToSkip >= 0.3}
         >
-          <Flex
-            ml="auto"
-            w={`${dislikePercentage}%`}
-            bgGradient="linear(to-r, gray.600, gray.300)"
-            boxShadow="0 0 20px 3px var(--chakra-colors-gray-500)"
-          ></Flex>
+          <motion.div style={{position: "absolute", right: "-100%", display: "flex", height: "6px", width: "100%", marginLeft: "auto", backgroundColor: "var(--chakra-colors-gray-500)", boxShadow: "0 0 20px 3px var(--chakra-colors-gray-500)"}} animate={{ x: `-${dislikePercentage}%` }} />
         </Tooltip>
       ) : null}
     </Flex>
