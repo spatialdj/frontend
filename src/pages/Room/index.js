@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import RoomBox from 'components/RoomBox';
 import SongBar from 'components/SongBar';
-import { Global, css } from '@emotion/react'
+import { Global, css } from '@emotion/react';
 import Vote from 'components/Vote';
 import VoteBar from 'components/VoteBar';
 
