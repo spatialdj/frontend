@@ -2,14 +2,23 @@ import React, { useContext, useRef } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { clientLike, clientSave, clientDislike } from 'slices/voteSlice';
-import { Box, IconButton, ButtonGroup } from '@chakra-ui/react';
+import { Flex, IconButton, ButtonGroup } from '@chakra-ui/react';
 import { IoMdThumbsUp, IoMdThumbsDown } from 'react-icons/io';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import styled from '@emotion/styled';
 import throttle from 'utils/throttle';
+
+const BottomLeft = styled(Flex)`
+  flex-direction: column;
+  align-self: flex-start;
+  margin-top: auto;
+  pointer-events: auto;
+`;
 
 function Vote() {
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
+  const authenticated = useSelector(state => state.user.authenticated);
   const like = () => {
     socket.emit('vote', 'like');
     dispatch(clientLike());
@@ -30,10 +39,10 @@ function Vote() {
   const currentSong = useSelector(state => state.queue.currentSong);
   const { clientVote, clientSaved } = vote;
 
-  if (!currentSong) return null;
+  if (!currentSong || !authenticated) return <div></div>;
 
   return (
-    <Box position="absolute" bottom="80px">
+    <BottomLeft>
       <ButtonGroup size="lg" isAttached>
         <IconButton
           onClick={likeSong.current}
@@ -54,7 +63,7 @@ function Vote() {
           icon={<IoMdThumbsDown />}
         />
       </ButtonGroup>
-    </Box>
+    </BottomLeft>
   );
 }
 

@@ -25,6 +25,7 @@ const BottomRight = styled(Flex)`
   width: 20%;
   max-width: 345px;
   align-self: flex-end;
+  pointer-events: auto;
 `;
 
 const ChatContainer = styled(Flex)`

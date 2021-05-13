@@ -6,6 +6,7 @@ import RightSide from './components/RightSide';
 import Center from './components/Center';
 import SongDrawer from './components/SongDrawer';
 import ChatBox from 'components/ChatBox';
+import Vote from 'components/Vote';
 
 const Bar = styled(Flex)`
   z-index: 1;
@@ -13,6 +14,7 @@ const Bar = styled(Flex)`
   bottom: 0;
   border-top-left-radius: 100;
   border-top-right-radius: 100;
+  pointer-events: auto;
 `;
 
 export default function SongBar() {
@@ -20,14 +22,17 @@ export default function SongBar() {
 
   return (
     <Flex
+      pointerEvents="none"
       flexDirection="column"
-      alignItems="end"
       position="absolute"
       left={0}
       right={0}
       bottom={0}
     >
-      <ChatBox />
+      <Flex justifyContent="space-between">
+        <Vote />
+        <ChatBox />
+      </Flex>
       <Bar
         position="relative"
         align="center"
