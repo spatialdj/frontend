@@ -8,12 +8,14 @@ function JoinQueueButton() {
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
   const inQueue = useSelector(state => state.queue.inQueue);
+  const queueStatus = useSelector(state => state.queue.status);
   const currentUser = useSelector(state => state.user);
   const playlist = useSelector(state => state.playlists);
   const disableJoinQueue =
     !playlist.selectedPlaylist ||
     Object.keys(playlist.playlists).length === 0 ||
-    playlist.playlists?.[playlist.selectedPlaylist]?.queue?.length === 0;
+    playlist.playlists?.[playlist.selectedPlaylist]?.queue?.length === 0 ||
+    queueStatus === 'idle';
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 

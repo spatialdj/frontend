@@ -43,8 +43,7 @@ const ClientBubble = props => {
             success,
             queue: room.queue,
             currentSong: room.currentSong,
-            inQueue:
-              room.queue.findIndex(user => user.username === username) !== -1,
+            inQueue: room.queue.findIndex(user => user === username) !== -1,
           })
         );
         dispatch(populateVote({ votes: room.votes, clientUsername: username }));
