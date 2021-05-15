@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { ClientPositionContext } from 'contexts/clientposition';
 import { useDispatch } from 'react-redux';
@@ -8,8 +8,6 @@ import { populate as populateVote } from 'slices/voteSlice';
 import {
   Avatar,
   Tag,
-  Flex,
-  Fade,
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -17,6 +15,7 @@ import {
   PopoverBody,
 } from '@chakra-ui/react';
 import Draggable from 'react-draggable';
+import { motion } from 'framer-motion';
 import throttle from 'utils/throttle';
 
 const ClientBubble = props => {
@@ -84,57 +83,62 @@ const ClientBubble = props => {
   }
 
   return (
-    <Fade in={true}>
-      <Draggable
-        onDrag={handleOnDrag}
-        position={clientPosition}
-        defaultClassName="_draggable"
-        defaultClassNameDragging="__dragging"
-        defaultClassNameDragged="__dragged"
-        bounds="#canvas"
+    <Draggable
+      onDrag={handleOnDrag}
+      position={clientPosition}
+      defaultClassName="_draggable"
+      defaultClassNameDragging="__dragging"
+      defaultClassNameDragged="__dragged"
+      bounds="#canvas"
+    >
+      <motion.div
+        style={{
+          position: 'absolute',
+          display: 'flex',
+          width: '128px',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        whileTap={{ opacity: 0.8 }}
       >
-        <Flex
-          position="absolute"
-          width="128px"
-          flexDir="column"
-          alignItems="center"
+        <Popover
+          autoFocus={false}
+          isOpen={reaction}
+          placement="top"
+          arrowSize={10}
+          arrowShadowColor="rgba(12, 22, 45, 0.5)"
         >
-          <Popover
-            autoFocus={false}
-            isOpen={reaction}
-            placement="top"
-            arrowSize={10}
-            arrowShadowColor="rgba(12, 22, 45, 0.5)"
-          >
-            <PopoverTrigger>
-              <Avatar
-                boxShadow={`0 0 4px 4px ${tagColor}`}
-                bgColor={`${tagColor}.500`}
-                cursor="move"
-                size="lg"
-                src={profilePicture}
-                name={username}
-                onDragStart={preventDragHandler}
-              />
-            </PopoverTrigger>
-            <PopoverContent bg="rgba(12, 22, 45)" maxW="43px">
-              <PopoverArrow bg="#0c162d" />
-              <PopoverBody px="10px">{reaction}</PopoverBody>
-            </PopoverContent>
-          </Popover>
+          <PopoverTrigger>
+            <Avatar
+              boxShadow={`0 0 4px 4px ${tagColor}`}
+              bgColor={`${tagColor}.500`}
+              cursor="move"
+              size="lg"
+              src={profilePicture}
+              name={username}
+              onDragStart={preventDragHandler}
+            />
+          </PopoverTrigger>
+          <PopoverContent bg="rgba(12, 22, 45)" maxW="43px">
+            <PopoverArrow bg="#0c162d" />
+            <PopoverBody px="10px">{reaction}</PopoverBody>
+          </PopoverContent>
+        </Popover>
 
-          <Tag
-            mt={4}
-            variant="solid"
-            colorScheme={tagColor}
-            maxW="128px"
-            textAlign="center"
-          >
-            {`${prefix} ${username.substr(0, 20)}`}
-          </Tag>
-        </Flex>
-      </Draggable>
-    </Fade>
+        <Tag
+          mt={4}
+          variant="solid"
+          colorScheme={tagColor}
+          maxW="128px"
+          textAlign="center"
+        >
+          {`${prefix} ${username.substr(0, 20)}`}
+        </Tag>
+      </motion.div>
+    </Draggable>
   );
 };
 

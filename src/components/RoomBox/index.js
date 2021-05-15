@@ -303,14 +303,14 @@ function RoomBox(props) {
             reaction={val.reaction !== '' ? val.reaction : null}
           />
         ))}
+        <ClientBubble
+          roomId={roomId}
+          profilePicture={profilePicture}
+          prefix="👋"
+          username={clientUsername}
+          reaction={userReaction !== '' ? userReaction : null}
+        />
       </AnimatePresence>
-      <ClientBubble
-        roomId={roomId}
-        profilePicture={profilePicture}
-        prefix="👋"
-        username={clientUsername}
-        reaction={userReaction !== '' ? userReaction : null}
-      />
       <ViewOnlyModal
         isOpen={showViewOnly}
         onClose={() => setShowViewOnly(false)}
