@@ -46,10 +46,11 @@ export default function SongDrawer(props) {
   const selectedPlaylistId = useSelector(
     state => state.playlists.selectedPlaylist
   );
+  const songSearchStatus = useSelector(state => state.songSearch.status);
 
   const handlePlaylistChange = async playlistId => {
     // dont update if it's same as already selected playlist
-    if (playlistId === selectedPlaylistId) {
+    if (playlistId === selectedPlaylistId && songSearchStatus === 'idle') {
       return;
     }
 
