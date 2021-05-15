@@ -1,24 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Icon, InputGroup, InputLeftElement, Input } from '@chakra-ui/react';
+import {
+  Icon,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Button,
+  Input,
+} from '@chakra-ui/react';
 import { FaSearch } from 'react-icons/fa';
 import { search } from 'slices/songSearchSlice';
 
 function SongSearch() {
   const dispatch = useDispatch();
   const globalQuery = useSelector(state => state.songSearch.query);
+  const searchLoading =
+    useSelector(state => state.songSearch.status) === 'loading';
   const [localQuery, setLocalQuery] = useState(globalQuery);
 
   useEffect(() => {
-    if (globalQuery !== localQuery) {
-      setLocalQuery(globalQuery);
-    }
+    setLocalQuery(globalQuery);
   }, [globalQuery]);
 
-  const searchSongs = e => {
+  const searchSongs = query => {
+    dispatch(search(query));
+  };
+
+  const handleEnter = e => {
     if (e.key === 'Enter') {
-      dispatch(search(e.target.value));
+      searchSongs(e.target.value);
     }
+  };
+
+  const handleClickSearch = () => {
+    searchSongs(localQuery);
   };
 
   return (
@@ -30,10 +45,21 @@ function SongSearch() {
       <Input
         value={localQuery}
         onChange={e => setLocalQuery(e.target.value)}
-        onKeyDown={searchSongs}
+        onKeyDown={handleEnter}
         placeholder="Search for songs on Youtube..."
         _placeholder={{ color: 'white' }}
       />
+      <InputRightElement width="5.5rem">
+        <Button
+          isLoading={searchLoading}
+          colorScheme="blue"
+          h="2rem"
+          size="sm"
+          onClick={handleClickSearch}
+        >
+          Search
+        </Button>
+      </InputRightElement>
     </InputGroup>
   );
 }
