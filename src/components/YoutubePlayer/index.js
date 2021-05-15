@@ -152,7 +152,7 @@ function YoutubePlayer(props) {
         // because they can't control volume by moving bubble
         dispatch(changeVolume(50));
       } else {
-        dispatch(changeVolume(100));
+        dispatch(changeVolume(50));
       }
 
       boundingBox.current = event.target.getIframe().getBoundingClientRect();
