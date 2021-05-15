@@ -89,6 +89,7 @@ function YoutubePlayer(props) {
   const dispatch = useDispatch();
   const volume = useSelector(state => state.youtube.volume);
   const player = useRef(null);
+  const timesSynced = useRef(0);
   const boundingBox = useRef(baseBoundingBox);
   const song = useSelector(state => state.currentRoom.data.currentSong);
   const isYouTubeAPIReady = useSelector(
@@ -107,16 +108,17 @@ function YoutubePlayer(props) {
   const onPlayerStateChange = useCallback(
     event => {
       const { data } = event;
-      console.log(data);
+      // console.log(data);
 
       switch (data) {
         case -1:
+          ytStatus = 'unstarted';
           dispatch(clearError());
           break;
         case 0:
           ytStatus = 'stopped';
-          // dispatch(endSong());
-          // dispatch(clearError());
+          dispatch(endSong());
+          dispatch(clearError());
           break;
         case 1:
           ytStatus = 'playing';
@@ -127,9 +129,11 @@ function YoutubePlayer(props) {
           dispatch(clearError());
           break;
         case 3:
+          ytStatus = 'buffering';
           dispatch(clearError());
           break;
         case 5:
+          ytStatus = 'cued';
           dispatch(clearError());
           break;
         default:
@@ -257,14 +261,15 @@ function YoutubePlayer(props) {
   useEffect(() => {
     socket.on('sync_song', data => {
       const seekTimeSec = data.seekTime / 1000;
-      console.log(ytStatus);
+      // console.log('seekTimeSec', seekTimeSec);
 
       if (
-        ytStatus !== 'playing' &&
+        (timesSynced.current < 3 || ytStatus !== 'playing') &&
         player.current?.getCurrentTime &&
         Math.abs(player.current.getCurrentTime() - seekTimeSec) > 2
       ) {
         player.current.seekTo(seekTimeSec);
+        timesSynced.current++;
       }
     });
 
