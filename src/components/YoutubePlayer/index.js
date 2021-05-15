@@ -279,7 +279,7 @@ function YoutubePlayer(props) {
 
     socket.on('stop_song', () => {
       // Sent when current song ends AND there are no more users in queue
-      player.current?.stopVideo();
+      player.current?.pauseVideo();
       timesSynced.current = 0;
       dispatch(stopSong());
       dispatch(changeCurrentSong(null));
