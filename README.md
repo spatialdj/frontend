@@ -3,6 +3,7 @@ THIS README TEMPLATE WAS ADAPTED FROM https://github.com/othneildrew/Best-README
 -->
 
 <!-- PROJECT LOGO -->
+<!--
 <br />
 <p align="center">
   <a href="https://github.com/spatialdj">
@@ -24,7 +25,14 @@ THIS README TEMPLATE WAS ADAPTED FROM https://github.com/othneildrew/Best-README
     <a href="https://github.com/spatialdj/backend">Backend Repo</a>
   </p>
 </p>
+-->
 
+![SpatialDjLogo](https://avatars.githubusercontent.com/u/83042272)
+# Spatial Dj
+- [View Demo](http://spatial.francochen.com)
+- [Report Bug](https://github.com/reeedis/backend/issues)
+- [Request Feature](https://github.com/reeedis/backend/issues)
+- [Backend Repo](https://github.com/reeedis/backend)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
