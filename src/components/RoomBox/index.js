@@ -206,7 +206,7 @@ function RoomBox(props) {
 
     // Listen to room closed
     socket.on('room_closed', () => {
-      console.log('room_closed');
+      // console.log('room_closed');
       handleRoomClosed();
     });
 
@@ -248,7 +248,7 @@ function RoomBox(props) {
         );
       }
 
-      console.log('prevSongPicker.current', prevSongPicker.current);
+      // console.log('prevSongPicker.current', prevSongPicker.current);
 
       dispatch(playSong());
       dispatch(resetVote());
