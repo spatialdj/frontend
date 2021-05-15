@@ -80,6 +80,8 @@ const baseBoundingBox = {
   bottom: 0,
 };
 
+let ytStatus = 'unstarted';
+
 function YoutubePlayer(props) {
   const { isAuth, height, width } = props;
   const { clientPosition } = useContext(ClientPositionContext);
@@ -105,19 +107,23 @@ function YoutubePlayer(props) {
   const onPlayerStateChange = useCallback(
     event => {
       const { data } = event;
+      console.log(data);
 
       switch (data) {
         case -1:
           dispatch(clearError());
           break;
         case 0:
-          dispatch(endSong());
-          dispatch(clearError());
+          ytStatus = 'stopped';
+          // dispatch(endSong());
+          // dispatch(clearError());
           break;
         case 1:
+          ytStatus = 'playing';
           dispatch(playSong());
           break;
         case 2:
+          ytStatus = 'paused';
           dispatch(clearError());
           break;
         case 3:
@@ -225,6 +231,7 @@ function YoutubePlayer(props) {
   useEffect(() => {
     return () => {
       // Destroy player object
+      ytStatus = 'unstarted';
       player.current?.destroy();
     };
   }, []);
@@ -250,8 +257,10 @@ function YoutubePlayer(props) {
   useEffect(() => {
     socket.on('sync_song', data => {
       const seekTimeSec = data.seekTime / 1000;
+      console.log(ytStatus);
 
       if (
+        ytStatus !== 'playing' &&
         player.current?.getCurrentTime &&
         Math.abs(player.current.getCurrentTime() - seekTimeSec) > 2
       ) {
