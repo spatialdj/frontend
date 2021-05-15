@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Box,
   Button,
@@ -17,7 +17,6 @@ import {
 } from '@chakra-ui/react';
 import SongSearch from '../../SongSearch';
 import SongList from '../../SongList';
-import { search } from '../../../services/song.js';
 import { FaChevronDown } from 'react-icons/fa';
 import { MdDelete, MdEdit, MdCheck } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,34 +28,15 @@ import {
   deletePlaylist,
   populate,
 } from '../../../slices/playlistsSlice';
-
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
+import { clearSearch } from 'slices/songSearchSlice';
 
 export default function SongDrawer(props) {
-  const [query, setQuery] = useState('');
-  const [queryInProgress, setQueryInProgress] = useState(false);
-  const [results, setResults] = useState([]);
   const [pendingNew, setPendingNew] = useState(false);
   const [pendingRename, setPendingRename] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const renameInputValue = useRef('UNDEFINED');
-  const user = useSelector(state => state.user);
   const dispatch = useDispatch();
-
-  const searchSongs = async e => {
-    if (e.key === 'Enter') {
-      const res = await search(query);
-      setResults(res.data.data.videos);
-      setQueryInProgress(true);
-    }
-  };
 
   const playlists = useSelector(state => {
     return Object.entries(state.playlists.playlists).map(
@@ -66,16 +46,8 @@ export default function SongDrawer(props) {
   const selectedPlaylistId = useSelector(
     state => state.playlists.selectedPlaylist
   );
-  const selectedPlaylist = useSelector(
-    state => state.playlists.playlists[state.playlists.selectedPlaylist]
-  );
-  const selectedPlaylistData = selectedPlaylist?.queue ?? [];
 
   const handlePlaylistChange = async playlistId => {
-    // clear search results
-    setQuery('');
-    setQueryInProgress(false);
-
     // dont update if it's same as already selected playlist
     if (playlistId === selectedPlaylistId) {
       return;
@@ -83,6 +55,8 @@ export default function SongDrawer(props) {
 
     // update redux before server for better ux
     dispatch(selectPlaylist({ playlistId }));
+    // Clear search results and query
+    dispatch(clearSearch());
 
     // update server state
     const res = await playlistAPI.select(playlistId);
@@ -102,35 +76,6 @@ export default function SongDrawer(props) {
         selected = false;
       }
       newPlaylists.push({ ...playlists[i], selected });
-    }
-    // setPlaylists(newPlaylists);
-    // getPlaylistSongs();
-    setQueryInProgress(false);
-  };
-
-  const handleOnDragEnd = async result => {
-    if (!result.destination || !selectedPlaylist) {
-      return;
-    }
-
-    const reorderedSongs = reorder(
-      selectedPlaylistData,
-      result.source.index,
-      result.destination.index
-    );
-    const newPlaylist = {
-      id: selectedPlaylist.id,
-      name: selectedPlaylist.name,
-      user: selectedPlaylist.user,
-      queue: reorderedSongs,
-    };
-
-    dispatch(updatePlaylist({ playlist: newPlaylist }));
-
-    const res = await playlistAPI.update(newPlaylist.id, newPlaylist);
-
-    if (res.status !== 200) {
-      // todo: failed to rearrange playlist
     }
   };
 
@@ -321,17 +266,8 @@ export default function SongDrawer(props) {
               </VStack>
             </Box>
             <Box w="full">
-              <SongSearch
-                query={query}
-                setQuery={e => setQuery(e.target.value)}
-                onKeyDown={searchSongs}
-              />
-              <SongList
-                selectedPlaylist={selectedPlaylistId}
-                list={queryInProgress ? results : selectedPlaylistData}
-                isInSearch={queryInProgress}
-                handleOnDragEnd={handleOnDragEnd}
-              />
+              <SongSearch />
+              <SongList />
             </Box>
           </SimpleGrid>
         </DrawerBody>

@@ -89,7 +89,7 @@ function Song({ selectedPlaylist, data, isInSearch }) {
       </Flex>
 
       {isInSearch ? (
-        <Menu>
+        <Menu isLazy>
           <MenuButton
             as={IconButton}
             aria-label="Add to playlist"
