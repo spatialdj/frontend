@@ -184,6 +184,7 @@ function YoutubePlayer(props) {
     if (song?.videoId == null) {
       if (player.current.stopVideo) {
         player.current.stopVideo();
+        timesSynced.current = 0;
       }
 
       return;
@@ -192,6 +193,7 @@ function YoutubePlayer(props) {
     if (player.current.loadVideoById && player.current.playVideo) {
       player.current.loadVideoById(song.videoId);
       player.current.seekTo(0);
+      timesSynced.current = 0;
     }
   }
 
@@ -276,6 +278,7 @@ function YoutubePlayer(props) {
     socket.on('stop_song', () => {
       // Sent when current song ends AND there are no more users in queue
       player.current?.stopVideo();
+      timesSynced.current = 0;
       dispatch(stopSong());
       dispatch(changeCurrentSong(null));
     });
