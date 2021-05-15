@@ -37,15 +37,20 @@ const ChatContainer = styled(Flex)`
 function ChatBox() {
   const socket = useContext(SocketContext);
   const currentUser = useSelector(state => state.user);
+  const initMessages = useSelector(state => state.currentRoom.data.messages);
   const {
     register,
     formState: { isSubmitting },
     handleSubmit,
     reset,
   } = useForm();
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(initMessages);
   const [isOpen, setIsOpen] = useState(true);
   const toast = useToast();
+
+  useEffect(() => {
+    setMessages(initMessages);
+  }, [initMessages]);
 
   useEffect(() => {
     socket.on('chat_message', response => {
@@ -55,9 +60,9 @@ function ChatBox() {
         ...messages,
         {
           id: messages.length + 1,
-          username: sender.username,
-          profilePicture: sender.profilePicture,
-          message: message,
+          sender: sender,
+          text: message,
+          timeSent: timeSent,
         },
       ]);
     });

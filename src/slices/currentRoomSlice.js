@@ -14,6 +14,7 @@ const initialState = {
     numMembers: 0,
     members: null,
     currentSong: null,
+    messages: [],
   },
   // needed to replay the same song twice, we increment this when a new song plays and attach it to currentSong
   currentSongNumber: 0,
@@ -71,6 +72,7 @@ export const currentRoomSlice = createSlice({
           numMembers,
           members,
           currentSong,
+          messages,
         } = payload.room;
 
         state.data.id = id;
@@ -83,6 +85,7 @@ export const currentRoomSlice = createSlice({
         // Convert members from object to array
         state.data.members = members;
         state.data.currentSong = currentSong;
+        state.data.messages = messages ?? [];
         state.status = 'success';
         state.isGuest = payload.guest;
       } else {
