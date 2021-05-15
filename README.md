@@ -20,6 +20,8 @@ THIS README TEMPLATE WAS ADAPTED FROM https://github.com/othneildrew/Best-README
     <a href="https://github.com/reeedis/frontend/issues">Report Bug</a>
     ·
     <a href="https://github.com/reeedis/frontend/issues">Request Feature</a>
+    .
+    <a href="https://github.com/reeedis/backend">Backend Repo</a>
   </p>
 </p>
 
