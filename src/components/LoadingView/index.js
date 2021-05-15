@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Spinner } from '@chakra-ui/react';
+import { Center, Spinner } from '@chakra-ui/react';
 
 function LoadingView() {
   return (
-    <Box h="80vh" display="flex" justifyContent="center" alignItems="center">
+    <Center h="65vh">
       <Spinner
         thickness="4px"
         speed="0.65s"
@@ -11,7 +11,7 @@ function LoadingView() {
         color="blue.300"
         size="xl"
       />
-    </Box>
+    </Center>
   );
 }
 
