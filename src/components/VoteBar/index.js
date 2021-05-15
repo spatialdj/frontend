@@ -35,12 +35,22 @@ function VoteBar() {
         animate={{ x: `${likePercentage}%` }}
       />
       {votes.dislikes > 0 ? (
-        <Tooltip
-          placement="bottom"
-          label={tooltipLabel}
-          hasArrow
-          isOpen={votes.dislikes / numDislikesToSkip >= 0.3}
-        >
+        <>
+          <Tooltip
+            placement="bottom"
+            label={tooltipLabel}
+            hasArrow
+            isOpen={votes.dislikes / numDislikesToSkip >= 0.3}
+          >
+            <Flex
+              position="absolute"
+              w={`${dislikePercentage}%`}
+              h="6px"
+              ml="auto"
+              right="0"
+              opacity="0"
+            />
+          </Tooltip>
           <motion.div
             style={{
               position: 'absolute',
@@ -54,7 +64,7 @@ function VoteBar() {
             }}
             animate={{ x: `-${dislikePercentage}%` }}
           />
-        </Tooltip>
+        </>
       ) : null}
     </Flex>
   );
