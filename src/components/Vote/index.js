@@ -39,30 +39,19 @@ function Vote() {
 
   const saveSong = async () => {
     setSaveSongLoading(true);
-    dispatch(clientSave());
 
-    if (clientSaved && currentSong) {
+    const res = await saveToPlaylist(selectedPlaylistId, {
+      song: currentSong,
+    });
+
+    if (res.status === 200 && res.data.success) {
       dispatch(
-        removeSong({ playlistId: selectedPlaylistId, id: currentSong.id })
+        addSong({ playlistId: selectedPlaylistId, song: res.data.song })
       );
-      const res = await removeSave(selectedPlaylistId, {
-        songId: currentSong.id,
-      });
-      if (res.status === 200) {
-        setSaveSongLoading(false);
-      } else {
-        // Handle save fail
-      }
+      setSaveSongLoading(false);
+      dispatch(clientSave());
     } else {
-      dispatch(addSong({ playlistId: selectedPlaylistId, song: currentSong }));
-      const res = await saveToPlaylist(selectedPlaylistId, {
-        song: currentSong,
-      });
-      if (res.status === 200) {
-        setSaveSongLoading(false);
-      } else {
-        // Handle save fail
-      }
+      // Handle save fail
     }
   };
 
@@ -77,7 +66,7 @@ function Vote() {
 
   return (
     <BottomLeft>
-      <HStack alignItems="end">
+      <HStack alignItems="flex-end">
         <VStack>
           <Text>{likes}</Text>
           <IconButton
@@ -88,14 +77,18 @@ function Vote() {
             icon={<IoMdThumbsUp />}
           />
         </VStack>
-        <IconButton
-          size="lg"
-          isLoading={saveSongLoading}
-          onClick={saveSong}
-          colorScheme={clientSaved ? 'yellow' : 'gray'}
-          aria-label="Save this song"
-          icon={clientSaved ? <AiFillStar /> : <AiOutlineStar />}
-        />
+        <VStack>
+          <Text>{clientSaved ? '😍' : ''}</Text>
+          <IconButton
+            size="lg"
+            disabled={clientSaved}
+            isLoading={saveSongLoading}
+            onClick={saveSong}
+            colorScheme={clientSaved ? 'yellow' : 'gray'}
+            aria-label="Save this song"
+            icon={clientSaved ? <AiFillStar /> : <AiOutlineStar />}
+          />
+        </VStack>
         <VStack>
           <Text>{dislikes}</Text>
           <IconButton
