@@ -8,13 +8,13 @@ function Layout(props) {
 
   if (inRoomPage?.isExact) {
     return (
-      <GradientBackground src="/DarkGradient14.jpg">
+      <GradientBackground src="/DarkGradient15.jpg">
         {props.children}
       </GradientBackground>
     );
   } else {
     return (
-      <GradientBackground src="/DarkGradient14.jpg">
+      <GradientBackground src="/DarkGradient15.jpg">
         <Header />
         {props.children}
       </GradientBackground>

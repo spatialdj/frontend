@@ -9,7 +9,7 @@ function GradientBackground(props) {
         styles={css`
           body {
             height: 100%;
-            background: url('${src ?? '/DarkGradient14.jpg'}') no-repeat center
+            background: url('${src ?? '/DarkGradient15.jpg'}') no-repeat center
               center fixed !important;
             background-color: #040d21 !important;
             -webkit-background-size: cover;
