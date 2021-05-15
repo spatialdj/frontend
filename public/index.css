@@ -2,15 +2,11 @@
   scrollbar-color: #404040 #000000;
 }
 
-*::-webkit-scrollbar,
-*::-o-scrollbar,
-*::-moz-scrollbar {
+*::-webkit-scrollbar {
   background: #000000;
 }
 
-*::-webkit-scrollbar-thumb,
-*::-o-scrollbar-thumb,
-*::-moz-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background: #404040;
 }
 
@@ -19,22 +15,16 @@
   scrollbar-width: thin;
 }
 
-.dark-scrollbar::-webkit-scrollbar,
-.dark-scrollbar::-o-scrollbar,
-.dark-scrollbar::-moz-scrollbar {
+.dark-scrollbar::-webkit-scrollbar {
   background: #000000 !important;
   width: 8px;
 }
 
-.dark-scrollbar::-webkit-scrollbar-thumb,
-.dark-scrollbar::-o-scrollbar-thumb,
-.dark-scrollbar::-moz-scrollbar-thumb {
+.dark-scrollbar::-webkit-scrollbar-thumb {
   background: #404040 !important;
   border-radius: 8px;
 }
 
-.dark-scrollbar::-webkit-scrollbar-thumb:hover,
-.dark-scrollbar::-o-scrollbar-thumb:hover,
-.dark-scrollbar::-moz-scrollbar-thumb:hover {
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #4b4b4b !important;
 }

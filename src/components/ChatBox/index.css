@@ -3,16 +3,12 @@
   scrollbar-width: thin;
 }
 
-.message-scrollbar::-webkit-scrollbar,
-.message-scrollbar::-o-scrollbar,
-.message-scrollbar::-moz-scrollbar {
+.message-scrollbar::-webkit-scrollbar {
   background: rgba(12, 22, 45, 0.4) !important;
   width: 8px;
 }
 
-.message-scrollbar::-webkit-scrollbar-thumb,
-.message-scrollbar::-o-scrollbar-thumb,
-.message-scrollbar::-moz-scrollbar-thumb {
+.message-scrollbar::-webkit-scrollbar-thumb {
   background: rgb(3, 3, 19) !important;
   border-radius: 8px;
 }
