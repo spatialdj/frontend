@@ -151,6 +151,8 @@ function YoutubePlayer(props) {
         // Set player volume for non authed users,
         // because they can't control volume by moving bubble
         dispatch(changeVolume(50));
+      } else {
+        dispatch(changeVolume(100));
       }
 
       boundingBox.current = event.target.getIframe().getBoundingClientRect();
