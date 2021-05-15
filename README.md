@@ -5,7 +5,7 @@ THIS README TEMPLATE WAS ADAPTED FROM https://github.com/othneildrew/Best-README
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/reeedis">
+  <a href="https://github.com/spatialdj">
     <img src="https://avatars.githubusercontent.com/u/83042272" alt="Logo" width="80" height="80">
   </a>
 
@@ -17,11 +17,11 @@ THIS README TEMPLATE WAS ADAPTED FROM https://github.com/othneildrew/Best-README
     <br />
     <a href="http://spatial.francochen.com/">View Demo</a>
     ·
-    <a href="https://github.com/reeedis/frontend/issues">Report Bug</a>
+    <a href="https://github.com/spatialdj/frontend/issues">Report Bug</a>
     ·
-    <a href="https://github.com/reeedis/frontend/issues">Request Feature</a>
+    <a href="https://github.com/spatialdj/frontend/issues">Request Feature</a>
     .
-    <a href="https://github.com/reeedis/backend">Backend Repo</a>
+    <a href="https://github.com/spatialdj/backend">Backend Repo</a>
   </p>
 </p>
 
@@ -53,13 +53,13 @@ Requires Node version >= 14.16.0
   node -v
   ```
 
-**💥 IMPORTANT: make sure you also clone and run the backend [here](https://github.com/reeedis/backend) 💥**
+**💥 IMPORTANT: make sure you also clone and run the backend [here](https://github.com/spatialdj/backend) 💥**
 
 ### Installation
 
 1. Clone this repo
    ```sh
-   git clone https://github.com/reeedis/frontend.git
+   git clone https://github.com/spatialdj/frontend.git
    ```
 2. Install NPM packages
    ```sh
