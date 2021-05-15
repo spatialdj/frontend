@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { clientLike, clientSave, clientDislike } from 'slices/voteSlice';
-import { Flex, IconButton, ButtonGroup } from '@chakra-ui/react';
+import { Flex, IconButton, Text, HStack, VStack } from '@chakra-ui/react';
 import { IoMdThumbsUp, IoMdThumbsDown } from 'react-icons/io';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import styled from '@emotion/styled';
@@ -29,7 +29,7 @@ function Vote() {
     state => state.playlists.selectedPlaylist
   );
   const vote = useSelector(state => state.vote);
-  const { clientVote, clientSaved } = vote;
+  const { clientVote, clientSaved, likes, dislikes } = vote;
   const [saveSongLoading, setSaveSongLoading] = useState(false);
 
   const like = () => {
@@ -77,27 +77,36 @@ function Vote() {
 
   return (
     <BottomLeft>
-      <ButtonGroup size="lg" isAttached>
+      <HStack alignItems="end">
+        <VStack>
+          <Text>{likes}</Text>
+          <IconButton
+            size="lg"
+            onClick={likeSong.current}
+            colorScheme={clientVote === 'like' ? 'blue' : 'gray'}
+            aria-label="Like this song"
+            icon={<IoMdThumbsUp />}
+          />
+        </VStack>
         <IconButton
-          onClick={likeSong.current}
-          colorScheme={clientVote === 'like' ? 'blue' : 'gray'}
-          aria-label="Like this song"
-          icon={<IoMdThumbsUp />}
-        />
-        <IconButton
+          size="lg"
           isLoading={saveSongLoading}
           onClick={saveSong}
           colorScheme={clientSaved ? 'yellow' : 'gray'}
           aria-label="Save this song"
           icon={clientSaved ? <AiFillStar /> : <AiOutlineStar />}
         />
-        <IconButton
-          onClick={dislikeSong.current}
-          colorScheme={clientVote === 'dislike' ? 'blue' : 'gray'}
-          aria-label="Dislike this song"
-          icon={<IoMdThumbsDown />}
-        />
-      </ButtonGroup>
+        <VStack>
+          <Text>{dislikes}</Text>
+          <IconButton
+            size="lg"
+            onClick={dislikeSong.current}
+            colorScheme={clientVote === 'dislike' ? 'blue' : 'gray'}
+            aria-label="Dislike this song"
+            icon={<IoMdThumbsDown />}
+          />
+        </VStack>
+      </HStack>
     </BottomLeft>
   );
 }
