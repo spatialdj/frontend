@@ -82,4 +82,4 @@ Requires Node version >= 14.16.0
   npm start
   ```
 
-[product-screenshot]: https://raw.githubusercontent.com/KevinLu/kevinlu.github.io/master/img/Spatialdj_home.png
+[product-screenshot]: https://i.imgur.com/0GdOVn7.png
