@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useCallback } from 'react';
 import { SocketContext } from 'contexts/socket';
-import { ClientPositionContext } from 'contexts/clientposition';
 import { useDispatch } from 'react-redux';
 import { joinRoom } from 'slices/currentRoomSlice';
 import { populate as populateQueue } from 'slices/queueSlice';
 import { populate as populateVote } from 'slices/voteSlice';
+import { changeVolumeOnMove } from 'slices/youtubeSlice';
 import {
   Avatar,
   Tag,
@@ -18,21 +18,29 @@ import Draggable from 'react-draggable';
 import { motion } from 'framer-motion';
 import throttle from 'utils/throttle';
 
+// Adjusts for circle size, which is 64x64 + 4px of border
+const X_OFFSET = 32 + 4;
+// When in doubt, add 330 to this number?
+const Y_OFFSET = X_OFFSET;
+
 const ClientBubble = props => {
   const socket = useContext(SocketContext);
-  const { clientPosition, setClientPosition } = useContext(
-    ClientPositionContext
-  );
   const dispatch = useDispatch();
-  const throttledPosChange = useRef(
-    throttle(pos => socket.emit('pos_change', pos), 50)
-  );
-  const { roomId, profilePicture, username, prefix, reaction } = props;
+
+  const throttledOnDrag = useCallback(
+    throttle((e, data) => {
+      const { x, y } = data;
+      dispatch(changeVolumeOnMove({ x: x + X_OFFSET, y: y + Y_OFFSET }));
+      socket.emit('pos_change', { x, y });
+    }, 50),
+    [socket, dispatch]
+  )
+  const { isAuth, roomId, profilePicture, username, prefix, reaction } = props;
 
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
       console.log('join_room', response);
-      const { success, guest, room } = response;
+      const { success, room } = response;
 
       dispatch(joinRoom(response));
 
@@ -47,23 +55,8 @@ const ClientBubble = props => {
         );
         dispatch(populateVote({ votes: room.votes, clientUsername: username }));
       }
-
-      if (success && guest === false) {
-        if (room?.members?.[username]) {
-          setClientPosition(room.members[username].position);
-        }
-      }
     });
-    return () => {
-      // console.log('clientbubble umounted');
-      setClientPosition({ x: -1, y: -1 });
-    };
-  }, [socket, dispatch, setClientPosition, roomId, username]);
-
-  useEffect(() => {
-    throttledPosChange.current(clientPosition);
-    // socket.emit('pos_change', pos)
-  }, [socket, clientPosition]);
+  }, [socket, dispatch, roomId, username]);
 
   // Prevents dragging text and images
   const preventDragHandler = e => {
@@ -72,20 +65,13 @@ const ClientBubble = props => {
 
   const tagColor = 'green';
 
-  const handleOnDrag = (e, data) => {
-    const { x, y } = data;
-    setClientPosition({ x, y });
-  };
-
-  // Don't show client bubble if position is not loaded
-  if (clientPosition.x === -1 && clientPosition.y === -1) {
+  if (!isAuth) {
     return null;
   }
 
   return (
     <Draggable
-      onDrag={handleOnDrag}
-      position={clientPosition}
+      onDrag={throttledOnDrag}
       defaultClassName="_draggable"
       defaultClassNameDragging="__dragging"
       defaultClassNameDragged="__dragged"

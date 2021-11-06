@@ -304,6 +304,7 @@ function RoomBox(props) {
           />
         ))}
         <ClientBubble
+          isAuth={authenticated}
           roomId={roomId}
           profilePicture={profilePicture}
           prefix="👋"
