@@ -18,11 +18,6 @@ import Draggable from 'react-draggable';
 import { motion } from 'framer-motion';
 import throttle from 'utils/throttle';
 
-// Adjusts for circle size, which is 64x64 + 4px of border
-const X_OFFSET = 32 + 4;
-// When in doubt, add 330 to this number?
-const Y_OFFSET = X_OFFSET;
-
 const ClientBubble = props => {
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
@@ -30,7 +25,7 @@ const ClientBubble = props => {
   const throttledOnDrag = useCallback(
     throttle((e, data) => {
       const { x, y } = data;
-      dispatch(changeVolumeOnMove({ x: x + X_OFFSET, y: y + Y_OFFSET }));
+      dispatch(changeVolumeOnMove({ x, y }));
       socket.emit('pos_change', { x, y });
     }, 50),
     [socket, dispatch]

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import calculateVolume from 'utils/calculateVolume';
+import { X_OFFSET, Y_OFFSET } from 'constants/youtube';
 
 const initialState = {
   boundingBox: {
@@ -28,7 +29,8 @@ export const youtubeSlice = createSlice({
     changeVolumeOnMove: (state, { payload }) => {
       // The closer clientPosition is to youtube embed,
       // the louder the volume gets.
-      const volume = calculateVolume(state.boundingBox, payload);
+      const volume = calculateVolume(state.boundingBox,
+        {x: payload.x + X_OFFSET, y: payload.y + Y_OFFSET});
       state.volume = volume;
     },
     muteVideo: state => {
