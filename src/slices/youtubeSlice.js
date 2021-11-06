@@ -29,8 +29,10 @@ export const youtubeSlice = createSlice({
     changeVolumeOnMove: (state, { payload }) => {
       // The closer clientPosition is to youtube embed,
       // the louder the volume gets.
-      const volume = calculateVolume(state.boundingBox,
-        {x: payload.x + X_OFFSET, y: payload.y + Y_OFFSET});
+      const volume = calculateVolume(state.boundingBox, {
+        x: payload.x + X_OFFSET,
+        y: payload.y + Y_OFFSET,
+      });
       state.volume = volume;
     },
     muteVideo: state => {

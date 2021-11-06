@@ -88,7 +88,11 @@ function YoutubePlayer(props) {
         dispatch(changeVolume(50));
       }
 
-      dispatch(updateBoundingBox(event.target.getIframe().getBoundingClientRect().toJSON()));
+      dispatch(
+        updateBoundingBox(
+          event.target.getIframe().getBoundingClientRect().toJSON()
+        )
+      );
     },
     [dispatch, isAuth]
   );

@@ -7,7 +7,7 @@
  * @param {number} d
  * @returns {number} a number between `c` and `d`
  */
- const linearTransform = (val, a, b, c, d) => {
+const linearTransform = (val, a, b, c, d) => {
   return Math.min(((val - a) / (b - a)) * (d - c) + c, 100);
 };
 

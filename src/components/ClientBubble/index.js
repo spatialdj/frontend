@@ -23,13 +23,14 @@ const ClientBubble = props => {
   const dispatch = useDispatch();
 
   const throttledOnDrag = useMemo(
-    () => throttle((e, data) => {
-      const { x, y } = data;
-      dispatch(changeVolumeOnMove({ x, y }));
-      socket.emit('pos_change', { x, y });
-    }, 50),
+    () =>
+      throttle((e, data) => {
+        const { x, y } = data;
+        dispatch(changeVolumeOnMove({ x, y }));
+        socket.emit('pos_change', { x, y });
+      }, 50),
     [socket, dispatch]
-  )
+  );
   const { isAuth, roomId, profilePicture, username, prefix, reaction } = props;
 
   useEffect(() => {
