@@ -1,6 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
+import calculateVolume from 'utils/calculateVolume';
+import { X_OFFSET, Y_OFFSET } from 'constants/youtube';
 
 const initialState = {
+  boundingBox: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
   volume: 0,
   videoId: null,
   status: 'unstarted',
@@ -16,6 +24,16 @@ export const youtubeSlice = createSlice({
     // standard reducer logic, with auto-generated action types per reducer
     changeVolume: (state, { payload }) => {
       state.volume = payload;
+    },
+    // calculates the client's volume based on position
+    changeVolumeOnMove: (state, { payload }) => {
+      // The closer clientPosition is to youtube embed,
+      // the louder the volume gets.
+      const volume = calculateVolume(state.boundingBox, {
+        x: payload.x + X_OFFSET,
+        y: payload.y + Y_OFFSET,
+      });
+      state.volume = volume;
     },
     muteVideo: state => {
       state.volume = 0;
@@ -51,11 +69,15 @@ export const youtubeSlice = createSlice({
     youtubeAPIReady: state => {
       state.isYouTubeAPIReady = true;
     },
+    updateBoundingBox: (state, { payload }) => {
+      state.boundingBox = payload;
+    },
   },
 });
 
 export const {
   changeVolume,
+  changeVolumeOnMove,
   changeVideoId,
   muteVideo,
   playSong,
@@ -65,6 +87,7 @@ export const {
   clearError,
   reset,
   youtubeAPIReady,
+  updateBoundingBox,
 } = youtubeSlice.actions;
 
 export default youtubeSlice.reducer;
