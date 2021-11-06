@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useCallback } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { useDispatch } from 'react-redux';
 import { joinRoom } from 'slices/currentRoomSlice';
@@ -22,8 +22,8 @@ const ClientBubble = props => {
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
-  const throttledOnDrag = useCallback(
-    throttle((e, data) => {
+  const throttledOnDrag = useMemo(
+    () => throttle((e, data) => {
       const { x, y } = data;
       dispatch(changeVolumeOnMove({ x, y }));
       socket.emit('pos_change', { x, y });
