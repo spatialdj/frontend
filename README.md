@@ -29,7 +29,7 @@ THIS README TEMPLATE WAS ADAPTED FROM https://github.com/othneildrew/Best-README
 
 ![SpatialDjLogo](https://avatars.githubusercontent.com/u/83042272)
 # Spatial Dj
-- [View Demo](http://spatial.francochen.com)
+- [Watch Demo](https://www.youtube.com/watch?v=qpOGIA4jPNw)
 - [Report Bug](https://github.com/reeedis/backend/issues)
 - [Request Feature](https://github.com/reeedis/backend/issues)
 - [Backend Repo](https://github.com/reeedis/backend)
@@ -46,6 +46,9 @@ THIS README TEMPLATE WAS ADAPTED FROM https://github.com/othneildrew/Best-README
 * 🔥 Interact through instant messaging, proximity audio, reactions and voting
 * 💬 A fair queue system to ensure everyone's song choices gets played
 * ⚡ Sleek UI thanks to Chakra-UI components
+
+## Demo Video
+[![SpatialDjVideo](https://img.youtube.com/vi/qpOGIA4jPNw/0.jpg)](https://www.youtube.com/watch?v=qpOGIA4jPNw)
 
 
 <!-- GETTING STARTED -->
