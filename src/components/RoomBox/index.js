@@ -21,6 +21,7 @@ import LeaveRoomButton from 'components/LeaveRoomButton';
 import YoutubePlayer from 'components/YoutubePlayer';
 import ViewOnlyModal from 'components/ViewOnlyModal';
 import { AnimatePresence } from 'framer-motion';
+import { useWindowSize } from 'hooks/useWindowSize';
 
 function RoomBox(props) {
   const socket = useContext(SocketContext);
@@ -42,6 +43,7 @@ function RoomBox(props) {
   const { status, data } = currentRoom;
   const toast = useToast();
   const history = useHistory();
+  const windowSize = useWindowSize();
   const roomId = props.roomId;
 
   const [userReaction, setUserReaction] = useState('');
@@ -298,7 +300,10 @@ function RoomBox(props) {
             profilePicture={val.profilePicture}
             prefix={val.prefix ?? ''}
             username={val.username}
-            position={val.position}
+            position={{
+              x: Math.floor(val.position.x * windowSize.width),
+              y: Math.floor(val.position.y * windowSize.height),
+            }}
             type={val.type}
             reaction={val.reaction !== '' ? val.reaction : null}
           />

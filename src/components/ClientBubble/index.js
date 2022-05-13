@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { SocketContext } from 'contexts/socket';
 import { useDispatch } from 'react-redux';
 import { joinRoom } from 'slices/currentRoomSlice';
@@ -19,6 +19,8 @@ import { motion } from 'framer-motion';
 import throttle from 'utils/throttle';
 
 const ClientBubble = props => {
+  const { isAuth, roomId, profilePicture, username, prefix, reaction } = props;
+  const [initPosition, setInitPosition] = useState(null);
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
@@ -27,11 +29,13 @@ const ClientBubble = props => {
       throttle((e, data) => {
         const { x, y } = data;
         dispatch(changeVolumeOnMove({ x, y }));
-        socket.emit('pos_change', { x, y });
+        socket.emit('pos_change', {
+          x: x / window.innerWidth,
+          y: y / window.innerHeight,
+        });
       }, 50),
     [socket, dispatch]
   );
-  const { isAuth, roomId, profilePicture, username, prefix, reaction } = props;
 
   useEffect(() => {
     socket.emit('join_room', roomId, response => {
@@ -41,6 +45,11 @@ const ClientBubble = props => {
       dispatch(joinRoom(response));
 
       if (success && room) {
+        const { x, y } = room.members[username].position;
+        setInitPosition({
+          x: x * window.innerWidth,
+          y: y * window.innerHeight,
+        });
         dispatch(
           populateQueue({
             success,
@@ -61,7 +70,7 @@ const ClientBubble = props => {
 
   const tagColor = 'green';
 
-  if (!isAuth) {
+  if (!isAuth || !initPosition) {
     return null;
   }
 
@@ -71,6 +80,7 @@ const ClientBubble = props => {
       defaultClassName="_draggable"
       defaultClassNameDragging="__dragging"
       defaultClassNameDragged="__dragged"
+      defaultPosition={initPosition}
       bounds="#canvas"
     >
       <motion.div
